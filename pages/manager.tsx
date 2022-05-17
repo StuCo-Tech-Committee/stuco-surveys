@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Header from '../components/header';
 import CreateSurveyButton from '../components/manager/createSurveyButton';
 import SurveyButton from '../components/manager/surveyButton';
+import { server } from '../config';
 import { ISurvey } from '../utilities/manager/SurveyManager';
 
 const Manager = ({
@@ -74,10 +75,10 @@ const Manager = ({
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const published: ISurvey[] = await (
-    await fetch('http://localhost:3000/api/getSurveys?published=1')
+    await fetch(`${server}/api/getSurveys?published=1`)
   ).json();
   const unpublished: ISurvey[] = await (
-    await fetch('http://localhost:3000/api/getSurveys?published=0')
+    await fetch(`${server}/api/getSurveys?published=0`)
   ).json();
 
   return {

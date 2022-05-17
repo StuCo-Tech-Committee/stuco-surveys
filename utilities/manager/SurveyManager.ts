@@ -1,7 +1,6 @@
 import mongoose, { Document } from 'mongoose';
 
-const uri =
-  'mongodb+srv://surveycommittee:gWHNB5LLhsyAelUL@surveycluster.jz8h7.mongodb.net/Surveys?retryWrites=true&w=majority';
+const uri = process.env.DB_URI as string;
 
 mongoose.connect(uri);
 

@@ -14,6 +14,7 @@ import { GetServerSideProps } from 'next';
 import { ISurvey } from '../utilities/manager/SurveyManager';
 import ElementEditorCard from '../components/editor/elementEditorCard';
 import { v4 } from 'uuid';
+import { server } from '../config';
 
 const Edit = ({ survey }: { survey: ISurvey }) => {
   const [editedSurvey, setEditedSurvey] = useState(survey);
@@ -23,7 +24,7 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
     if (saving) return;
 
     setSaving(true);
-    await fetch('http://localhost:3000/api/updateSurvey', {
+    await fetch(`${server}/api/updateSurvey`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(editedSurvey),
@@ -34,6 +35,7 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
   };
 
   // CTRL + S to save
+  // THIS IS JANK! HOTKEY WILL STILL WORK AFTER NAVIGATING OFF PAGE
   if (typeof window != 'undefined') {
     document.onkeydown = (e) => {
       if (e.ctrlKey && e.code == 'KeyS') {
@@ -224,7 +226,7 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const survey: ISurvey = await (
-    await fetch(`http://localhost:3000/api/getSurvey?id=${context.query.id}`)
+    await fetch(`${server}/api/getSurvey?id=${context.query.id}`)
   ).json();
 
   return {
