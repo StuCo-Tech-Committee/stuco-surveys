@@ -30,10 +30,17 @@ const ElementEditorCard = ({
                     className="my-1 ml-2 mr-2 w-full bg-transparent"
                     placeholder="Choice"
                     defaultValue={choice}
-                    onChange={(e) => {
-                      editedSurvey.elements.find(
+                    onKeyDown={(e) => {
+                      if (e.code == 'Enter') {
+                        e.currentTarget.blur();
+                      }
+                    }}
+                    onBlur={(e) => {
+                      const newSurvey = { ...editedSurvey };
+                      newSurvey.elements.find(
                         (element) => element.id == surveyElement.id
                       )!.choices![index] = e.currentTarget.value;
+                      setEditedSurvey(newSurvey as ISurvey);
                     }}
                   ></input>
                   <button
@@ -79,10 +86,17 @@ const ElementEditorCard = ({
                     className="my-1 ml-2 mr-2 w-full bg-transparent"
                     placeholder="Choice"
                     defaultValue={choice}
-                    onChange={(e) => {
-                      editedSurvey.elements.find(
+                    onKeyDown={(e) => {
+                      if (e.code == 'Enter') {
+                        e.currentTarget.blur();
+                      }
+                    }}
+                    onBlur={(e) => {
+                      const newSurvey = { ...editedSurvey };
+                      newSurvey.elements.find(
                         (element) => element.id == surveyElement.id
                       )!.choices![index] = e.currentTarget.value;
+                      setEditedSurvey(newSurvey as ISurvey);
                     }}
                   ></input>
                   <button
@@ -121,11 +135,34 @@ const ElementEditorCard = ({
               <input
                 className="m-0 w-9 bg-transparent text-center text-gray-600"
                 type="number"
-                defaultValue={surveyElement.range?.[0]}
-                onChange={(e) => {
+                defaultValue={
+                  isNaN(surveyElement.range?.[0] ?? NaN)
+                    ? undefined
+                    : surveyElement.range?.[0]
+                }
+                onKeyDown={(e) => {
+                  if (e.code == 'Enter') {
+                    e.currentTarget.blur();
+                  }
+                }}
+                onBlur={(e) => {
+                  if (
+                    isNaN(parseFloat(e.currentTarget.value)) ||
+                    parseFloat(e.currentTarget.value) >=
+                      editedSurvey.elements.find(
+                        (element) => element.id == surveyElement.id
+                      )!.range![1]
+                  ) {
+                    e.currentTarget.value = editedSurvey.elements
+                      .find((element) => element.id == surveyElement.id)!
+                      .range![0].toString();
+                  }
+
+                  const newSurvey = { ...editedSurvey };
                   editedSurvey.elements.find(
                     (element) => element.id == surveyElement.id
                   )!.range![0] = parseFloat(e.currentTarget.value);
+                  setEditedSurvey(newSurvey as ISurvey);
                 }}
                 placeholder="Min"
               ></input>
@@ -135,11 +172,34 @@ const ElementEditorCard = ({
               <input
                 className="m-0 w-9 bg-transparent text-center text-gray-600"
                 type="number"
-                defaultValue={surveyElement.range?.[1]}
-                onChange={(e) => {
+                defaultValue={
+                  isNaN(surveyElement.range?.[1] ?? NaN)
+                    ? 0
+                    : surveyElement.range?.[1]
+                }
+                onKeyDown={(e) => {
+                  if (e.code == 'Enter') {
+                    e.currentTarget.blur();
+                  }
+                }}
+                onBlur={(e) => {
+                  if (
+                    isNaN(parseFloat(e.currentTarget.value)) ||
+                    parseFloat(e.currentTarget.value) <=
+                      editedSurvey.elements.find(
+                        (element) => element.id == surveyElement.id
+                      )!.range![0]
+                  ) {
+                    e.currentTarget.value = editedSurvey.elements
+                      .find((element) => element.id == surveyElement.id)!
+                      .range![1].toString();
+                  }
+
+                  const newSurvey = { ...editedSurvey };
                   editedSurvey.elements.find(
                     (element) => element.id == surveyElement.id
                   )!.range![1] = parseFloat(e.currentTarget.value);
+                  setEditedSurvey(newSurvey as ISurvey);
                 }}
                 placeholder="Max"
               ></input>
@@ -149,13 +209,25 @@ const ElementEditorCard = ({
               <input
                 className="w-10 bg-transparent text-left text-gray-600"
                 defaultValue={surveyElement.step}
-                onChange={(e) => {
+                onKeyDown={(e) => {
+                  if (e.code == 'Enter') {
+                    e.currentTarget.blur();
+                  }
+                }}
+                onBlur={(e) => {
+                  if (
+                    isNaN(parseFloat(e.currentTarget.value)) ||
+                    parseFloat(e.currentTarget.value) < 0
+                  ) {
+                    e.currentTarget.value = '';
+                    return;
+                  }
+
+                  const newSurvey = { ...editedSurvey };
                   editedSurvey.elements.find(
                     (element) => element.id == surveyElement.id
-                  )!.step =
-                    parseFloat(e.currentTarget.value) == 0
-                      ? undefined
-                      : parseFloat(e.currentTarget.value);
+                  )!.step = parseFloat(e.currentTarget.value);
+                  setEditedSurvey(newSurvey as ISurvey);
                 }}
                 placeholder="None"
               ></input>
@@ -196,7 +268,6 @@ const ElementEditorCard = ({
             )!.title = e.currentTarget.value;
             setEditedSurvey(newSurvey as ISurvey);
           }}
-          contentEditable
         ></input>
         <button
           onClick={() => {
@@ -227,9 +298,23 @@ const ElementEditorCard = ({
           )!.description = e.currentTarget.value;
           setEditedSurvey(newSurvey as ISurvey);
         }}
-        contentEditable
       ></input>
       <Editor />
+      <div className="mt-2 flex flex-row items-center justify-start gap-1">
+        <input
+          type="checkbox"
+          className="mt-0.5"
+          id={surveyElement.id}
+          onChange={(e) => {
+            const newSurvey = { ...editedSurvey };
+            newSurvey.elements.find(
+              (element) => element.id == surveyElement.id
+            )!.required = e.currentTarget.checked;
+            setEditedSurvey(newSurvey as ISurvey);
+          }}
+        />
+        <label htmlFor={surveyElement.id}>Required</label>
+      </div>
     </div>
   );
 };
