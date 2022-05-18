@@ -5,7 +5,7 @@ import { ISurvey } from '../utilities/manager/SurveyManager';
 
 const Create = ({ id }: { id: string }) => {
   const router = useRouter();
-  router.push(`/edit?id=${id}`);
+  router.push(`/edit/${id}`);
 
   return (
     <div className="flex h-screen w-screen flex-row items-center justify-center">
@@ -16,7 +16,7 @@ const Create = ({ id }: { id: string }) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const survey: ISurvey = await (
-    await fetch(`${server}/api/createSurvey`)
+    await fetch(`${server}/api/survey`, { method: 'POST' })
   ).json();
 
   return {

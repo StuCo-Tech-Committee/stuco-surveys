@@ -75,10 +75,10 @@ const Manager = ({
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const published: ISurvey[] = await (
-    await fetch(`${server}/api/getSurveys?published=1`)
+    await fetch(`${server}/api/surveys?published=1`)
   ).json();
   const unpublished: ISurvey[] = await (
-    await fetch(`${server}/api/getSurveys?published=0`)
+    await fetch(`${server}/api/surveys?published=0`)
   ).json();
 
   return {

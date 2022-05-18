@@ -16,7 +16,7 @@ const SurveyButton = ({
   modifiedDate: Date;
 }) => {
   return (
-    <Link href={`/edit?id=${id}`}>
+    <Link href={`/edit/${id}`}>
       <div className="flex cursor-pointer flex-col items-start rounded-md bg-gray-100 p-4 shadow-md">
         <h1 className="w-full overflow-hidden overflow-ellipsis whitespace-nowrap text-lg font-bold text-gray-700">
           {title}

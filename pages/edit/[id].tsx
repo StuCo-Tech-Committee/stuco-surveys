@@ -5,16 +5,18 @@ import {
   BsTextLeft,
   BsSave,
   BsCloudUpload,
+  BsUpload,
 } from 'react-icons/bs';
 import { BiLoaderAlt } from 'react-icons/bi';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { GetServerSideProps } from 'next';
-import { ISurvey } from '../utilities/manager/SurveyManager';
-import ElementEditorCard from '../components/editor/elementEditorCard';
+import { ISurvey } from '../../utilities/manager/SurveyManager';
+import ElementEditorCard from '../../components/editor/elementEditorCard';
 import { v4 } from 'uuid';
-import { server } from '../config';
+import { server } from '../../config';
+import Question from '../../components/survey/question';
 
 const Edit = ({ survey }: { survey: ISurvey }) => {
   const [editedSurvey, setEditedSurvey] = useState(survey);
@@ -24,8 +26,8 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
     if (saving) return;
 
     setSaving(true);
-    await fetch(`${server}/api/updateSurvey`, {
-      method: 'POST',
+    await fetch(`${server}/api/survey`, {
+      method: 'PUT',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(editedSurvey),
     });
@@ -59,10 +61,32 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
           ...((type == 'multiple-choice' || type == 'checkboxes') && {
             choices: [],
           }),
-          ...(type == 'slider' && { range: [], step: undefined }),
+          ...(type == 'slider' && { range: [0, 10], step: undefined }),
         },
       ],
     } as ISurvey);
+  };
+
+  const CreateElementButton = ({
+    name,
+    type,
+    icon,
+  }: {
+    name: string;
+    type: string;
+    icon: ReactNode;
+  }) => {
+    return (
+      <button
+        onClick={() => {
+          createSurveyElement(type);
+        }}
+        className="my-2 flex flex-row items-center rounded-md bg-white p-2 font-semibold text-gray-800 transition-all hover:shadow-md"
+      >
+        {icon}
+        <span className="mx-2">{name}</span>
+      </button>
+    );
   };
 
   return (
@@ -121,42 +145,22 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
         ></input>
         <br></br>
         {/* Create new element buttons */}
-        <button
-          onClick={() => {
-            createSurveyElement('multiple-choice');
-          }}
-          className="my-2 flex flex-row items-center rounded-md bg-white p-2 font-semibold text-gray-800 transition-all hover:shadow-md"
-        >
-          <BsUiRadios />
-          <span className="mx-2">Multiple Choice</span>
-        </button>
-        <button
-          onClick={() => {
-            createSurveyElement('checkboxes');
-          }}
-          className="my-2 flex flex-row items-center rounded-md bg-white p-2 font-semibold text-gray-800 transition-all hover:shadow-md"
-        >
-          <BsUiChecks />
-          <span className="mx-2">Checkboxes</span>
-        </button>
-        <button
-          onClick={() => {
-            createSurveyElement('slider');
-          }}
-          className="my-2 flex flex-row items-center rounded-md bg-white p-2 font-semibold text-gray-800 transition-all hover:shadow-md"
-        >
-          <BsSliders />
-          <span className="mx-2">Slider</span>
-        </button>
-        <button
-          onClick={() => {
-            createSurveyElement('free-response');
-          }}
-          className="my-2 flex flex-row items-center rounded-md bg-white p-2 font-semibold text-gray-800 transition-all hover:shadow-md"
-        >
-          <BsTextLeft />
-          <span className="mx-2">Free Response</span>
-        </button>
+        <CreateElementButton
+          name="Multiple Choice"
+          type="multiple-choice"
+          icon={<BsUiRadios />}
+        />
+        <CreateElementButton
+          name="Checkboxes"
+          type="checkboxes"
+          icon={<BsUiChecks />}
+        />
+        <CreateElementButton name="Slider" type="slider" icon={<BsSliders />} />
+        <CreateElementButton
+          name="Free Response"
+          type="free-response"
+          icon={<BsTextLeft />}
+        />
         {/* Elements editor */}
         <div className="mt-8 flex flex-col items-start justify-start">
           {editedSurvey.elements.map((surveyElement) => {
@@ -172,19 +176,28 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
         </div>
       </div>
       <div className="relative flex h-screen w-full flex-row items-center justify-center bg-gray-50">
-        <div className="aspect-[400/780] h-[95%] overflow-x-hidden overflow-y-scroll bg-white p-6 shadow-2xl">
+        <div className="flex aspect-[400/780] h-[95%] flex-col gap-8 overflow-x-hidden overflow-y-scroll bg-white p-6 shadow-2xl">
           {/* Survey preview */}
-          <h1 className="break-words text-2xl font-bold text-gray-800">
-            {editedSurvey.name || 'Untitled Survey'}
-          </h1>
-          <h2 className="text-md break-words text-gray-600">
-            {editedSurvey.description || 'No description'}
-          </h2>
-          <Link href="/privacy">
-            <a className="text-sm text-exeter underline underline-offset-1">
-              Privacy notice
-            </a>
-          </Link>
+          <div>
+            <h1 className="break-words text-2xl font-bold text-gray-800">
+              {editedSurvey.name || 'Untitled Survey'}
+            </h1>
+            <h2 className="text-md break-words text-gray-600">
+              {editedSurvey.description || 'No description'}
+            </h2>
+            <Link href="/privacy">
+              <a className="text-sm text-exeter underline underline-offset-1">
+                Privacy notice
+              </a>
+            </Link>
+          </div>
+          {editedSurvey.elements.map((element) => {
+            return <Question key={element.id} element={element} />;
+          })}
+          <button className="flex flex-row items-center justify-center gap-2 rounded-md bg-exeter py-2 px-2 text-white shadow-md transition-all ease-out">
+            <BsUpload />
+            <span>Submit</span>
+          </button>
         </div>
         {/* Controls overlay */}
         <div className="pointer-events-none absolute flex h-full w-full flex-row items-start justify-end py-4 px-6">
@@ -226,7 +239,7 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const survey: ISurvey = await (
-    await fetch(`${server}/api/getSurvey?id=${context.query.id}`)
+    await fetch(`${server}/api/survey?id=${context.query.id}`)
   ).json();
 
   return {
