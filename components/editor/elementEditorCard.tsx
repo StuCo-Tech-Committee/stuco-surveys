@@ -303,6 +303,7 @@ const ElementEditorCard = ({
       <div className="mt-2 flex flex-row items-center justify-start gap-1">
         <input
           type="checkbox"
+          defaultChecked={surveyElement.required}
           className="mt-0.5"
           id={surveyElement.id}
           onChange={(e) => {

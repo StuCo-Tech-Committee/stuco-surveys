@@ -92,7 +92,7 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
   return (
     <div className="flex w-full flex-row">
       <Head>
-        <title>StuCo Surveys</title>
+        <title>{editedSurvey.name}</title>
         <meta
           name="description"
           content="Real-time survey system for Student Council."
@@ -190,11 +190,12 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
                 Privacy notice
               </a>
             </Link>
+            <h2 className="mt-2 text-sm font-bold text-exeter">* Required</h2>
           </div>
           {editedSurvey.elements.map((element) => {
             return <Question key={element.id} element={element} />;
           })}
-          <button className="flex flex-row items-center justify-center gap-2 rounded-md bg-exeter py-2 px-2 text-white shadow-md transition-all ease-out">
+          <button className="flex flex-row items-center justify-center gap-2 rounded-md bg-exeter py-2 px-2 text-white shadow-md">
             <BsUpload />
             <span>Submit</span>
           </button>

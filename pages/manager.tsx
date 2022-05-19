@@ -16,7 +16,7 @@ const Manager = ({
   return (
     <div className="flex w-full flex-col">
       <Head>
-        <title>StuCo Surveys</title>
+        <title>StuCo Surveys - Manager</title>
         <meta
           name="description"
           content="Real-time survey system for Student Council."

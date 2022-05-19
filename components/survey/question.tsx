@@ -30,6 +30,33 @@ const Question = ({ element }: { element: ISurveyElement }) => {
             })}
           </div>
         );
+      case 'checkboxes':
+        return (
+          <div className="mt-2 flex flex-col gap-1">
+            {element.choices!.map((choice, index) => {
+              return (
+                <div
+                  key={index}
+                  className="flex flex-row items-center justify-start gap-1.5"
+                >
+                  <input
+                    type="checkbox"
+                    name={element.id}
+                    className="mt-0.5"
+                    id={choice}
+                    value={choice}
+                  ></input>
+                  <label
+                    htmlFor={choice}
+                    className="empty:text-gray-400 empty:before:content-['Choice']"
+                  >
+                    {choice}
+                  </label>
+                </div>
+              );
+            })}
+          </div>
+        );
       case 'slider':
         return (
           <div className="mt-4">
@@ -70,12 +97,12 @@ const Question = ({ element }: { element: ISurveyElement }) => {
 
   return (
     <div className="flex flex-col gap-1 rounded-md bg-gray-50 p-4 shadow-md">
-      <div className="flex flex-row gap-2">
+      <div className="flex flex-row gap-1">
         <h1 className="font-bold text-gray-900">
           {element.title || 'Untitled Question'}
         </h1>
         {element.required ? (
-          <span className="text-xs text-exeter">Required</span>
+          <span className="text-md font-bold text-exeter">*</span>
         ) : (
           <></>
         )}
