@@ -7,11 +7,7 @@ const Create = ({ id }: { id: string }) => {
   const router = useRouter();
   router.push(`/edit/${id}`);
 
-  return (
-    <div className="flex h-screen w-screen flex-row items-center justify-center">
-      <h1 className="text-lg">Creating new survey...</h1>
-    </div>
-  );
+  return <div></div>;
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
@@ -22,6 +18,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       id: survey._id,
+      header: false,
     },
   };
 };

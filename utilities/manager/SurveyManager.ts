@@ -11,7 +11,7 @@ interface ISurveyElement {
   description: string;
   required: boolean;
   choices?: string[];
-  range?: number[];
+  range?: (number | undefined)[];
   step?: number;
   validator?: string;
 }
@@ -23,6 +23,14 @@ interface ISurvey extends Document {
   createdDate: string;
   modifiedDate: string;
   elements: ISurveyElement[];
+}
+
+interface ISurveyResponse {
+  answers: {
+    choices?: string[] | null;
+    number?: number | null;
+    text?: string | null;
+  }[];
 }
 
 const SurveySchema = new mongoose.Schema({
@@ -134,4 +142,4 @@ class SurveyManager {
 }
 
 export { SurveyManager };
-export type { ISurvey, ISurveyElement };
+export type { ISurvey, ISurveyElement, ISurveyResponse };

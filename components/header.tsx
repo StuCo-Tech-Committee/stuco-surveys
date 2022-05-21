@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 const NavItem = ({ name, href }: { name: string; href: string }) => {
   return (
@@ -12,7 +13,12 @@ const NavItem = ({ name, href }: { name: string; href: string }) => {
 
 const Header = () => {
   return (
-    <div className="absolute flex w-full flex-row justify-between px-4 py-4 md:px-32">
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      className="absolute flex w-full flex-row justify-between px-4 py-4 md:px-32"
+    >
       <Link href="/">
         <a className="text-2xl font-bold text-exeter">StuCo Surveys</a>
       </Link>
@@ -21,7 +27,7 @@ const Header = () => {
         <NavItem name="Viewer" href="/viewer" />
         <NavItem name="Privacy" href="/privacy" />
       </ul>
-    </div>
+    </motion.div>
   );
 };
 

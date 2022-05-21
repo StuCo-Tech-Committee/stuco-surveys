@@ -14,8 +14,6 @@ const Privacy: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
-
       <div className="mx-4 flex h-[80vh] flex-col justify-center self-stretch md:mx-32">
         <h1 className="text-6xl font-bold text-gray-900">
           Privacy is a universal human right.

@@ -10,13 +10,14 @@ import {
 import { BiLoaderAlt } from 'react-icons/bi';
 import Head from 'next/head';
 import Link from 'next/link';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { ISurvey } from '../../utilities/manager/SurveyManager';
 import ElementEditorCard from '../../components/editor/elementEditorCard';
 import { v4 } from 'uuid';
 import { server } from '../../config';
 import Question from '../../components/survey/question';
+import { motion } from 'framer-motion';
 
 const Edit = ({ survey }: { survey: ISurvey }) => {
   const [editedSurvey, setEditedSurvey] = useState(survey);
@@ -36,16 +37,21 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
     }, 3000);
   };
 
-  // CTRL + S to save
-  // THIS IS JANK! HOTKEY WILL STILL WORK AFTER NAVIGATING OFF PAGE
-  if (typeof window != 'undefined') {
-    document.onkeydown = (e) => {
-      if (e.ctrlKey && e.code == 'KeyS') {
-        e.preventDefault();
-        saveSurvey();
+  useEffect(() => {
+    if (typeof window != 'undefined') {
+      document.onkeydown = (e) => {
+        if (e.ctrlKey && e.code == 'KeyS') {
+          e.preventDefault();
+          saveSurvey();
+        }
+      };
+    }
+    return () => {
+      if (typeof window != 'undefined') {
+        document.onkeydown = null;
       }
     };
-  }
+  });
 
   const createSurveyElement = (type: string) => {
     setEditedSurvey({
@@ -90,7 +96,7 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
   };
 
   return (
-    <div className="flex w-full flex-row">
+    <motion.div className="flex w-full flex-row overflow-hidden">
       <Head>
         <title>{editedSurvey.name}</title>
         <meta
@@ -100,7 +106,22 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="h-screen w-2/5 overflow-x-hidden overflow-y-scroll bg-gray-100 p-8">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        exit="hidden"
+        variants={{
+          hidden: {
+            x: -60,
+            opacity: 0,
+          },
+          visible: {
+            x: 0,
+            opacity: 1,
+          },
+        }}
+        className="h-screen w-2/5 overflow-x-hidden overflow-y-scroll bg-gray-100 p-8"
+      >
         {/* Back button and title and description editor */}
         <Link href="/manager">
           <a className="text-gray-400">{'← Back to Manager'}</a>
@@ -174,8 +195,23 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
             );
           })}
         </div>
-      </div>
-      <div className="relative flex h-screen w-full flex-row items-center justify-center bg-gray-50">
+      </motion.div>
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        exit="hidden"
+        variants={{
+          hidden: {
+            x: 60,
+            opacity: 0,
+          },
+          visible: {
+            x: 0,
+            opacity: 1,
+          },
+        }}
+        className="relative flex h-screen w-full flex-row items-center justify-center bg-gray-50"
+      >
         <div className="flex aspect-[400/780] h-[95%] flex-col gap-8 overflow-x-hidden overflow-y-scroll bg-white p-6 shadow-2xl">
           {/* Survey preview */}
           <div>
@@ -192,8 +228,14 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
             </Link>
             <h2 className="mt-2 text-sm font-bold text-exeter">* Required</h2>
           </div>
-          {editedSurvey.elements.map((element) => {
-            return <Question key={element.id} element={element} />;
+          {editedSurvey.elements.map((element, index) => {
+            return (
+              <Question
+                key={element.id}
+                questionIndex={index}
+                element={element}
+              />
+            );
           })}
           <button className="flex flex-row items-center justify-center gap-2 rounded-md bg-exeter py-2 px-2 text-white shadow-md">
             <BsUpload />
@@ -233,8 +275,8 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
             </button>
           </div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
@@ -246,6 +288,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       survey: survey,
+      header: false,
     },
   };
 };

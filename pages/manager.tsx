@@ -5,6 +5,7 @@ import CreateSurveyButton from '../components/manager/createSurveyButton';
 import SurveyButton from '../components/manager/surveyButton';
 import { server } from '../config';
 import { ISurvey } from '../utilities/manager/SurveyManager';
+import { motion } from 'framer-motion';
 
 const Manager = ({
   published,
@@ -14,7 +15,7 @@ const Manager = ({
   unpublished: ISurvey[];
 }) => {
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full flex-col overflow-x-hidden">
       <Head>
         <title>StuCo Surveys - Manager</title>
         <meta
@@ -24,11 +25,59 @@ const Manager = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
-
-      <div className="mx-4 h-screen self-stretch pt-20 md:mx-32">
-        <h1 className="text-xl font-semibold text-gray-800">Drafts</h1>
-        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        exit="hidden"
+        variants={{
+          visible: {
+            transition: {
+              staggerChildren: 0.05,
+            },
+          },
+          hidden: {
+            transition: {
+              staggerChildren: 0.05,
+              staggerDirection: -1,
+            },
+          },
+        }}
+        className="mx-4 h-screen self-stretch pt-20 md:mx-32"
+      >
+        <motion.h1
+          variants={{
+            hidden: {
+              y: 20,
+              opacity: 0,
+            },
+            visible: {
+              y: 0,
+              opacity: 1,
+            },
+          }}
+          className="text-xl font-semibold text-gray-800"
+        >
+          Drafts
+        </motion.h1>
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.02,
+              },
+            },
+            hidden: {
+              transition: {
+                staggerChildren: 0.015,
+                staggerDirection: -1,
+              },
+            },
+          }}
+          className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5"
+        >
           <CreateSurveyButton />
           {unpublished
             .sort(
@@ -47,9 +96,41 @@ const Manager = ({
                 />
               );
             })}
-        </div>
-        <h1 className="mt-12 text-xl font-semibold text-gray-800">Published</h1>
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        </motion.div>
+        <motion.h1
+          variants={{
+            hidden: {
+              y: 20,
+              opacity: 0,
+            },
+            visible: {
+              y: 0,
+              opacity: 1,
+            },
+          }}
+          className="mt-12 text-xl font-semibold text-gray-800"
+        >
+          Published
+        </motion.h1>
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.05,
+              },
+            },
+            hidden: {
+              transition: {
+                staggerChildren: 0.025,
+                staggerDirection: -1,
+              },
+            },
+          }}
+          className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+        >
           {published
             .sort(
               (a, b) =>
@@ -67,8 +148,8 @@ const Manager = ({
                 />
               );
             })}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };

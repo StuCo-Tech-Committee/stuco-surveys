@@ -5,6 +5,204 @@ import { BsCircle, BsTrash } from 'react-icons/bs';
 import { TiDeleteOutline } from 'react-icons/ti';
 import { MdCheckBoxOutlineBlank } from 'react-icons/md';
 
+const Editor = ({
+  surveyElement,
+  editedSurvey,
+  setEditedSurvey,
+}: {
+  surveyElement: ISurveyElement;
+  editedSurvey: ISurvey;
+  setEditedSurvey: Dispatch<SetStateAction<ISurvey>>;
+}) => {
+  switch (surveyElement.type) {
+    case 'multiple-choice':
+      return (
+        <div className="flex flex-col items-start justify-start">
+          {surveyElement.choices!.map((choice, index) => {
+            return (
+              <div
+                key={index}
+                className="flex w-full flex-row items-center justify-start"
+              >
+                <BsCircle className="mt-0.5" />
+                <input
+                  className="my-1 ml-2 mr-2 w-full bg-transparent"
+                  placeholder="Choice"
+                  defaultValue={choice}
+                  onChange={(e) => {
+                    const newSurvey = { ...editedSurvey };
+                    newSurvey.elements.find(
+                      (element) => element.id == surveyElement.id
+                    )!.choices![index] = e.currentTarget.value;
+                    setEditedSurvey(newSurvey as ISurvey);
+                  }}
+                ></input>
+                <button
+                  onClick={() => {
+                    const newSurvey = { ...editedSurvey };
+                    editedSurvey.elements
+                      .find((element) => element.id == surveyElement.id)
+                      ?.choices?.splice(index, 1);
+                    setEditedSurvey(newSurvey as ISurvey);
+                  }}
+                >
+                  <TiDeleteOutline />
+                </button>
+              </div>
+            );
+          })}
+          <button
+            onClick={() => {
+              const newSurvey = { ...editedSurvey };
+              newSurvey.elements
+                .find((element) => element.id == surveyElement.id)
+                ?.choices?.push('');
+              setEditedSurvey(newSurvey as ISurvey);
+            }}
+            className="mt-1 flex flex-row items-center rounded-md py-1 transition-all hover:bg-gray-100"
+          >
+            <AiFillPlusCircle />
+            <span className="ml-2">New choice</span>
+          </button>
+        </div>
+      );
+    case 'checkboxes':
+      return (
+        <div className="flex flex-col items-start justify-start">
+          {surveyElement.choices!.map((choice, index) => {
+            return (
+              <div
+                key={index}
+                className="flex w-full flex-row items-center justify-start"
+              >
+                <MdCheckBoxOutlineBlank className="mt-0.5" />
+                <input
+                  className="my-1 ml-2 mr-2 w-full bg-transparent"
+                  placeholder="Choice"
+                  defaultValue={choice}
+                  onChange={(e) => {
+                    const newSurvey = { ...editedSurvey };
+                    newSurvey.elements.find(
+                      (element) => element.id == surveyElement.id
+                    )!.choices![index] = e.currentTarget.value;
+                    setEditedSurvey(newSurvey as ISurvey);
+                  }}
+                ></input>
+                <button
+                  onClick={() => {
+                    const newSurvey = { ...editedSurvey };
+                    editedSurvey.elements
+                      .find((element) => element.id == surveyElement.id)
+                      ?.choices?.splice(index, 1);
+                    setEditedSurvey(newSurvey as ISurvey);
+                  }}
+                >
+                  <TiDeleteOutline />
+                </button>
+              </div>
+            );
+          })}
+          <button
+            onClick={() => {
+              const newSurvey = { ...editedSurvey };
+              newSurvey.elements
+                .find((element) => element.id == surveyElement.id)
+                ?.choices?.push('');
+              setEditedSurvey(newSurvey as ISurvey);
+            }}
+            className="mt-1 flex flex-row items-center rounded-md py-1 transition-all hover:bg-gray-100"
+          >
+            <AiFillPlusCircle />
+            <span className="ml-2">New choice</span>
+          </button>
+        </div>
+      );
+    case 'slider':
+      return (
+        <div className="flex flex-col gap-1">
+          <div className="mt-2 flex flex-row items-center justify-center">
+            <input
+              className="m-0 w-9 bg-transparent text-center text-gray-600"
+              type="number"
+              defaultValue={
+                isNaN(surveyElement.range?.[0] ?? NaN)
+                  ? undefined
+                  : surveyElement.range?.[0]
+              }
+              onChange={(e) => {
+                const newSurvey = { ...editedSurvey };
+                editedSurvey.elements.find(
+                  (element) => element.id == surveyElement.id
+                )!.range![0] = isNaN(parseFloat(e.currentTarget.value))
+                  ? undefined
+                  : parseFloat(e.currentTarget.value);
+                setEditedSurvey(newSurvey as ISurvey);
+              }}
+              placeholder="Min"
+            ></input>
+            <div className="mx-2 flex h-1 w-full flex-row items-center justify-center rounded-2xl bg-gray-500">
+              <div className="aspect-square h-3 rounded-2xl bg-gray-400"></div>
+            </div>
+            <input
+              className="m-0 w-9 bg-transparent text-center text-gray-600"
+              type="number"
+              defaultValue={
+                isNaN(surveyElement.range?.[1] ?? NaN)
+                  ? 0
+                  : surveyElement.range?.[1]
+              }
+              onChange={(e) => {
+                const newSurvey = { ...editedSurvey };
+                editedSurvey.elements.find(
+                  (element) => element.id == surveyElement.id
+                )!.range![1] = isNaN(parseFloat(e.currentTarget.value))
+                  ? undefined
+                  : parseFloat(e.currentTarget.value);
+                setEditedSurvey(newSurvey as ISurvey);
+              }}
+              placeholder="Max"
+            ></input>
+          </div>
+          <div className="flex flex-row gap-2">
+            <span className="text-gray-500">Step:</span>
+            <input
+              className="w-10 bg-transparent text-left text-gray-600"
+              defaultValue={surveyElement.step}
+              onChange={(e) => {
+                if (
+                  isNaN(parseFloat(e.currentTarget.value)) ||
+                  parseFloat(e.currentTarget.value) < 0
+                ) {
+                  e.currentTarget.value = '';
+                  return;
+                }
+
+                const newSurvey = { ...editedSurvey };
+                editedSurvey.elements.find(
+                  (element) => element.id == surveyElement.id
+                )!.step = parseFloat(e.currentTarget.value);
+                setEditedSurvey(newSurvey as ISurvey);
+              }}
+              placeholder="None"
+            ></input>
+          </div>
+        </div>
+      );
+    case 'free-response':
+      return (
+        <div>
+          <h1>I am free response</h1>
+        </div>
+      );
+    default:
+      return (
+        <div>
+          <h1>{`You shouldn't see this!`}</h1>
+        </div>
+      );
+  }
+};
+
 const ElementEditorCard = ({
   surveyElement,
   editedSurvey,
@@ -14,241 +212,6 @@ const ElementEditorCard = ({
   editedSurvey: ISurvey;
   setEditedSurvey: Dispatch<SetStateAction<ISurvey>>;
 }) => {
-  const Editor = () => {
-    switch (surveyElement.type) {
-      case 'multiple-choice':
-        return (
-          <div className="flex flex-col items-start justify-start">
-            {surveyElement.choices!.map((choice, index) => {
-              return (
-                <div
-                  key={index}
-                  className="flex w-full flex-row items-center justify-start"
-                >
-                  <BsCircle className="mt-0.5" />
-                  <input
-                    className="my-1 ml-2 mr-2 w-full bg-transparent"
-                    placeholder="Choice"
-                    defaultValue={choice}
-                    onKeyDown={(e) => {
-                      if (e.code == 'Enter') {
-                        e.currentTarget.blur();
-                      }
-                    }}
-                    onBlur={(e) => {
-                      const newSurvey = { ...editedSurvey };
-                      newSurvey.elements.find(
-                        (element) => element.id == surveyElement.id
-                      )!.choices![index] = e.currentTarget.value;
-                      setEditedSurvey(newSurvey as ISurvey);
-                    }}
-                  ></input>
-                  <button
-                    onClick={() => {
-                      const newSurvey = { ...editedSurvey };
-                      editedSurvey.elements
-                        .find((element) => element.id == surveyElement.id)
-                        ?.choices?.splice(index, 1);
-                      setEditedSurvey(newSurvey as ISurvey);
-                    }}
-                  >
-                    <TiDeleteOutline />
-                  </button>
-                </div>
-              );
-            })}
-            <button
-              onClick={() => {
-                const newSurvey = { ...editedSurvey };
-                newSurvey.elements
-                  .find((element) => element.id == surveyElement.id)
-                  ?.choices?.push('');
-                setEditedSurvey(newSurvey as ISurvey);
-              }}
-              className="mt-1 flex flex-row items-center rounded-md py-1 transition-all hover:bg-gray-100"
-            >
-              <AiFillPlusCircle />
-              <span className="ml-2">New choice</span>
-            </button>
-          </div>
-        );
-      case 'checkboxes':
-        return (
-          <div className="flex flex-col items-start justify-start">
-            {surveyElement.choices!.map((choice, index) => {
-              return (
-                <div
-                  key={index}
-                  className="flex w-full flex-row items-center justify-start"
-                >
-                  <MdCheckBoxOutlineBlank className="mt-0.5" />
-                  <input
-                    className="my-1 ml-2 mr-2 w-full bg-transparent"
-                    placeholder="Choice"
-                    defaultValue={choice}
-                    onKeyDown={(e) => {
-                      if (e.code == 'Enter') {
-                        e.currentTarget.blur();
-                      }
-                    }}
-                    onBlur={(e) => {
-                      const newSurvey = { ...editedSurvey };
-                      newSurvey.elements.find(
-                        (element) => element.id == surveyElement.id
-                      )!.choices![index] = e.currentTarget.value;
-                      setEditedSurvey(newSurvey as ISurvey);
-                    }}
-                  ></input>
-                  <button
-                    onClick={() => {
-                      const newSurvey = { ...editedSurvey };
-                      editedSurvey.elements
-                        .find((element) => element.id == surveyElement.id)
-                        ?.choices?.splice(index, 1);
-                      setEditedSurvey(newSurvey as ISurvey);
-                    }}
-                  >
-                    <TiDeleteOutline />
-                  </button>
-                </div>
-              );
-            })}
-            <button
-              onClick={() => {
-                const newSurvey = { ...editedSurvey };
-                newSurvey.elements
-                  .find((element) => element.id == surveyElement.id)
-                  ?.choices?.push('');
-                setEditedSurvey(newSurvey as ISurvey);
-              }}
-              className="mt-1 flex flex-row items-center rounded-md py-1 transition-all hover:bg-gray-100"
-            >
-              <AiFillPlusCircle />
-              <span className="ml-2">New choice</span>
-            </button>
-          </div>
-        );
-      case 'slider':
-        return (
-          <div className="flex flex-col gap-1">
-            <div className="mt-2 flex flex-row items-center justify-center">
-              <input
-                className="m-0 w-9 bg-transparent text-center text-gray-600"
-                type="number"
-                defaultValue={
-                  isNaN(surveyElement.range?.[0] ?? NaN)
-                    ? undefined
-                    : surveyElement.range?.[0]
-                }
-                onKeyDown={(e) => {
-                  if (e.code == 'Enter') {
-                    e.currentTarget.blur();
-                  }
-                }}
-                onBlur={(e) => {
-                  if (
-                    isNaN(parseFloat(e.currentTarget.value)) ||
-                    parseFloat(e.currentTarget.value) >=
-                      editedSurvey.elements.find(
-                        (element) => element.id == surveyElement.id
-                      )!.range![1]
-                  ) {
-                    e.currentTarget.value = editedSurvey.elements
-                      .find((element) => element.id == surveyElement.id)!
-                      .range![0].toString();
-                  }
-
-                  const newSurvey = { ...editedSurvey };
-                  editedSurvey.elements.find(
-                    (element) => element.id == surveyElement.id
-                  )!.range![0] = parseFloat(e.currentTarget.value);
-                  setEditedSurvey(newSurvey as ISurvey);
-                }}
-                placeholder="Min"
-              ></input>
-              <div className="mx-2 flex h-1 w-full flex-row items-center justify-center rounded-2xl bg-gray-500">
-                <div className="aspect-square h-3 rounded-2xl bg-gray-400"></div>
-              </div>
-              <input
-                className="m-0 w-9 bg-transparent text-center text-gray-600"
-                type="number"
-                defaultValue={
-                  isNaN(surveyElement.range?.[1] ?? NaN)
-                    ? 0
-                    : surveyElement.range?.[1]
-                }
-                onKeyDown={(e) => {
-                  if (e.code == 'Enter') {
-                    e.currentTarget.blur();
-                  }
-                }}
-                onBlur={(e) => {
-                  if (
-                    isNaN(parseFloat(e.currentTarget.value)) ||
-                    parseFloat(e.currentTarget.value) <=
-                      editedSurvey.elements.find(
-                        (element) => element.id == surveyElement.id
-                      )!.range![0]
-                  ) {
-                    e.currentTarget.value = editedSurvey.elements
-                      .find((element) => element.id == surveyElement.id)!
-                      .range![1].toString();
-                  }
-
-                  const newSurvey = { ...editedSurvey };
-                  editedSurvey.elements.find(
-                    (element) => element.id == surveyElement.id
-                  )!.range![1] = parseFloat(e.currentTarget.value);
-                  setEditedSurvey(newSurvey as ISurvey);
-                }}
-                placeholder="Max"
-              ></input>
-            </div>
-            <div className="flex flex-row gap-2">
-              <span className="text-gray-500">Step:</span>
-              <input
-                className="w-10 bg-transparent text-left text-gray-600"
-                defaultValue={surveyElement.step}
-                onKeyDown={(e) => {
-                  if (e.code == 'Enter') {
-                    e.currentTarget.blur();
-                  }
-                }}
-                onBlur={(e) => {
-                  if (
-                    isNaN(parseFloat(e.currentTarget.value)) ||
-                    parseFloat(e.currentTarget.value) < 0
-                  ) {
-                    e.currentTarget.value = '';
-                    return;
-                  }
-
-                  const newSurvey = { ...editedSurvey };
-                  editedSurvey.elements.find(
-                    (element) => element.id == surveyElement.id
-                  )!.step = parseFloat(e.currentTarget.value);
-                  setEditedSurvey(newSurvey as ISurvey);
-                }}
-                placeholder="None"
-              ></input>
-            </div>
-          </div>
-        );
-      case 'free-response':
-        return (
-          <div>
-            <h1>I am free response</h1>
-          </div>
-        );
-      default:
-        return (
-          <div>
-            <h1>{`You shouldn't see this!`}</h1>
-          </div>
-        );
-    }
-  };
-
   return (
     <div className="mb-4 w-full rounded-md bg-gray-50 p-4">
       <div className="flex flex-row">
@@ -299,7 +262,11 @@ const ElementEditorCard = ({
           setEditedSurvey(newSurvey as ISurvey);
         }}
       ></input>
-      <Editor />
+      <Editor
+        surveyElement={surveyElement}
+        editedSurvey={editedSurvey}
+        setEditedSurvey={setEditedSurvey}
+      />
       <div className="mt-2 flex flex-row items-center justify-start gap-1">
         <input
           type="checkbox"
