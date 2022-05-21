@@ -31,7 +31,7 @@ const Home: NextPage = () => {
             },
           },
         }}
-        className="mx-4 flex h-screen flex-col justify-center self-stretch md:mx-32"
+        className="mx-4 -mt-16 flex h-screen flex-col justify-center self-stretch md:mx-32"
       >
         <motion.h1
           variants={{

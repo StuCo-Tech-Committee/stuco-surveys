@@ -17,7 +17,7 @@ const Header = () => {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
-      className="absolute flex w-full flex-row justify-between px-4 py-4 md:px-32"
+      className="flex w-full flex-row justify-between px-4 py-4 md:px-32"
     >
       <Link href="/">
         <a className="text-2xl font-bold text-exeter">StuCo Surveys</a>

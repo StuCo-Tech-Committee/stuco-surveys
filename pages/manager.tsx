@@ -42,7 +42,7 @@ const Manager = ({
             },
           },
         }}
-        className="mx-4 h-screen self-stretch pt-20 md:mx-32"
+        className="mx-4 self-stretch py-6 md:mx-32"
       >
         <motion.h1
           variants={{
