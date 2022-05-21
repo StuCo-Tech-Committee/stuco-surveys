@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { ChangeEvent, useCallback, useState } from 'react';
 import { BsUpload } from 'react-icons/bs';
+import { AiOutlineStop } from 'react-icons/ai';
 import Question from '../../components/survey/question';
 import { server } from '../../config';
 import {
@@ -90,10 +91,17 @@ const Survey = ({ survey }: { survey: ISurvey }) => {
             />
           );
         })}
-        <button className="flex flex-row items-center justify-center gap-2 rounded-md bg-exeter py-2 px-2 text-white shadow-md">
-          <BsUpload />
-          <span>Submit</span>
-        </button>
+        {survey.published ? (
+          <button className="flex flex-row items-center justify-center gap-2 rounded-md bg-exeter py-2 px-2 text-white shadow-md">
+            <BsUpload />
+            <span>Submit</span>
+          </button>
+        ) : (
+          <button className="flex cursor-not-allowed flex-row items-center justify-center gap-2 rounded-md bg-gray-400 py-2 px-2 text-white shadow-md">
+            <AiOutlineStop />
+            <span>Unpublished</span>
+          </button>
+        )}
         <h1>{JSON.stringify(surveyResponse, null, '\t')}</h1>
       </div>
     </div>

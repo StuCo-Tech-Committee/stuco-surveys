@@ -6,8 +6,10 @@ import {
   BsSave,
   BsCloudUpload,
   BsUpload,
+  BsEye,
 } from 'react-icons/bs';
 import { BiLoaderAlt } from 'react-icons/bi';
+import { AiOutlineStop } from 'react-icons/ai';
 import Head from 'next/head';
 import Link from 'next/link';
 import { ReactNode, useEffect, useState } from 'react';
@@ -18,10 +20,19 @@ import { v4 } from 'uuid';
 import { server } from '../../config';
 import Question from '../../components/survey/question';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/router';
+import useWarnIfUnsavedChanges from '../../components/editor/useWarnIfUnsavedChanges';
 
 const Edit = ({ survey }: { survey: ISurvey }) => {
+  const router = useRouter();
+
   const [editedSurvey, setEditedSurvey] = useState(survey);
   const [saving, setSaving] = useState(false);
+  const [dirty, setDirty] = useState(false);
+
+  useWarnIfUnsavedChanges(dirty, () => {
+    return confirm('Unsaved changes may be lost.');
+  });
 
   const saveSurvey = async () => {
     if (saving) return;
@@ -34,8 +45,18 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
     });
     setTimeout(() => {
       setSaving(false);
-    }, 3000);
+      setDirty(false);
+    }, 1000);
   };
+
+  // Dirty survey
+  useEffect(() => {
+    setDirty(true);
+  }, [editedSurvey]);
+
+  useEffect(() => {
+    setDirty(false);
+  }, []);
 
   useEffect(() => {
     if (typeof window != 'undefined') {
@@ -98,7 +119,9 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
   return (
     <motion.div className="flex w-full flex-row overflow-hidden">
       <Head>
-        <title>{editedSurvey.name}</title>
+        <title>{`${dirty ? ' * ' : ''}${
+          editedSurvey.name || 'Untitled Survey'
+        }`}</title>
         <meta
           name="description"
           content="Real-time survey system for Student Council."
@@ -237,14 +260,28 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
               />
             );
           })}
-          <button className="flex flex-row items-center justify-center gap-2 rounded-md bg-exeter py-2 px-2 text-white shadow-md">
-            <BsUpload />
-            <span>Submit</span>
-          </button>
+          {survey.published ? (
+            <button className="flex flex-row items-center justify-center gap-2 rounded-md bg-exeter py-2 px-2 text-white shadow-md">
+              <BsUpload />
+              <span>Submit</span>
+            </button>
+          ) : (
+            <button className="flex cursor-not-allowed flex-row items-center justify-center gap-2 rounded-md bg-gray-400 py-2 px-2 text-white shadow-md">
+              <AiOutlineStop />
+              <span>Unpublished</span>
+            </button>
+          )}
         </div>
         {/* Controls overlay */}
         <div className="pointer-events-none absolute flex h-full w-full flex-row items-start justify-end py-4 px-6">
           <div className="pointer-events-auto flex flex-row gap-2">
+            <button
+              onClick={() => router.push(`${server}/survey/${survey._id}`)}
+              className="flex cursor-pointer flex-row items-center justify-center gap-2 rounded-md bg-gray-800 px-3 py-2 text-white transition-all hover:shadow-md"
+            >
+              <BsEye />
+              <span>Preview</span>
+            </button>
             {!saving ? (
               <button
                 onClick={() => saveSurvey()}

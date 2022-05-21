@@ -3,7 +3,7 @@ import type { AppProps } from 'next/app';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import Header from '../components/header';
-import NextNProgress from 'nextjs-progressbar';
+import NextNProgress from '../components/progressBar';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
