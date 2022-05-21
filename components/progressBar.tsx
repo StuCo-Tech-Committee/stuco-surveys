@@ -67,7 +67,7 @@ export default function NextNProgress({
       Router.events.off('routeChangeComplete', routeChangeEnd);
       Router.events.off('routeChangeError', routeChangeEnd);
     };
-  }, []);
+  });
 
   const routeChangeStart = (
     _: string,
