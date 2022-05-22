@@ -117,7 +117,7 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
   };
 
   return (
-    <motion.div className="flex w-full flex-row overflow-hidden">
+    <motion.div layout className="flex w-full flex-row overflow-hidden">
       <Head>
         <title>{`${dirty ? ' * ' : ''}${
           editedSurvey.name || 'Untitled Survey'

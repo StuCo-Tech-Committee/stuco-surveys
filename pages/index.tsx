@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Header from '../components/header';
 import { motion } from 'framer-motion';
 
 const Home: NextPage = () => {
@@ -18,7 +17,6 @@ const Home: NextPage = () => {
       <motion.div
         initial="hidden"
         animate="visible"
-        exit="hidden"
         variants={{
           hidden: {
             transition: {
