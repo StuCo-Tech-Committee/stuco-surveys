@@ -16,7 +16,6 @@ const Header = () => {
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 20 }}
       className="flex w-full flex-row justify-between px-4 py-4 md:px-32"
     >
       <Link href="/">
