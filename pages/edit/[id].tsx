@@ -6,7 +6,6 @@ import {
   BsSave,
   BsCloudUpload,
   BsUpload,
-  BsEye,
 } from 'react-icons/bs';
 import { BiLoaderAlt } from 'react-icons/bi';
 import { AiOutlineStop } from 'react-icons/ai';
@@ -20,12 +19,9 @@ import { v4 } from 'uuid';
 import { server } from '../../config';
 import Question from '../../components/survey/question';
 import { motion } from 'framer-motion';
-import { useRouter } from 'next/router';
 import useWarnIfUnsavedChanges from '../../components/editor/useWarnIfUnsavedChanges';
 
 const Edit = ({ survey }: { survey: ISurvey }) => {
-  const router = useRouter();
-
   const [editedSurvey, setEditedSurvey] = useState(survey);
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
@@ -275,13 +271,6 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
         {/* Controls overlay */}
         <div className="pointer-events-none absolute flex h-full w-full flex-row items-start justify-end py-4 px-6">
           <div className="pointer-events-auto flex flex-row gap-2">
-            <button
-              onClick={() => router.push(`${server}/survey/${survey._id}`)}
-              className="flex cursor-pointer flex-row items-center justify-center gap-2 rounded-md bg-gray-800 px-3 py-2 text-white transition-all hover:shadow-md"
-            >
-              <BsEye />
-              <span>Preview</span>
-            </button>
             {!saving ? (
               <button
                 onClick={() => saveSurvey()}

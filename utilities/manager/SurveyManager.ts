@@ -19,7 +19,7 @@ interface ISurveyElement {
 interface ISurvey extends Document {
   name: string;
   description: string;
-  published: string;
+  published: boolean;
   createdDate: string;
   modifiedDate: string;
   elements: ISurveyElement[];
@@ -136,8 +136,14 @@ class SurveyManager {
     }).exec();
   }
 
-  static async getSurveys(published: boolean) {
-    return await Survey.find({ published: published }).exec();
+  static async getSurveys(published?: boolean) {
+    if (typeof published === 'undefined') {
+      return await Survey.find().exec();
+    } else if (published === true) {
+      return await Survey.find({ published: true }).exec();
+    } else {
+      return await Survey.find({ published: false }).exec();
+    }
   }
 }
 
