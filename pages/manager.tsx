@@ -28,7 +28,6 @@ const Manager = ({
       <motion.div
         initial="hidden"
         animate="visible"
-        exit="hidden"
         variants={{
           visible: {
             transition: {
@@ -62,7 +61,6 @@ const Manager = ({
         <motion.div
           initial="hidden"
           animate="visible"
-          exit="hidden"
           variants={{
             visible: {
               transition: {
@@ -115,7 +113,6 @@ const Manager = ({
         <motion.div
           initial="hidden"
           animate="visible"
-          exit="hidden"
           variants={{
             visible: {
               transition: {

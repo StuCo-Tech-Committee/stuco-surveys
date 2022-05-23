@@ -2,7 +2,6 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
 
 dayjs.extend(relativeTime);
 
@@ -17,43 +16,18 @@ const SurveyButton = ({
   description: string;
   modifiedDate: Date;
 }) => {
-  const [tapped, setTapped] = useState(false);
-
   return (
     <Link href={`/edit/${id}`} scroll={false}>
       <motion.div
-        variants={
-          !tapped
-            ? {
-                hidden: {
-                  y: 20,
-                  opacity: 0,
-                },
-                visible: {
-                  y: 0,
-                  opacity: 1,
-                },
-              }
-            : {}
-        }
-        animate={
-          tapped
-            ? {
-                scale: 1.3,
-                y: 0,
-                opacity: 0,
-                transition: {
-                  ease: 'circOut',
-                  duration: 0.4,
-                },
-              }
-            : {
-                y: 0,
-                opacity: 1,
-              }
-        }
-        onTap={() => {
-          setTapped(true);
+        variants={{
+          hidden: {
+            y: 20,
+            opacity: 0,
+          },
+          visible: {
+            y: 0,
+            opacity: 1,
+          },
         }}
         className="flex cursor-pointer flex-col items-start rounded-md bg-gray-100 p-4 shadow-md"
       >
