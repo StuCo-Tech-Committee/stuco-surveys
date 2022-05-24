@@ -3,7 +3,7 @@ import {
   BsUiChecks,
   BsSliders,
   BsTextLeft,
-  BsSave,
+  BsCheck2,
   BsCloudUpload,
   BsUpload,
 } from 'react-icons/bs';
@@ -11,7 +11,7 @@ import { BiLoaderAlt } from 'react-icons/bi';
 import { AiOutlineStop } from 'react-icons/ai';
 import Head from 'next/head';
 import Link from 'next/link';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { ISurvey } from '../../utilities/manager/SurveyManager';
 import ElementEditorCard from '../../components/editor/elementEditorCard';
@@ -19,59 +19,14 @@ import { v4 } from 'uuid';
 import { server } from '../../config';
 import Question from '../../components/survey/question';
 import { motion } from 'framer-motion';
-import useWarnIfUnsavedChanges from '../../components/editor/useWarnIfUnsavedChanges';
+import useAutosave from '../../components/editor/useAutosave';
 
 const Edit = ({ survey }: { survey: ISurvey }) => {
-  const [editedSurvey, setEditedSurvey] = useState(survey);
   const [saving, setSaving] = useState(false);
-  const [dirty, setDirty] = useState(false);
-
-  useWarnIfUnsavedChanges(dirty, () => {
-    return confirm('Unsaved changes may be lost.');
-  });
-
-  const saveSurvey = async () => {
-    if (saving) return;
-
-    setSaving(true);
-    await fetch(`${server}/api/survey`, {
-      method: 'PUT',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(editedSurvey),
-    });
-    setTimeout(() => {
-      setSaving(false);
-      setDirty(false);
-    }, 1000);
-  };
-
-  // Dirty survey
-  useEffect(() => {
-    setDirty(true);
-  }, [editedSurvey]);
-
-  useEffect(() => {
-    setDirty(false);
-  }, []);
-
-  useEffect(() => {
-    if (typeof window != 'undefined') {
-      document.onkeydown = (e) => {
-        if (e.ctrlKey && e.code == 'KeyS') {
-          e.preventDefault();
-          saveSurvey();
-        }
-      };
-    }
-    return () => {
-      if (typeof window != 'undefined') {
-        document.onkeydown = null;
-      }
-    };
-  });
+  const [editedSurvey, saveEditedSurvey] = useAutosave(survey, setSaving);
 
   const createSurveyElement = (type: string) => {
-    setEditedSurvey({
+    saveEditedSurvey({
       ...editedSurvey,
       elements: [
         ...editedSurvey.elements,
@@ -115,9 +70,7 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
   return (
     <motion.div layout className="flex w-full flex-row overflow-hidden">
       <Head>
-        <title>{`${dirty ? ' * ' : ''}${
-          editedSurvey.name || 'Untitled Survey'
-        }`}</title>
+        <title>{editedSurvey.name || 'Untitled Survey'}</title>
         <meta
           name="description"
           content="Real-time survey system for Student Council."
@@ -158,7 +111,7 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
             }
           }}
           onChange={(e) => {
-            setEditedSurvey({
+            saveEditedSurvey({
               ...editedSurvey,
               name: e.currentTarget.value,
             } as ISurvey);
@@ -177,7 +130,7 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
             }
           }}
           onChange={(e) => {
-            setEditedSurvey({
+            saveEditedSurvey({
               ...editedSurvey,
               description: e.currentTarget.value,
             } as ISurvey);
@@ -208,7 +161,7 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
               <ElementEditorCard
                 surveyElement={surveyElement}
                 editedSurvey={editedSurvey}
-                setEditedSurvey={setEditedSurvey}
+                saveEditedSurvey={saveEditedSurvey}
                 key={surveyElement.id}
               />
             );
@@ -270,23 +223,25 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
         </div>
         {/* Controls overlay */}
         <div className="pointer-events-none absolute flex h-full w-full flex-row items-start justify-end py-4 px-6">
-          <div className="pointer-events-auto flex flex-row gap-2">
-            {!saving ? (
-              <button
-                onClick={() => saveSurvey()}
-                className="flex cursor-pointer flex-row items-center justify-center gap-2 rounded-md bg-gray-800 px-3 py-2 text-white transition-all hover:shadow-md"
-              >
-                <BsSave />
-                <span>Save</span>
-              </button>
-            ) : (
-              <button
-                disabled={true}
-                className="flex cursor-not-allowed flex-row items-center justify-center gap-2 rounded-md bg-gray-700 px-3 py-2 text-white"
+          <div className="pointer-events-auto flex flex-row gap-4">
+            {saving ? (
+              <motion.div
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="pointer-events-none flex select-none flex-row items-center justify-end gap-1 text-gray-400"
               >
                 <BiLoaderAlt className="animate-spin" />
                 <span>Saving...</span>
-              </button>
+              </motion.div>
+            ) : (
+              <motion.main
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="pointer-events-none flex select-none flex-row items-center justify-end gap-1 text-gray-400"
+              >
+                <BsCheck2 className="mt-0.5" />
+                <span>Saved</span>
+              </motion.main>
             )}
             <button
               onClick={() => {

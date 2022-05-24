@@ -8,11 +8,11 @@ import { MdCheckBoxOutlineBlank } from 'react-icons/md';
 const Editor = ({
   surveyElement,
   editedSurvey,
-  setEditedSurvey,
+  saveEditedSurvey,
 }: {
   surveyElement: ISurveyElement;
   editedSurvey: ISurvey;
-  setEditedSurvey: Dispatch<SetStateAction<ISurvey>>;
+  saveEditedSurvey: Dispatch<SetStateAction<ISurvey>>;
 }) => {
   switch (surveyElement.type) {
     case 'multiple-choice':
@@ -34,7 +34,7 @@ const Editor = ({
                     newSurvey.elements.find(
                       (element) => element.id == surveyElement.id
                     )!.choices![index] = e.currentTarget.value;
-                    setEditedSurvey(newSurvey as ISurvey);
+                    saveEditedSurvey(newSurvey as ISurvey);
                   }}
                 ></input>
                 <button
@@ -43,7 +43,7 @@ const Editor = ({
                     editedSurvey.elements
                       .find((element) => element.id == surveyElement.id)
                       ?.choices?.splice(index, 1);
-                    setEditedSurvey(newSurvey as ISurvey);
+                    saveEditedSurvey(newSurvey as ISurvey);
                   }}
                 >
                   <TiDeleteOutline />
@@ -57,7 +57,7 @@ const Editor = ({
               newSurvey.elements
                 .find((element) => element.id == surveyElement.id)
                 ?.choices?.push('');
-              setEditedSurvey(newSurvey as ISurvey);
+              saveEditedSurvey(newSurvey as ISurvey);
             }}
             className="mt-1 flex flex-row items-center rounded-md py-1 transition-all hover:bg-gray-100"
           >
@@ -85,7 +85,7 @@ const Editor = ({
                     newSurvey.elements.find(
                       (element) => element.id == surveyElement.id
                     )!.choices![index] = e.currentTarget.value;
-                    setEditedSurvey(newSurvey as ISurvey);
+                    saveEditedSurvey(newSurvey as ISurvey);
                   }}
                 ></input>
                 <button
@@ -94,7 +94,7 @@ const Editor = ({
                     editedSurvey.elements
                       .find((element) => element.id == surveyElement.id)
                       ?.choices?.splice(index, 1);
-                    setEditedSurvey(newSurvey as ISurvey);
+                    saveEditedSurvey(newSurvey as ISurvey);
                   }}
                 >
                   <TiDeleteOutline />
@@ -108,7 +108,7 @@ const Editor = ({
               newSurvey.elements
                 .find((element) => element.id == surveyElement.id)
                 ?.choices?.push('');
-              setEditedSurvey(newSurvey as ISurvey);
+              saveEditedSurvey(newSurvey as ISurvey);
             }}
             className="mt-1 flex flex-row items-center rounded-md py-1 transition-all hover:bg-gray-100"
           >
@@ -136,7 +136,7 @@ const Editor = ({
                 )!.range![0] = isNaN(parseFloat(e.currentTarget.value))
                   ? undefined
                   : parseFloat(e.currentTarget.value);
-                setEditedSurvey(newSurvey as ISurvey);
+                saveEditedSurvey(newSurvey as ISurvey);
               }}
               placeholder="Min"
             ></input>
@@ -158,7 +158,7 @@ const Editor = ({
                 )!.range![1] = isNaN(parseFloat(e.currentTarget.value))
                   ? undefined
                   : parseFloat(e.currentTarget.value);
-                setEditedSurvey(newSurvey as ISurvey);
+                saveEditedSurvey(newSurvey as ISurvey);
               }}
               placeholder="Max"
             ></input>
@@ -181,7 +181,7 @@ const Editor = ({
                 editedSurvey.elements.find(
                   (element) => element.id == surveyElement.id
                 )!.step = parseFloat(e.currentTarget.value);
-                setEditedSurvey(newSurvey as ISurvey);
+                saveEditedSurvey(newSurvey as ISurvey);
               }}
               placeholder="None"
             ></input>
@@ -206,11 +206,11 @@ const Editor = ({
 const ElementEditorCard = ({
   surveyElement,
   editedSurvey,
-  setEditedSurvey,
+  saveEditedSurvey,
 }: {
   surveyElement: ISurveyElement;
   editedSurvey: ISurvey;
-  setEditedSurvey: Dispatch<SetStateAction<ISurvey>>;
+  saveEditedSurvey: Dispatch<SetStateAction<ISurvey>>;
 }) => {
   return (
     <div className="mb-4 w-full rounded-md bg-gray-50 p-4">
@@ -229,7 +229,7 @@ const ElementEditorCard = ({
             newSurvey.elements.find(
               (element) => element.id == surveyElement.id
             )!.title = e.currentTarget.value;
-            setEditedSurvey(newSurvey as ISurvey);
+            saveEditedSurvey(newSurvey as ISurvey);
           }}
         ></input>
         <button
@@ -239,7 +239,7 @@ const ElementEditorCard = ({
               (element) => element.id == surveyElement.id
             )!;
             newSurvey.elements.splice(index, 1);
-            setEditedSurvey(newSurvey as ISurvey);
+            saveEditedSurvey(newSurvey as ISurvey);
           }}
         >
           <BsTrash />
@@ -259,13 +259,13 @@ const ElementEditorCard = ({
           newSurvey.elements.find(
             (element) => element.id == surveyElement.id
           )!.description = e.currentTarget.value;
-          setEditedSurvey(newSurvey as ISurvey);
+          saveEditedSurvey(newSurvey as ISurvey);
         }}
       ></input>
       <Editor
         surveyElement={surveyElement}
         editedSurvey={editedSurvey}
-        setEditedSurvey={setEditedSurvey}
+        saveEditedSurvey={saveEditedSurvey}
       />
       <div className="mt-2 flex flex-row items-center justify-start gap-1">
         <input
@@ -278,7 +278,7 @@ const ElementEditorCard = ({
             newSurvey.elements.find(
               (element) => element.id == surveyElement.id
             )!.required = e.currentTarget.checked;
-            setEditedSurvey(newSurvey as ISurvey);
+            saveEditedSurvey(newSurvey as ISurvey);
           }}
         />
         <label htmlFor={surveyElement.id}>Required</label>
