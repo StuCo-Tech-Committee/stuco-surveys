@@ -21,7 +21,7 @@ const Manager = () => {
 
   useEffect(() => {
     loadSurveys();
-  });
+  }, [loadSurveys]);
 
   return (
     <div className="flex w-full flex-col overflow-x-hidden pb-20">
