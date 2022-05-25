@@ -84,9 +84,13 @@ const Manager = () => {
             >
               Create
             </motion.h1>
-            <div className="mt-4 grid grid-cols-5 gap-4">
+            <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-5">
               <CreateSurveyButton name="Blank" icon={<BiFileBlank />} />
               <CreateSurveyButton name="Motion" icon={<GoLaw />} />
+              <CreateSurveyButton
+                name="None of these do anything (yet)"
+                icon={<GoLaw />}
+              />
             </div>
           </motion.div>
           <motion.div
