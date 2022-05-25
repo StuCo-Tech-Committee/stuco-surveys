@@ -4,24 +4,27 @@ import SurveyButton from '../components/manager/surveyButton';
 import { server } from '../config';
 import { ISurvey } from '../utilities/manager/SurveyManager';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
-import { BiLoaderAlt } from 'react-icons/bi';
+import { useCallback, useEffect, useState } from 'react';
+import { BiLoaderAlt, BiFileBlank } from 'react-icons/bi';
+import { GoLaw } from 'react-icons/go';
 
 const Manager = () => {
   const [surveys, setSurveys] = useState<ISurvey[] | undefined>(undefined);
 
-  useEffect(() => {
-    (async () => {
-      const surveys: ISurvey[] = await (
-        await fetch(`${server}/api/surveys`)
-      ).json();
+  const loadSurveys = useCallback(async () => {
+    const surveys: ISurvey[] = await (
+      await fetch(`${server}/api/surveys`)
+    ).json();
 
-      setSurveys(surveys);
-    })();
+    setSurveys(surveys);
   }, []);
 
+  useEffect(() => {
+    loadSurveys();
+  });
+
   return (
-    <div className="flex w-full flex-col overflow-x-hidden">
+    <div className="flex w-full flex-col overflow-x-hidden pb-20">
       <Head>
         <title>StuCo Surveys - Manager</title>
         <meta
@@ -53,94 +56,39 @@ const Manager = () => {
           </motion.h1>
         </div>
       ) : (
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={{
-            visible: {
-              transition: {
-                staggerChildren: 0.05,
-              },
-            },
-            hidden: {
-              transition: {
-                staggerChildren: 0.05,
-                staggerDirection: -1,
-              },
-            },
-          }}
-          className="mx-4 self-stretch py-6 md:mx-32"
-        >
-          <motion.h1
-            variants={{
-              hidden: {
-                y: 20,
-                opacity: 0,
-              },
-              visible: {
-                y: 0,
-                opacity: 1,
-              },
-            }}
-            className="text-xl font-semibold text-gray-800"
-          >
-            Drafts
-          </motion.h1>
+        <>
           <motion.div
             initial="hidden"
             animate="visible"
             variants={{
               visible: {
                 transition: {
-                  staggerChildren: 0.02,
+                  staggerChildren: 0.05,
                 },
+                y: 0,
               },
               hidden: {
                 transition: {
-                  staggerChildren: 0.015,
+                  staggerChildren: 0.05,
                   staggerDirection: -1,
                 },
+                y: 10,
               },
             }}
-            className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5"
+            className="w-full bg-gray-100 px-4 py-6 md:px-32"
           >
-            <CreateSurveyButton />
-            {surveys
-              .sort(
-                (a, b) =>
-                  new Date(Date.parse(b.modifiedDate)).getTime() -
-                  new Date(Date.parse(a.modifiedDate)).getTime()
-              )
-              .filter((survey) => {
-                return survey.published === false;
-              })
-              .map((survey) => {
-                return (
-                  <SurveyButton
-                    key={survey._id}
-                    id={survey._id}
-                    title={survey.name || 'Untitled Survey'}
-                    description={survey.description || 'No description'}
-                    modifiedDate={new Date(Date.parse(survey.modifiedDate))}
-                  />
-                );
-              })}
+            <motion.h1
+              initial="hidden"
+              animate="visible"
+              className="text-xl font-semibold text-gray-800"
+            >
+              Create
+            </motion.h1>
+            <div className="mt-4 grid grid-cols-5 gap-4">
+              <CreateSurveyButton name="Blank" icon={<BiFileBlank />} />
+              <CreateSurveyButton name="Motion" icon={<GoLaw />} />
+            </div>
           </motion.div>
-          <motion.h1
-            variants={{
-              hidden: {
-                y: 20,
-                opacity: 0,
-              },
-              visible: {
-                y: 0,
-                opacity: 1,
-              },
-            }}
-            className="mt-12 text-xl font-semibold text-gray-800"
-          >
-            Published
-          </motion.h1>
           <motion.div
             initial="hidden"
             animate="visible"
@@ -152,35 +100,145 @@ const Manager = () => {
               },
               hidden: {
                 transition: {
-                  staggerChildren: 0.025,
+                  staggerChildren: 0.05,
                   staggerDirection: -1,
                 },
               },
             }}
-            className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+            className="mx-4 self-stretch py-6 md:mx-32"
           >
-            {surveys
-              .sort(
-                (a, b) =>
-                  new Date(Date.parse(b.modifiedDate)).getTime() -
-                  new Date(Date.parse(a.modifiedDate)).getTime()
-              )
-              .filter((survey) => {
-                return survey.published === true;
-              })
-              .map((survey) => {
-                return (
-                  <SurveyButton
-                    key={survey._id}
-                    id={survey._id}
-                    title={survey.name || 'Untitled Survey'}
-                    description={survey.description || 'No description'}
-                    modifiedDate={new Date(Date.parse(survey.modifiedDate))}
-                  />
-                );
-              })}
+            {surveys.filter((survey) => {
+              return survey.published === false;
+            }).length > 0 ? (
+              <>
+                <motion.h1
+                  variants={{
+                    hidden: {
+                      y: 20,
+                      opacity: 0,
+                    },
+                    visible: {
+                      y: 0,
+                      opacity: 1,
+                    },
+                  }}
+                  className="text-xl font-semibold text-gray-800"
+                >
+                  Drafts
+                </motion.h1>
+                <motion.div
+                  initial="hidden"
+                  animate="visible"
+                  variants={{
+                    visible: {
+                      transition: {
+                        staggerChildren: 0.02,
+                      },
+                    },
+                    hidden: {
+                      transition: {
+                        staggerChildren: 0.015,
+                        staggerDirection: -1,
+                      },
+                    },
+                  }}
+                  className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5"
+                >
+                  {surveys
+                    .sort(
+                      (a, b) =>
+                        new Date(Date.parse(b.modifiedDate)).getTime() -
+                        new Date(Date.parse(a.modifiedDate)).getTime()
+                    )
+                    .filter((survey) => {
+                      return survey.published === false;
+                    })
+                    .map((survey) => {
+                      return (
+                        <SurveyButton
+                          key={survey._id}
+                          id={survey._id}
+                          title={survey.name || 'Untitled Survey'}
+                          description={survey.description || 'No description'}
+                          modifiedDate={
+                            new Date(Date.parse(survey.modifiedDate))
+                          }
+                          loadSurveys={loadSurveys}
+                        />
+                      );
+                    })}
+                </motion.div>
+              </>
+            ) : (
+              <></>
+            )}
+            {surveys.filter((survey) => {
+              return survey.published === true;
+            }).length > 0 ? (
+              <>
+                <motion.h1
+                  variants={{
+                    hidden: {
+                      y: 20,
+                      opacity: 0,
+                    },
+                    visible: {
+                      y: 0,
+                      opacity: 1,
+                    },
+                  }}
+                  className="mt-12 text-xl font-semibold text-gray-800"
+                >
+                  Published
+                </motion.h1>
+                <motion.div
+                  initial="hidden"
+                  animate="visible"
+                  variants={{
+                    visible: {
+                      transition: {
+                        staggerChildren: 0.05,
+                      },
+                    },
+                    hidden: {
+                      transition: {
+                        staggerChildren: 0.025,
+                        staggerDirection: -1,
+                      },
+                    },
+                  }}
+                  className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+                >
+                  {surveys
+                    .sort(
+                      (a, b) =>
+                        new Date(Date.parse(b.modifiedDate)).getTime() -
+                        new Date(Date.parse(a.modifiedDate)).getTime()
+                    )
+                    .filter((survey) => {
+                      return survey.published === true;
+                    })
+                    .map((survey) => {
+                      return (
+                        <SurveyButton
+                          key={survey._id}
+                          id={survey._id}
+                          title={survey.name || 'Untitled Survey'}
+                          description={survey.description || 'No description'}
+                          modifiedDate={
+                            new Date(Date.parse(survey.modifiedDate))
+                          }
+                          loadSurveys={loadSurveys}
+                        />
+                      );
+                    })}
+                </motion.div>
+              </>
+            ) : (
+              <></>
+            )}
           </motion.div>
-        </motion.div>
+        </>
       )}
     </div>
   );

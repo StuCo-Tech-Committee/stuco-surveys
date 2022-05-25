@@ -24,6 +24,13 @@ export default async function handler(
         .status(200)
         .send(await SurveyManager.updateSurvey(req.body as ISurvey));
       break;
+    case 'DELETE':
+      if (!req.query.id)
+        return res.status(400).send({ error: 'Query parameter "id" required' });
+      res
+        .status(200)
+        .send(await SurveyManager.deleteSurvey(req.query.id as string));
+      break;
     default:
       res.status(405);
       break;

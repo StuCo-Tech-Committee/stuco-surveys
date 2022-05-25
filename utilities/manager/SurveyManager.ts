@@ -136,6 +136,10 @@ class SurveyManager {
     }).exec();
   }
 
+  static async deleteSurvey(id: string) {
+    return await Survey.findByIdAndDelete(id).exec();
+  }
+
   static async getSurveys(published?: boolean) {
     if (typeof published === 'undefined') {
       return await Survey.find().exec();

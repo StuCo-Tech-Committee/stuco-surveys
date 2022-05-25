@@ -1,14 +1,20 @@
 import Link from 'next/link';
-import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { motion } from 'framer-motion';
+import { ReactNode } from 'react';
 
-const CreateSurveyButton = () => {
+const CreateSurveyButton = ({
+  name,
+  icon,
+}: {
+  name: string;
+  icon: ReactNode;
+}) => {
   return (
     <Link href="/create" scroll={false}>
       <motion.div
         variants={{
           hidden: {
-            y: 20,
+            y: 10,
             opacity: 0,
           },
           visible: {
@@ -16,10 +22,10 @@ const CreateSurveyButton = () => {
             opacity: 1,
           },
         }}
-        className="flex h-full w-full cursor-pointer flex-row items-center justify-center rounded-md bg-gray-100 p-4 shadow-md"
+        className="flex cursor-pointer flex-col items-start justify-start rounded-md bg-white p-4 outline outline-1 outline-gray-300 transition-colors hover:bg-gray-50"
       >
-        <AiOutlinePlusCircle size={20} className="text-gray-700" />
-        <h1 className="ml-2 text-lg font-bold text-gray-700">Create</h1>
+        {icon}
+        <h1>{name}</h1>
       </motion.div>
     </Link>
   );
