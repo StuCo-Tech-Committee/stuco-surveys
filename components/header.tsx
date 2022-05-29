@@ -23,8 +23,8 @@ const Header = () => {
       </Link>
       <ul className="flex flex-row">
         <NavItem name="Manager" href="/manager" />
-        <NavItem name="Viewer" href="/viewer" />
-        <NavItem name="Privacy" href="/privacy" />
+        {/* <NavItem name="Viewer" href="/viewer" /> */}
+        {/* <NavItem name="Privacy" href="/privacy" /> */}
       </ul>
     </motion.div>
   );

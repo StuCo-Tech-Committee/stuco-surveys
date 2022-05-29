@@ -9,10 +9,12 @@ const Editor = ({
   surveyElement,
   editedSurvey,
   saveEditedSurvey,
+  published,
 }: {
   surveyElement: ISurveyElement;
   editedSurvey: ISurvey;
   saveEditedSurvey: Dispatch<SetStateAction<ISurvey>>;
+  published: boolean;
 }) => {
   switch (surveyElement.type) {
     case 'multiple-choice':
@@ -26,6 +28,7 @@ const Editor = ({
               >
                 <BsCircle className="mt-0.5" />
                 <input
+                  disabled={published}
                   className="my-1 ml-2 mr-2 w-full bg-transparent"
                   placeholder="Choice"
                   defaultValue={choice}
@@ -38,6 +41,7 @@ const Editor = ({
                   }}
                 ></input>
                 <button
+                  disabled={published}
                   onClick={() => {
                     const newSurvey = { ...editedSurvey };
                     editedSurvey.elements
@@ -52,6 +56,7 @@ const Editor = ({
             );
           })}
           <button
+            disabled={published}
             onClick={() => {
               const newSurvey = { ...editedSurvey };
               newSurvey.elements
@@ -77,6 +82,7 @@ const Editor = ({
               >
                 <MdCheckBoxOutlineBlank className="mt-0.5" />
                 <input
+                  disabled={published}
                   className="my-1 ml-2 mr-2 w-full bg-transparent"
                   placeholder="Choice"
                   defaultValue={choice}
@@ -89,6 +95,7 @@ const Editor = ({
                   }}
                 ></input>
                 <button
+                  disabled={published}
                   onClick={() => {
                     const newSurvey = { ...editedSurvey };
                     editedSurvey.elements
@@ -103,6 +110,7 @@ const Editor = ({
             );
           })}
           <button
+            disabled={published}
             onClick={() => {
               const newSurvey = { ...editedSurvey };
               newSurvey.elements
@@ -122,6 +130,7 @@ const Editor = ({
         <div className="flex flex-col gap-1">
           <div className="mt-2 flex flex-row items-center justify-center">
             <input
+              disabled={published}
               className="m-0 w-9 bg-transparent text-center text-gray-600"
               type="number"
               defaultValue={
@@ -144,6 +153,7 @@ const Editor = ({
               <div className="aspect-square h-3 rounded-2xl bg-gray-400"></div>
             </div>
             <input
+              disabled={published}
               className="m-0 w-9 bg-transparent text-center text-gray-600"
               type="number"
               defaultValue={
@@ -166,6 +176,7 @@ const Editor = ({
           <div className="flex flex-row gap-2">
             <span className="text-gray-500">Step:</span>
             <input
+              disabled={published}
               className="w-10 bg-transparent text-left text-gray-600"
               defaultValue={surveyElement.step}
               onChange={(e) => {
@@ -207,15 +218,18 @@ const ElementEditorCard = ({
   surveyElement,
   editedSurvey,
   saveEditedSurvey,
+  published,
 }: {
   surveyElement: ISurveyElement;
   editedSurvey: ISurvey;
   saveEditedSurvey: Dispatch<SetStateAction<ISurvey>>;
+  published: boolean;
 }) => {
   return (
     <div className="mb-4 w-full rounded-md bg-gray-50 p-4">
       <div className="flex flex-row">
         <input
+          disabled={published}
           className="mr-4 w-full cursor-text rounded-sm bg-transparent text-lg font-bold text-gray-800 outline outline-0 outline-offset-2 outline-gray-300 before:text-gray-400 empty:before:content-['Untitled_question'] hover:outline-2 focus:outline-2"
           defaultValue={surveyElement.title}
           placeholder="Untitled Question"
@@ -233,6 +247,7 @@ const ElementEditorCard = ({
           }}
         ></input>
         <button
+          disabled={published}
           onClick={() => {
             const newSurvey = { ...editedSurvey };
             const index = newSurvey.elements.findIndex(
@@ -246,6 +261,7 @@ const ElementEditorCard = ({
         </button>
       </div>
       <input
+        disabled={published}
         className="my-2 w-full cursor-text rounded-sm bg-transparent text-gray-600 outline outline-0 outline-offset-2 outline-gray-300 before:text-gray-400 empty:before:content-['No_description'] hover:outline-2 focus:outline-2"
         defaultValue={surveyElement.description}
         placeholder="No description"
@@ -266,9 +282,11 @@ const ElementEditorCard = ({
         surveyElement={surveyElement}
         editedSurvey={editedSurvey}
         saveEditedSurvey={saveEditedSurvey}
+        published={published}
       />
       <div className="mt-2 flex flex-row items-center justify-start gap-1">
         <input
+          disabled={published}
           type="checkbox"
           defaultChecked={surveyElement.required}
           className="mt-0.5"

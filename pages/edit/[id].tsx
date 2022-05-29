@@ -6,6 +6,7 @@ import {
   BsCheck2,
   BsCloudUpload,
   BsUpload,
+  BsChatLeftText,
 } from 'react-icons/bs';
 import { BiLoaderAlt } from 'react-icons/bi';
 import { AiOutlineStop } from 'react-icons/ai';
@@ -56,6 +57,7 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
   }) => {
     return (
       <button
+        disabled={editedSurvey.published}
         onClick={() => {
           createSurveyElement(type);
         }}
@@ -92,13 +94,18 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
             opacity: 1,
           },
         }}
-        className="h-screen w-2/5 overflow-x-hidden overflow-y-scroll bg-gray-100 p-8"
+        className={`h-screen w-2/5 overflow-x-hidden overflow-y-scroll bg-gray-100 p-8 ${
+          editedSurvey.published ? 'pointer-events-none' : ''
+        }`}
       >
         {/* Back button and title and description editor */}
         <Link href="/manager">
-          <a className="text-gray-400">{'← Back to Manager'}</a>
+          <a className="pointer-events-auto text-gray-400">
+            {'← Back to Manager'}
+          </a>
         </Link>
         <input
+          disabled={editedSurvey.published}
           role="textbox"
           className="mt-8 w-full cursor-text rounded-sm bg-transparent text-3xl font-bold text-gray-800 outline outline-0 outline-offset-4 outline-gray-300 hover:outline-2 focus:outline-2"
           contentEditable
@@ -118,6 +125,7 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
           }}
         ></input>
         <input
+          disabled={editedSurvey.published}
           role="textbox"
           className="my-4 w-full cursor-text rounded-sm bg-transparent text-xl text-gray-600 outline outline-0 outline-offset-4 outline-gray-300 hover:outline-2 focus:outline-2"
           contentEditable
@@ -162,6 +170,7 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
                 surveyElement={surveyElement}
                 editedSurvey={editedSurvey}
                 saveEditedSurvey={saveEditedSurvey}
+                published={editedSurvey.published}
                 key={surveyElement.id}
               />
             );
@@ -209,7 +218,7 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
               />
             );
           })}
-          {survey.published ? (
+          {editedSurvey.published ? (
             <button className="flex flex-row items-center justify-center gap-2 rounded-md bg-exeter py-2 px-2 text-white shadow-md">
               <BsUpload />
               <span>Submit</span>
@@ -224,7 +233,7 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
         {/* Controls overlay */}
         <div className="pointer-events-none absolute flex h-full w-full flex-row items-start justify-end py-4 px-6">
           <div className="pointer-events-auto flex flex-row gap-4">
-            {saving ? (
+            {saving && !editedSurvey.published ? (
               <motion.div
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -233,7 +242,7 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
                 <BiLoaderAlt className="animate-spin" />
                 <span>Saving...</span>
               </motion.div>
-            ) : (
+            ) : !editedSurvey.published ? (
               <motion.main
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -242,18 +251,46 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
                 <BsCheck2 className="mt-0.5" />
                 <span>Saved</span>
               </motion.main>
+            ) : (
+              <motion.main
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="pointer-events-none flex select-none flex-row items-center justify-end gap-1 text-gray-400"
+              >
+                <BsCloudUpload className="mt-0.5" />
+                <span>Published</span>
+              </motion.main>
             )}
-            <button
-              onClick={() => {
-                alert(
-                  'Publishing this survey will disable editing and will request all of campus to complete it.\n\nAre you sure you wish to proceed?'
-                );
-              }}
-              className="flex cursor-pointer flex-row items-center justify-center gap-2 rounded-md bg-gray-800 px-3 py-2 text-white transition-all hover:shadow-md"
-            >
-              <BsCloudUpload />
-              <span>Publish</span>
-            </button>
+            {editedSurvey.published ? (
+              <Link href={`/viewer/${survey._id}`}>
+                <button className="flex cursor-pointer flex-row items-center justify-center gap-2 rounded-md bg-gray-800 px-3 py-2 text-white transition-all hover:shadow-md">
+                  <BsChatLeftText />
+                  <span>Responses</span>
+                </button>
+              </Link>
+            ) : (
+              <button
+                onClick={async () => {
+                  if (
+                    confirm(
+                      `Publishing this survey will disable editing. This action is permanent!\n\nDo you wish to continue?`
+                    )
+                  ) {
+                    saveEditedSurvey({
+                      ...editedSurvey,
+                      published: true,
+                    } as ISurvey);
+                    await fetch(`${server}/api/publish?id=${survey._id}`, {
+                      method: 'POST',
+                    });
+                  }
+                }}
+                className="flex cursor-pointer flex-row items-center justify-center gap-2 rounded-md bg-gray-800 px-3 py-2 text-white transition-all hover:shadow-md"
+              >
+                <BsCloudUpload />
+                <span>Publish</span>
+              </button>
+            )}
           </div>
         </div>
       </motion.div>

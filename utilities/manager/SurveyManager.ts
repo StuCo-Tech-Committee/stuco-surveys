@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose';
+import mongoose, { Document, ObjectId } from 'mongoose';
 
 const uri = process.env.DB_URI as string;
 
@@ -25,7 +25,9 @@ interface ISurvey extends Document {
   elements: ISurveyElement[];
 }
 
-interface ISurveyResponse {
+interface ISurveyResponse extends Document {
+  surveyId: string;
+  date: string;
   answers: {
     choices?: string[] | null;
     number?: number | null;
@@ -108,10 +110,44 @@ const SurveySchema = new mongoose.Schema({
   },
 });
 
+const SurveyResponseSchema = new mongoose.Schema({
+  surveyId: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: Date,
+    required: true,
+  },
+  answers: {
+    type: [
+      {
+        choices: [String],
+        number: Number,
+        text: String,
+      },
+    ],
+    required: true,
+  },
+});
+
 const Survey =
   mongoose.models.Survey ||
   mongoose.model<ISurvey>('Survey', SurveySchema, 'survey-schemas');
 
+const SurveyResponse =
+  mongoose.models.SurveyResponse ||
+  mongoose.model<ISurveyResponse>(
+    'SurveyResponse',
+    SurveyResponseSchema,
+    'survey-responses'
+  );
+
+// TODO: This entire class does not include
+// data validation. That's an issue.
+// As a matter of fact, all server-side
+// functions do not perform data
+// checking.
 class SurveyManager {
   static async createSurvey() {
     const newSurvey = new Survey({
@@ -140,6 +176,12 @@ class SurveyManager {
     return await Survey.findByIdAndDelete(id).exec();
   }
 
+  static async publishSurvey(id: string) {
+    return await Survey.findByIdAndUpdate(id, {
+      published: true,
+    }).exec();
+  }
+
   static async getSurveys(published?: boolean) {
     if (typeof published === 'undefined') {
       return await Survey.find().exec();
@@ -148,6 +190,20 @@ class SurveyManager {
     } else {
       return await Survey.find({ published: false }).exec();
     }
+  }
+
+  static async submitResponse(response: ISurveyResponse) {
+    const newResponse = new SurveyResponse({
+      ...response,
+      date: new Date().toString(),
+    } as ISurveyResponse);
+    await newResponse.save();
+
+    return newResponse;
+  }
+
+  static async getResponses(id: string) {
+    return await SurveyResponse.find(new mongoose.Types.ObjectId(id)).exec();
   }
 }
 

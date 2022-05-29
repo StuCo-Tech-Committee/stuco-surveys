@@ -14,6 +14,8 @@ import {
 
 const Survey = ({ survey }: { survey: ISurvey }) => {
   const [surveyResponse, setSurveyResponse] = useState<ISurveyResponse>({
+    surveyId: survey._id,
+    date: '',
     answers: survey.elements.map((element) => {
       return {
         ...((element.type == 'multiple-choice' ||
@@ -22,7 +24,14 @@ const Survey = ({ survey }: { survey: ISurvey }) => {
         ...(element.type == 'free-response' && { text: null }),
       };
     }),
-  });
+  } as ISurveyResponse);
+
+  const submitResponse = useCallback(async () => {
+    await fetch(`${server}/api/response`, {
+      method: 'POST',
+      body: JSON.stringify(surveyResponse),
+    });
+  }, [surveyResponse]);
 
   const handleChange = useCallback(
     (
@@ -55,7 +64,7 @@ const Survey = ({ survey }: { survey: ISurvey }) => {
         }),
         ...(element.type == 'free-response' && { text: e.currentTarget.value }),
       };
-      setSurveyResponse(newResponse);
+      setSurveyResponse(newResponse as ISurveyResponse);
     },
     [surveyResponse]
   );
@@ -69,10 +78,10 @@ const Survey = ({ survey }: { survey: ISurvey }) => {
       </Head>
 
       <h1 className="break-words text-3xl font-bold text-gray-800">
-        {survey.name}
+        {survey.name || 'Untitled Survey'}
       </h1>
       <h2 className="text-md break-words text-gray-600">
-        {survey.description}
+        {survey.description || 'No description'}
       </h2>
       <Link href="/privacy">
         <a className="text-sm text-exeter underline underline-offset-1">
@@ -92,7 +101,12 @@ const Survey = ({ survey }: { survey: ISurvey }) => {
           );
         })}
         {survey.published ? (
-          <button className="flex flex-row items-center justify-center gap-2 rounded-md bg-exeter py-2 px-2 text-white shadow-md">
+          <button
+            onClick={() => {
+              submitResponse();
+            }}
+            className="flex flex-row items-center justify-center gap-2 rounded-md bg-exeter py-2 px-2 text-white shadow-md"
+          >
             <BsUpload />
             <span>Submit</span>
           </button>

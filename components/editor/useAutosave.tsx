@@ -44,6 +44,7 @@ const useAutosave = (
   );
 
   useEffect(() => {
+    if (survey.published) return;
     setSaving(true);
     debouncedSave(survey);
   }, [survey, debouncedSave, setSaving]);

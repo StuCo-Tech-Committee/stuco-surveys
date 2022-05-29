@@ -9,7 +9,7 @@ import React, {
   useState,
 } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const useOutsideAlerter = (
   ref: MutableRefObject<Node | null>,
@@ -75,7 +75,7 @@ const PopupMenu = ({ children }: PropsWithChildren<{}>) => {
       <BsThreeDotsVertical />
       {visible ? (
         <motion.div
-          initial={{ opacity: 0, scale: 0 }}
+          initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ ease: 'backOut', duration: 0.4 }}
           className="absolute right-0 top-7 origin-top-right bg-white py-2 text-right shadow-md"

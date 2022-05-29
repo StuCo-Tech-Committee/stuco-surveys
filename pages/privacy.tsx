@@ -1,10 +1,9 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Header from '../components/header';
 
 const Privacy: NextPage = () => {
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full flex-col pb-20">
       <Head>
         <title>StuCo Surveys - Privacy</title>
         <meta

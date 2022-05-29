@@ -24,7 +24,7 @@ const Manager = () => {
   }, [loadSurveys]);
 
   return (
-    <div className="flex w-full flex-col overflow-x-hidden pb-20">
+    <div className="flex min-h-screen w-full flex-col overflow-x-hidden pb-20">
       <Head>
         <title>StuCo Surveys - Manager</title>
         <meta
@@ -109,12 +109,12 @@ const Manager = () => {
                 },
               },
             }}
-            className="mx-4 self-stretch py-6 md:mx-32"
+            className="mx-4 flex flex-col gap-12 self-stretch py-6 md:mx-32"
           >
             {surveys.filter((survey) => {
               return survey.published === false;
             }).length > 0 ? (
-              <>
+              <div>
                 <motion.h1
                   variants={{
                     hidden: {
@@ -172,14 +172,14 @@ const Manager = () => {
                       );
                     })}
                 </motion.div>
-              </>
+              </div>
             ) : (
               <></>
             )}
             {surveys.filter((survey) => {
               return survey.published === true;
             }).length > 0 ? (
-              <>
+              <div>
                 <motion.h1
                   variants={{
                     hidden: {
@@ -191,7 +191,7 @@ const Manager = () => {
                       opacity: 1,
                     },
                   }}
-                  className="mt-12 text-xl font-semibold text-gray-800"
+                  className="text-xl font-semibold text-gray-800"
                 >
                   Published
                 </motion.h1>
@@ -211,7 +211,7 @@ const Manager = () => {
                       },
                     },
                   }}
-                  className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+                  className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5"
                 >
                   {surveys
                     .sort(
@@ -237,7 +237,7 @@ const Manager = () => {
                       );
                     })}
                 </motion.div>
-              </>
+              </div>
             ) : (
               <></>
             )}

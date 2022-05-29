@@ -9,16 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@harelpls/use-pusher": "^7.2.1",
     "dayjs": "^1.11.2",
     "framer-motion": "^6.3.3",
     "lodash": "^4.17.21",
     "mongoose": "^6.3.3",
     "next": "12.1.6",
     "nprogress": "^0.2.0",
+    "pusher": "^5.1.0-beta",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-icons": "^4.3.1",
-    "uuid": "^8.3.2"
+    "react-rnd": "^10.3.7",
+    "uuid": "^8.3.2",
+    "victory": "^36.4.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.182",
