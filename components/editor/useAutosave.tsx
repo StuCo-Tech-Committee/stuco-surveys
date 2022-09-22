@@ -12,9 +12,9 @@ import debounce from 'lodash/debounce';
 const SAVE_DELAY = 1000;
 
 const useAutosave = (
-  initialSurvey: ISurvey,
-  setSaving: (arg0: boolean) => void
-): [ISurvey, Dispatch<SetStateAction<ISurvey>>] => {
+  setSaving: (arg0: boolean) => void,
+  initialSurvey?: ISurvey
+): [ISurvey | undefined, Dispatch<SetStateAction<ISurvey | undefined>>] => {
   const [survey, setSurvey] = useState(initialSurvey);
 
   const saveSurvey = useCallback(async (editedSurvey: ISurvey) => {
@@ -44,7 +44,8 @@ const useAutosave = (
   );
 
   useEffect(() => {
-    if (survey.published) return;
+    if (survey && survey.published) return;
+    if (!survey) return;
     setSaving(true);
     debouncedSave(survey);
   }, [survey, debouncedSave, setSaving]);

@@ -35,6 +35,11 @@ interface ISurveyResponse extends Document {
   }[];
 }
 
+interface ISurveyRespondents extends Document {
+  surveyId: string;
+  respondents: string[];
+}
+
 const SurveySchema = new mongoose.Schema({
   name: { type: String },
   description: { type: String },
@@ -131,6 +136,17 @@ const SurveyResponseSchema = new mongoose.Schema({
   },
 });
 
+const SurveyRespondentsSchema = new mongoose.Schema({
+  surveyId: {
+    type: String,
+    required: true,
+  },
+  respondents: {
+    type: [String],
+    required: true,
+  },
+});
+
 const Survey =
   mongoose.models.Survey ||
   mongoose.model<ISurvey>('Survey', SurveySchema, 'survey-schemas');
@@ -141,6 +157,14 @@ const SurveyResponse =
     'SurveyResponse',
     SurveyResponseSchema,
     'survey-responses'
+  );
+
+const SurveyRespondents =
+  mongoose.models.SurveyRespondents ||
+  mongoose.model<ISurveyRespondents>(
+    'SurveyRespondents',
+    SurveyRespondentsSchema,
+    'survey-respondents'
   );
 
 // TODO: This entire class does not include
@@ -177,6 +201,12 @@ class SurveyManager {
   }
 
   static async publishSurvey(id: string) {
+    const newSurveyRespondents = new SurveyRespondents({
+      surveyId: id,
+      respondents: [],
+    });
+    await newSurveyRespondents.save();
+
     return await Survey.findByIdAndUpdate(id, {
       published: true,
     }).exec();
@@ -192,18 +222,38 @@ class SurveyManager {
     }
   }
 
-  static async submitResponse(response: ISurveyResponse) {
+  static async submitResponse(response: ISurveyResponse, respondent: string) {
     const newResponse = new SurveyResponse({
       ...response,
       date: new Date().toString(),
     } as ISurveyResponse);
     await newResponse.save();
 
+    const surveyRespondents = await SurveyRespondents.findOne({
+      surveyId: response.surveyId,
+    }).exec();
+    if (surveyRespondents) {
+      surveyRespondents.respondents.push(respondent);
+      await surveyRespondents.save();
+    }
+
     return newResponse;
   }
 
   static async getResponses(id: string) {
-    return await SurveyResponse.find(new mongoose.Types.ObjectId(id)).exec();
+    return await SurveyResponse.find({ surveyId: id }).exec();
+  }
+
+  static async checkResponded(id: string, respondent: string) {
+    const surveyRespondents = await SurveyRespondents.findOne({
+      surveyId: id,
+    }).exec();
+
+    if (surveyRespondents) {
+      return surveyRespondents.respondents.includes(respondent);
+    } else {
+      return false;
+    }
   }
 }
 

@@ -13,7 +13,7 @@ const Editor = ({
 }: {
   surveyElement: ISurveyElement;
   editedSurvey: ISurvey;
-  saveEditedSurvey: Dispatch<SetStateAction<ISurvey>>;
+  saveEditedSurvey: Dispatch<SetStateAction<ISurvey | undefined>>;
   published: boolean;
 }) => {
   switch (surveyElement.type) {
@@ -200,11 +200,7 @@ const Editor = ({
         </div>
       );
     case 'free-response':
-      return (
-        <div>
-          <h1>I am free response</h1>
-        </div>
-      );
+      return <div></div>;
     default:
       return (
         <div>
@@ -222,7 +218,7 @@ const ElementEditorCard = ({
 }: {
   surveyElement: ISurveyElement;
   editedSurvey: ISurvey;
-  saveEditedSurvey: Dispatch<SetStateAction<ISurvey>>;
+  saveEditedSurvey: Dispatch<SetStateAction<ISurvey | undefined>>;
   published: boolean;
 }) => {
   return (

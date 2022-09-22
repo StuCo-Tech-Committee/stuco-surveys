@@ -1,5 +1,8 @@
-import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { useSession, signIn, signOut } from 'next-auth/react';
+import { useState } from 'react';
+import Link from 'next/link';
+import { BiLoaderAlt } from 'react-icons/bi';
 
 const NavItem = ({ name, href }: { name: string; href: string }) => {
   return (
@@ -12,6 +15,9 @@ const NavItem = ({ name, href }: { name: string; href: string }) => {
 };
 
 const Header = () => {
+  const { data: session } = useSession();
+  const [working, setWorking] = useState(false);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
@@ -21,8 +27,26 @@ const Header = () => {
       <Link href="/">
         <a className="text-2xl font-bold text-exeter">StuCo Surveys</a>
       </Link>
-      <ul className="flex flex-row">
+      <ul className="flex flex-row gap-4">
         <NavItem name="Manager" href="/manager" />
+        <button
+          onClick={() => {
+            if (session) {
+              setWorking(true);
+              signOut();
+            } else {
+              setWorking(true);
+              signIn('azure-ad');
+            }
+          }}
+          className="font-bold"
+        >
+          {working ? (
+            <BiLoaderAlt className="animate-spin" />
+          ) : (
+            session?.user?.name ?? 'Sign in'
+          )}
+        </button>
         {/* <NavItem name="Viewer" href="/viewer" /> */}
         {/* <NavItem name="Privacy" href="/privacy" /> */}
       </ul>

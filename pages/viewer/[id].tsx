@@ -1,15 +1,18 @@
 import { useChannel, useEvent } from '@harelpls/use-pusher';
+import { AnimatePresence, motion } from 'framer-motion';
 import { GetServerSideProps } from 'next';
+import { unstable_getServerSession } from 'next-auth';
 import Head from 'next/head';
 import { useState } from 'react';
 import { Rnd } from 'react-rnd';
 import { VictoryBar, VictoryChart, VictoryPie } from 'victory';
-import { server } from '../../config';
+import authorized from '../../authorized';
 import {
   ISurvey,
   ISurveyResponse,
+  SurveyManager,
 } from '../../utilities/manager/SurveyManager';
-import { AnimatePresence, motion } from 'framer-motion';
+import { authOptions } from '../api/auth/[...nextauth]';
 
 const Viewer = ({
   survey,
@@ -122,12 +125,39 @@ const Viewer = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const survey = await (
-    await fetch(`${server}/api/survey?id=${context.query.id}`)
-  ).json();
-  const responses = await (
-    await fetch(`${server}/api/responses?id=${context.query.id}`)
-  ).json();
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+
+  if (!authorized.includes(session?.user?.email ?? '')) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  if (!context.query.id) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const survey = JSON.parse(
+    JSON.stringify(await SurveyManager.getSurvey(context.query.id as string))
+  );
+  const responses = JSON.parse(
+    JSON.stringify(await SurveyManager.getResponses(context.query.id as string))
+  );
+
+  if (!survey || !responses) {
+    return {
+      notFound: true,
+    };
+  }
 
   return {
     props: {

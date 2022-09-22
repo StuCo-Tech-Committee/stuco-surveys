@@ -6,9 +6,16 @@ import { ISurvey } from '../utilities/manager/SurveyManager';
 import { motion } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
 import { BiLoaderAlt, BiFileBlank } from 'react-icons/bi';
+import { useRouter } from 'next/router';
 import { GoLaw } from 'react-icons/go';
+import { getSession } from 'next-auth/react';
+import { GetServerSideProps } from 'next';
+import authorized from '../authorized';
+import { unstable_getServerSession } from 'next-auth';
+import { authOptions } from './api/auth/[...nextauth]';
 
 const Manager = () => {
+  const router = useRouter();
   const [surveys, setSurveys] = useState<ISurvey[] | undefined>(undefined);
 
   const loadSurveys = useCallback(async () => {
@@ -85,11 +92,10 @@ const Manager = () => {
               Create
             </motion.h1>
             <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-5">
-              <CreateSurveyButton name="Blank" icon={<BiFileBlank />} />
-              <CreateSurveyButton name="Motion" icon={<GoLaw />} />
               <CreateSurveyButton
-                name="None of these do anything (yet)"
-                icon={<GoLaw />}
+                router={router}
+                name="Blank"
+                icon={<BiFileBlank />}
               />
             </div>
           </motion.div>
@@ -246,6 +252,30 @@ const Manager = () => {
       )}
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  // const session = await getSession(context);
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+
+  if (!authorized.includes(session?.user?.email ?? '')) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      header: true,
+    },
+  };
 };
 
 export default Manager;
