@@ -314,7 +314,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       survey: survey,
-      responded: false,
+      responded: session?.user?.email
+        ? await SurveyManager.checkResponded(survey._id, session?.user?.email)
+        : false,
       header: false,
     },
   };
