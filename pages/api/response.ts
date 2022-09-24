@@ -4,7 +4,6 @@ import {
   ISurveyResponse,
   SurveyManager,
 } from '../../utilities/manager/SurveyManager';
-import PusherManager from '../../utilities/PusherManager';
 import { authOptions } from './auth/[...nextauth]';
 
 export default async function handler(
@@ -30,7 +29,6 @@ export default async function handler(
         respondent: string;
       };
       await SurveyManager.submitResponse(response, respondent);
-      PusherManager.push(response.surveyId, 'new-response', response);
 
       res.status(200).send({ success: true });
 

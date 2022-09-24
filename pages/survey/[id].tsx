@@ -1,17 +1,18 @@
+import { motion } from 'framer-motion';
 import { GetServerSideProps } from 'next';
 import { unstable_getServerSession } from 'next-auth';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { ChangeEvent, useCallback, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { AiOutlineStop } from 'react-icons/ai';
-import { BiLogOut } from 'react-icons/bi';
+import { BiLoaderAlt, BiLogOut } from 'react-icons/bi';
 import {
+  BsFillCheckCircleFill,
   BsFillPersonBadgeFill,
   BsPersonCircle,
   BsUpload,
 } from 'react-icons/bs';
-import { IoClose } from 'react-icons/io5';
 import Question from '../../components/survey/question';
 import { server } from '../../config';
 import {
@@ -24,12 +25,12 @@ import { authOptions } from '../api/auth/[...nextauth]';
 
 const Survey = ({
   survey,
-  respondedInitial,
+  responded,
 }: {
   survey: ISurvey;
-  respondedInitial: boolean;
+  responded: boolean;
 }) => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [surveyResponse, setSurveyResponse] = useState<ISurveyResponse>({
     surveyId: survey._id,
     date: '',
@@ -42,15 +43,37 @@ const Survey = ({
       };
     }),
   } as ISurveyResponse);
-  const [responded, setResponded] = useState(respondedInitial);
-  1;
+  const [responseValid, setResponseValid] = useState<boolean>(false);
+  const [submissionState, setSubmissionState] = useState<
+    'idle' | 'submitting' | 'submitted'
+  >('idle');
+
+  useEffect(() => {
+    // Go through each element in the survey and check if the corresponding response has been answered.
+    // If all elements have been answered, set the response as valid.
+    setResponseValid(
+      survey.elements.every((element, index) => {
+        if (!element.required) return true;
+
+        if (element.type == 'multiple-choice' || element.type == 'checkboxes') {
+          return surveyResponse.answers[index].choices!.length > 0;
+        } else if (element.type == 'slider') {
+          return surveyResponse.answers[index].number != null;
+        } else if (element.type == 'free-response') {
+          return surveyResponse.answers[index].text != null;
+        } else {
+          return false;
+        }
+      })
+    );
+  }, [surveyResponse, survey.elements]);
 
   const submitResponse = useCallback(async () => {
     if (!session?.user?.email) {
       return;
     }
 
-    setResponded(true);
+    setSubmissionState('submitting');
 
     await fetch(`${server}/api/response`, {
       method: 'POST',
@@ -59,6 +82,8 @@ const Survey = ({
         respondent: session.user.email,
       }),
     });
+
+    setSubmissionState('submitted');
   }, [surveyResponse, session?.user?.email]);
 
   const handleChange = useCallback(
@@ -112,84 +137,137 @@ const Survey = ({
         {survey.description || 'No description'}
       </h2>
       <h2 className="mt-2 text-sm font-bold text-exeter">* Required</h2>
-      {session ? (
-        <div className="mt-8 flex flex-col gap-6">
-          <div className="flex flex-row justify-between">
-            <div className="flex flex-row items-center gap-3">
-              <BsPersonCircle className="text-2xl" />
-              <h1>
-                You are signed in as
-                <br />
-                <span className="font-bold">{session.user?.name}</span>
-                <br />
-                <Link href="/privacy">
-                  <a className="text-sm text-exeter underline underline-offset-1">
-                    Privacy statement
-                  </a>
-                </Link>
-              </h1>
+      {
+        {
+          authenticated: session && (
+            <div className="mt-8 flex flex-col gap-6">
+              <div className="flex flex-row justify-between">
+                <div className="flex flex-row items-center gap-3">
+                  <BsPersonCircle className="text-2xl" />
+                  <h1>
+                    You are signed in as
+                    <br />
+                    <span className="font-bold">{session.user?.name}</span>
+                    <br />
+                    <Link href="/privacy">
+                      <a className="text-sm text-exeter underline underline-offset-1">
+                        Privacy statement
+                      </a>
+                    </Link>
+                  </h1>
+                </div>
+                <button
+                  onClick={() => {
+                    signOut();
+                  }}
+                  className="flex flex-row items-center justify-center gap-2 self-center rounded-md bg-exeter py-2 px-3 text-white shadow-md"
+                >
+                  <BiLogOut />
+                  <span>Sign out</span>
+                </button>
+              </div>
+              {survey.elements.map((element, index) => {
+                return (
+                  <Question
+                    key={element.id}
+                    questionIndex={index}
+                    element={element}
+                    handleChange={handleChange}
+                  />
+                );
+              })}
+              {survey.published ? (
+                responded ? (
+                  <button
+                    disabled
+                    className="flex cursor-not-allowed flex-row items-center justify-center gap-2 rounded-md bg-neutral-400 py-2 px-2 text-white shadow-md"
+                  >
+                    <AiOutlineStop />
+                    <span>You have already submitted this survey.</span>
+                  </button>
+                ) : (
+                  {
+                    idle: responseValid ? (
+                      <button
+                        onClick={() => {
+                          submitResponse();
+                        }}
+                        className="flex flex-row items-center justify-center gap-2 rounded-md bg-exeter py-2 px-2 text-white shadow-md"
+                      >
+                        <BsUpload />
+                        <span>Submit</span>
+                      </button>
+                    ) : (
+                      <button
+                        disabled
+                        className="flex flex-row items-center justify-center gap-2 rounded-md bg-neutral-400 py-2 px-2 text-white shadow-md"
+                      >
+                        <AiOutlineStop />
+                        <span>Please answer all required questions.</span>
+                      </button>
+                    ),
+                    submitting: (
+                      <button
+                        disabled
+                        className="flex flex-row items-center justify-center gap-2 rounded-md bg-neutral-500 py-2 px-2 text-white shadow-md"
+                      >
+                        <BiLoaderAlt className="animate-spin" />
+                        <span>Submitting...</span>
+                      </button>
+                    ),
+                    submitted: (
+                      <button
+                        disabled
+                        className="flex flex-row items-center justify-center gap-2 rounded-md bg-green-500 py-2 px-2 text-white shadow-md"
+                      >
+                        <motion.div
+                          initial={{ scale: 0.5, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ ease: 'backOut', duration: 0.4 }}
+                        >
+                          <BsFillCheckCircleFill className="text-lg" />
+                        </motion.div>
+                        <span>Submitted!</span>
+                      </button>
+                    ),
+                  }[submissionState]
+                )
+              ) : (
+                <button
+                  disabled
+                  className="flex cursor-not-allowed flex-row items-center justify-center gap-2 rounded-md bg-gray-400 py-2 px-2 text-white shadow-md"
+                >
+                  <AiOutlineStop />
+                  <span>Unpublished</span>
+                </button>
+              )}
             </div>
-            <button
-              onClick={() => {
-                signOut();
-              }}
-              className="flex flex-row items-center justify-center gap-2 self-center rounded-md bg-exeter py-2 px-3 text-white shadow-md"
-            >
-              <BiLogOut />
-              <span>Sign out</span>
-            </button>
-          </div>
-          {survey.elements.map((element, index) => {
-            return (
-              <Question
-                key={element.id}
-                questionIndex={index}
-                element={element}
-                handleChange={handleChange}
-              />
-            );
-          })}
-          {survey.published ? (
-            responded ? (
-              <button className="flex cursor-not-allowed flex-row items-center justify-center gap-2 rounded-md bg-neutral-400 py-2 px-2 text-white shadow-md">
-                <IoClose />
-                <span>You have already submitted this survey.</span>
-              </button>
-            ) : (
+          ),
+          unauthenticated: (
+            <div className="mt-8 flex flex-col gap-6">
+              <h1 className="text-center text-xl">
+                Please sign in before taking this survey.
+              </h1>
               <button
                 onClick={() => {
-                  submitResponse();
+                  signIn('azure-ad');
                 }}
                 className="flex flex-row items-center justify-center gap-2 rounded-md bg-exeter py-2 px-2 text-white shadow-md"
               >
-                <BsUpload />
-                <span>Submit</span>
+                <BsFillPersonBadgeFill />
+                <span>Sign in with Exeter</span>
               </button>
-            )
-          ) : (
-            <button className="flex cursor-not-allowed flex-row items-center justify-center gap-2 rounded-md bg-gray-400 py-2 px-2 text-white shadow-md">
-              <AiOutlineStop />
-              <span>Unpublished</span>
-            </button>
-          )}
-          <h1>{JSON.stringify(surveyResponse, null, '\t')}</h1>
-        </div>
-      ) : (
-        <div className="mt-8 flex flex-col gap-6">
-          <h1 className="text-center text-xl">
-            Please sign in before taking this survey.
-          </h1>
-          <button
-            onClick={() => {
-              signIn('azure-ad');
-            }}
-            className="flex flex-row items-center justify-center gap-2 rounded-md bg-exeter py-2 px-2 text-white shadow-md"
-          >
-            <BsFillPersonBadgeFill />
-            <span>Sign in with Exeter</span>
-          </button>
-        </div>
-      )}
+            </div>
+          ),
+          loading: (
+            <div className="mt-8 flex flex-row items-center justify-center gap-2">
+              <BiLoaderAlt className="animate-spin text-lg" />
+              <h1 className="text-center text-xl">Loading...</h1>
+            </div>
+          ),
+        }[status]
+      }
+      {session ? <></> : <></>}
     </div>
   );
 };
@@ -220,9 +298,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       survey: survey,
-      respondedInitial: session?.user?.email
-        ? await SurveyManager.checkResponded(survey._id, session?.user?.email)
-        : false,
+      responded: false,
       header: false,
     },
   };

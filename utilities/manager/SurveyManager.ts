@@ -1,4 +1,5 @@
 import mongoose, { Document, ObjectId } from 'mongoose';
+import pusher from '../Pusher';
 
 const uri = process.env.DB_URI as string;
 
@@ -18,6 +19,7 @@ interface ISurveyElement {
 
 interface ISurvey extends Document {
   name: string;
+  creator: string;
   description: string;
   published: boolean;
   createdDate: string;
@@ -42,6 +44,7 @@ interface ISurveyRespondents extends Document {
 
 const SurveySchema = new mongoose.Schema({
   name: { type: String },
+  creator: { type: String, required: true },
   description: { type: String },
   published: { type: Boolean },
   createdDate: { type: Date, required: true },
@@ -173,9 +176,10 @@ const SurveyRespondents =
 // functions do not perform data
 // checking.
 class SurveyManager {
-  static async createSurvey() {
+  static async createSurvey(creator: string) {
     const newSurvey = new Survey({
       name: '',
+      creator: creator,
       description: '',
       published: false,
       createdDate: new Date(),
@@ -189,14 +193,30 @@ class SurveyManager {
     return await Survey.findById(id).exec();
   }
 
-  static async updateSurvey(newSurvey: ISurvey) {
+  static async updateSurvey(newSurvey: ISurvey, creator: string) {
+    const survey = await Survey.findById(newSurvey._id).exec();
+    if (survey == null) {
+      throw new Error('Survey not found');
+    }
+    if (survey.creator != creator) {
+      throw new Error('Not authorized');
+    }
+
     return await Survey.findByIdAndUpdate(newSurvey._id, {
       ...newSurvey,
       modifiedDate: new Date(),
     }).exec();
   }
 
-  static async deleteSurvey(id: string) {
+  static async deleteSurvey(id: string, creator: string) {
+    const survey = await Survey.findById(id).exec();
+    if (survey == null) {
+      throw new Error('Survey not found');
+    }
+    if (survey.creator != creator) {
+      throw new Error('Not authorized');
+    }
+
     return await Survey.findByIdAndDelete(id).exec();
   }
 
@@ -212,17 +232,22 @@ class SurveyManager {
     }).exec();
   }
 
-  static async getSurveys(published?: boolean) {
-    if (typeof published === 'undefined') {
-      return await Survey.find().exec();
-    } else if (published === true) {
-      return await Survey.find({ published: true }).exec();
-    } else {
-      return await Survey.find({ published: false }).exec();
+  static async getSurveys(
+    creator: string,
+    type: 'all' | 'published' | 'unpublished'
+  ) {
+    let query = Survey.find({ creator: creator });
+    if (type == 'published') {
+      query = query.where('published').equals(true);
+    } else if (type == 'unpublished') {
+      query = query.where('published').equals(false);
     }
+    return await query.exec();
   }
 
   static async submitResponse(response: ISurveyResponse, respondent: string) {
+    pusher.trigger(response.surveyId, 'new-response', response);
+
     const newResponse = new SurveyResponse({
       ...response,
       date: new Date().toString(),

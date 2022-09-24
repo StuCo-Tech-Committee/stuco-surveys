@@ -1,17 +1,16 @@
+import { motion } from 'framer-motion';
+import { GetServerSideProps } from 'next';
+import { unstable_getServerSession } from 'next-auth';
+import { useSession } from 'next-auth/react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useCallback, useEffect, useState } from 'react';
+import { BiFileBlank, BiLoaderAlt } from 'react-icons/bi';
+import authorized from '../authorized';
 import CreateSurveyButton from '../components/manager/createSurveyButton';
 import SurveyButton from '../components/manager/surveyButton';
 import { server } from '../config';
 import { ISurvey } from '../utilities/manager/SurveyManager';
-import { motion } from 'framer-motion';
-import { useCallback, useEffect, useState } from 'react';
-import { BiLoaderAlt, BiFileBlank } from 'react-icons/bi';
-import { useRouter } from 'next/router';
-import { GoLaw } from 'react-icons/go';
-import { getSession } from 'next-auth/react';
-import { GetServerSideProps } from 'next';
-import authorized from '../authorized';
-import { unstable_getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]';
 
 const Manager = () => {
@@ -20,7 +19,7 @@ const Manager = () => {
 
   const loadSurveys = useCallback(async () => {
     const surveys: ISurvey[] = await (
-      await fetch(`${server}/api/surveys`)
+      await fetch(`${server}/api/surveys?publishType=all`)
     ).json();
 
     setSurveys(surveys);

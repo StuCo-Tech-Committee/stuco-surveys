@@ -34,7 +34,7 @@ const SurveyButton = ({
             opacity: 1,
           },
         }}
-        className="flex cursor-pointer flex-col items-start rounded-md bg-gray-50 p-4 outline outline-1 outline-gray-200 transition-colors hover:bg-gray-100"
+        className="flex cursor-pointer flex-col items-start rounded-md border border-gray-200 bg-gray-50 p-4 transition-colors hover:bg-gray-100"
       >
         <div className="flex w-full flex-row justify-between">
           <h1 className="overflow-hidden overflow-ellipsis whitespace-nowrap text-lg font-semibold text-gray-700">

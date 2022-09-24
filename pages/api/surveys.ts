@@ -26,18 +26,18 @@ export default async function handler(
     return;
   }
 
-  let surveys: ISurvey[];
+  const publishType = req.query.publishType as
+    | 'all'
+    | 'published'
+    | 'unpublished';
 
-  if (!req.query.published) {
-    surveys = await SurveyManager.getSurveys();
-  } else if (req.query.published == '1') {
-    surveys = await SurveyManager.getSurveys(true);
-  } else if (req.query.published == '0') {
-    surveys = await SurveyManager.getSurveys(false);
+  if (publishType) {
+    res
+      .status(200)
+      .json(await SurveyManager.getSurveys(session.user.email, publishType));
+    return;
   } else {
     res.status(400).send({ error: 'Bad request' });
     return;
   }
-
-  res.status(200).json(surveys);
 }

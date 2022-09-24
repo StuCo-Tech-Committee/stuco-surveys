@@ -7,7 +7,7 @@ import { authOptions } from './auth/[...nextauth]';
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ISurvey[] | { error: string }>
+  res: NextApiResponse<ISurvey[] | { error: string } | null>
 ) {
   const session = await unstable_getServerSession(req, res, authOptions);
 
@@ -36,21 +36,39 @@ export default async function handler(
 
   switch (req.method) {
     case 'POST':
-      res.status(200).json(await SurveyManager.createSurvey());
+      if (!JSON.parse(req.body).creator)
+        return res
+          .status(400)
+          .send({ error: 'Body parameter "creator" required' });
+
+      res
+        .status(200)
+        .json(await SurveyManager.createSurvey(JSON.parse(req.body).creator));
       break;
     case 'PUT':
       if (!req.body)
         return res.status(400).send({ error: 'Request body required' });
-      res
-        .status(200)
-        .send(await SurveyManager.updateSurvey(req.body as ISurvey));
+
+      try {
+        await SurveyManager.updateSurvey(req.body, session.user.email);
+        res.status(200).json(null);
+      } catch {
+        res.status(400).send({ error: 'Bad request' });
+      }
       break;
     case 'DELETE':
       if (!req.query.id)
         return res.status(400).send({ error: 'Query parameter "id" required' });
-      res
-        .status(200)
-        .send(await SurveyManager.deleteSurvey(req.query.id as string));
+
+      try {
+        await SurveyManager.deleteSurvey(
+          req.query.id as string,
+          session.user.email
+        );
+        res.status(200).send(null);
+      } catch {
+        res.status(400).send({ error: 'Bad request' });
+      }
       break;
     default:
       res.status(405);

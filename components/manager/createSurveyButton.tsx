@@ -1,7 +1,7 @@
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ReactNode } from 'react';
+import { useSession } from 'next-auth/react';
 import { NextRouter } from 'next/router';
+import { ReactNode } from 'react';
 import { server } from '../../config';
 
 const CreateSurveyButton = ({
@@ -13,11 +13,21 @@ const CreateSurveyButton = ({
   icon: ReactNode;
   router: NextRouter;
 }) => {
+  const { data: session } = useSession();
+
   return (
     <button
       onClick={async () => {
+        if (!session?.user?.email) {
+          router.push('/');
+          return;
+        }
+
         const surveyResponse = await fetch(`${server}/api/survey`, {
           method: 'POST',
+          body: JSON.stringify({
+            creator: session?.user?.email,
+          }),
         });
 
         if (!surveyResponse.ok) {
@@ -41,7 +51,7 @@ const CreateSurveyButton = ({
             opacity: 1,
           },
         }}
-        className="flex cursor-pointer flex-col items-start justify-start rounded-md bg-white p-4 outline outline-1 outline-gray-300 transition-colors hover:bg-gray-50"
+        className="flex cursor-pointer flex-col items-start justify-start rounded-md border border-gray-300 bg-white p-4 transition-colors hover:bg-gray-50"
       >
         {icon}
         <h1>{name}</h1>
