@@ -28,9 +28,14 @@ export default async function handler(
         response: ISurveyResponse;
         respondent: string;
       };
-      await SurveyManager.submitResponse(response, respondent);
 
-      res.status(200).send({ success: true });
+      try {
+        await SurveyManager.submitResponse(response, respondent);
+
+        res.status(200).send({ success: true });
+      } catch {
+        res.status(400).send({ success: false, error: 'Bad request' });
+      }
 
       break;
   }

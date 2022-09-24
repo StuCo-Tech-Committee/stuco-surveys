@@ -131,6 +131,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     authOptions
   );
 
+  if (!session || !session.user?.email) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
   if (!authorized.includes(session?.user?.email ?? '')) {
     return {
       redirect: {
@@ -157,6 +166,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       notFound: true,
     };
+  }
+
+  if (survey.creator != session.user.email) {
+    throw new Error('Not authorized');
   }
 
   return {

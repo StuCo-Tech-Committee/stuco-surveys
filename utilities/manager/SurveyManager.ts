@@ -246,6 +246,10 @@ class SurveyManager {
   }
 
   static async submitResponse(response: ISurveyResponse, respondent: string) {
+    if (await this.checkResponded(response.surveyId, respondent)) {
+      throw new Error('Already responded');
+    }
+
     pusher.trigger(response.surveyId, 'new-response', response);
 
     const newResponse = new SurveyResponse({
