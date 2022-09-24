@@ -97,20 +97,7 @@ const Edit = ({ id }: { id: string }) => {
 
       {editedSurvey && editedSurvey.hasOwnProperty('_id') ? (
         <>
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            variants={{
-              hidden: {
-                x: -60,
-                opacity: 0,
-              },
-              visible: {
-                x: 0,
-                opacity: 1,
-              },
-            }}
+          <div
             className={`h-screen w-2/5 overflow-x-hidden overflow-y-scroll bg-gray-100 p-8 ${
               editedSurvey.published ? 'pointer-events-none' : ''
             }`}
@@ -197,24 +184,17 @@ const Edit = ({ id }: { id: string }) => {
                 );
               })}
             </div>
-          </motion.div>
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            variants={{
-              hidden: {
-                x: 60,
-                opacity: 0,
-              },
-              visible: {
-                x: 0,
-                opacity: 1,
-              },
-            }}
-            className="relative flex h-screen w-full flex-row items-center justify-center bg-gray-50"
-          >
-            <div className="flex aspect-[400/780] h-[95%] flex-col gap-8 overflow-x-hidden overflow-y-scroll bg-white p-6 shadow-2xl">
+          </div>
+          <div className="relative flex h-screen w-full flex-row items-center justify-center bg-gray-50">
+            <motion.div
+              initial={{ scale: 0.96, opacity: 0, filter: 'blur(2px)' }}
+              animate={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
+              transition={{
+                duration: 0.3,
+                ease: 'easeInOut',
+              }}
+              className="flex aspect-[400/780] h-[95%] flex-col gap-8 overflow-x-hidden overflow-y-scroll bg-white p-6 shadow-2xl"
+            >
               {/* Survey preview */}
               <div>
                 <h1 className="break-words text-2xl font-bold text-gray-800">
@@ -252,7 +232,7 @@ const Edit = ({ id }: { id: string }) => {
                   <span>Unpublished</span>
                 </button>
               )}
-            </div>
+            </motion.div>
             {/* Controls overlay */}
             <div className="pointer-events-none absolute flex h-full w-full flex-row items-start justify-end py-4 px-6">
               <div className="pointer-events-auto flex flex-row gap-4">
@@ -320,7 +300,7 @@ const Edit = ({ id }: { id: string }) => {
                 )}
               </div>
             </div>
-          </motion.div>
+          </div>
         </>
       ) : (
         <div className="absolute top-0 bottom-0 right-0 left-0 flex flex-col items-center justify-center">

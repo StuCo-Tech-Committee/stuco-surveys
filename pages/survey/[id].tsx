@@ -140,7 +140,15 @@ const Survey = ({
       {
         {
           authenticated: session && (
-            <div className="mt-8 flex flex-col gap-6">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{
+                ease: 'backOut',
+                duration: 0.4,
+              }}
+              className="mt-8 flex origin-top flex-col gap-6"
+            >
               <div className="flex flex-row justify-between">
                 <div className="flex flex-row items-center gap-3">
                   <BsPersonCircle className="text-2xl" />
@@ -241,10 +249,18 @@ const Survey = ({
                   <span>Unpublished</span>
                 </button>
               )}
-            </div>
+            </motion.div>
           ),
           unauthenticated: (
-            <div className="mt-8 flex flex-col gap-6">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{
+                ease: 'backOut',
+                duration: 0.4,
+              }}
+              className="mt-8 flex origin-top flex-col gap-6"
+            >
               <h1 className="text-center text-xl">
                 Please sign in before taking this survey.
               </h1>
@@ -257,7 +273,7 @@ const Survey = ({
                 <BsFillPersonBadgeFill />
                 <span>Sign in with Exeter</span>
               </button>
-            </div>
+            </motion.div>
           ),
           loading: (
             <div className="mt-8 flex flex-row items-center justify-center gap-2">
