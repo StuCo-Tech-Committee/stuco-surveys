@@ -65,7 +65,7 @@ const Viewer = ({
                         }, 0),
                       };
                     })}
-                    animate={{ duration: 1000, easing: 'circleOut' }}
+                    // animate={{ duration: 1000, easing: 'circleOut' }}
                   />
                 )}
                 {element.type === 'slider' && (
@@ -86,7 +86,7 @@ const Viewer = ({
                             }, 0),
                           };
                         })}
-                      animate={{ duration: 1000, easing: 'circleOut' }}
+                      // animate={{ duration: 1000, easing: 'circleOut' }}
                     />
                   </VictoryChart>
                 )}
