@@ -47,10 +47,10 @@ const Viewer = ({
                 resizeGrid={[20, 20]}
                 dragGrid={[20, 20]}
                 bounds="parent"
-                className="rounded-lg bg-gray-100 p-8 shadow-md"
+                className="overflow-hidden rounded-lg bg-gray-100 p-8 shadow-md"
               >
-                <h1 className="text-2xl">{element.title}</h1>
-                <h1 className="text-lg text-gray-600">{element.description}</h1>
+                <h1 className="text-3xl">{element.title}</h1>
+                <h1 className="text-xl text-gray-600">{element.description}</h1>
                 {element.type === 'multiple-choice' && (
                   <VictoryPie
                     data={survey.elements[index].choices!.map((choice) => {
@@ -91,29 +91,16 @@ const Viewer = ({
                   </VictoryChart>
                 )}
                 {element.type === 'free-response' && (
-                  <motion.div className="mt-4 flex flex-col gap-6">
-                    <AnimatePresence>
-                      {[...responses].slice(0, 4).map((response) => {
-                        return (
-                          <motion.h1
-                            initial={{
-                              y: -20,
-                              opacity: 0,
-                            }}
-                            animate={{
-                              y: 0,
-                              opacity: 1,
-                            }}
-                            layout="position"
-                            key={response._id}
-                            className="text-2xl font-bold italic"
-                          >
-                            {`"${response.answers[index].text}"`}
-                          </motion.h1>
-                        );
-                      })}
-                    </AnimatePresence>
-                  </motion.div>
+                  <div className="mt-8 flex h-full flex-col gap-10 overflow-y-scroll pb-20">
+                    {responses.map((response) => (
+                      <>
+                        <p className="text-4xl" key={response.id}>
+                          {response.answers[index].text}
+                        </p>
+                        <hr />
+                      </>
+                    ))}
+                  </div>
                 )}
               </Rnd>
             );
