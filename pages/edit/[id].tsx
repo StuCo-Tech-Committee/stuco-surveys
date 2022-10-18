@@ -9,6 +9,7 @@ import { BiLoaderAlt } from 'react-icons/bi';
 import {
   BsChatLeftText,
   BsCheck2,
+  BsClipboard,
   BsCloudUpload,
   BsSliders,
   BsTextLeft,
@@ -265,12 +266,25 @@ const Edit = ({ id }: { id: string }) => {
                   </motion.main>
                 )}
                 {editedSurvey.published ? (
-                  <Link href={`/viewer/${editedSurvey._id}`}>
-                    <button className="flex cursor-pointer flex-row items-center justify-center gap-2 rounded-md bg-gray-800 px-3 py-2 text-white transition-all hover:shadow-md">
-                      <BsChatLeftText />
-                      <span>Responses</span>
+                  <div className="flex flex-row gap-2">
+                    <button
+                      onClick={async () => {
+                        navigator.clipboard.writeText(
+                          `${server}/survey/${editedSurvey._id}`
+                        );
+                      }}
+                      className="flex cursor-pointer flex-row items-center justify-center gap-2 rounded-md bg-gray-800 px-3 py-2 text-white transition-all hover:shadow-md"
+                    >
+                      <BsClipboard />
+                      <span>Copy Link</span>
                     </button>
-                  </Link>
+                    <Link href={`/viewer/${editedSurvey._id}`}>
+                      <button className="flex cursor-pointer flex-row items-center justify-center gap-2 rounded-md bg-gray-800 px-3 py-2 text-white transition-all hover:shadow-md">
+                        <BsChatLeftText />
+                        <span>Responses</span>
+                      </button>
+                    </Link>
+                  </div>
                 ) : (
                   <button
                     onClick={async () => {
