@@ -111,7 +111,7 @@ const AnswerPanel = ({
       return (
         <div className="mt-2 w-full">
           <input
-            className="w-full cursor-text rounded-md bg-white p-2"
+            className="w-full cursor-text rounded-md border border-neutral-300 bg-white p-2 outline-none focus:border-exeter/50"
             placeholder="Type response here..."
             onChange={(e) =>
               handleChange && handleChange(e, element, questionIndex)
@@ -138,7 +138,7 @@ const Question = ({
   ) => void;
 }) => {
   return (
-    <div className="flex flex-col gap-1 rounded-md bg-gray-50 p-4 shadow-md">
+    <div className="flex flex-col gap-1 rounded-md border border-neutral-200 bg-gray-50 p-4 shadow-md">
       <div className="flex flex-row gap-1">
         <h1 className="font-bold text-gray-900">
           {element.title || 'Untitled Question'}
