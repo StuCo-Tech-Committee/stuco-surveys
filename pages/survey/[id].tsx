@@ -5,7 +5,7 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import { AiOutlineStop } from 'react-icons/ai';
+import { AiOutlineStop, AiOutlineWarning } from 'react-icons/ai';
 import { BiLoaderAlt, BiLogOut } from 'react-icons/bi';
 import {
   BsFillCheckCircleFill,
@@ -157,11 +157,13 @@ const Survey = ({
                     <br />
                     <span className="font-bold">{session.user?.name}</span>
                     <br />
-                    <Link href="/privacy">
-                      <a className="text-sm text-exeter underline underline-offset-1">
-                        Privacy statement
-                      </a>
-                    </Link>
+                    {!survey.identifiable && (
+                      <Link href="/privacy">
+                        <a className="text-sm text-exeter underline underline-offset-1">
+                          Privacy statement
+                        </a>
+                      </Link>
+                    )}
                   </h1>
                 </div>
                 <button
@@ -174,6 +176,14 @@ const Survey = ({
                   <span>Sign out</span>
                 </button>
               </div>
+              {survey.identifiable && (
+                <div className="flex flex-row items-center justify-center gap-2 rounded-md border border-red-200 bg-red-500/10 p-3">
+                  <AiOutlineWarning />
+                  <span>
+                    Your identity is tied to your response for this survey!
+                  </span>
+                </div>
+              )}
               {survey.elements.map((element, index) => {
                 return (
                   <Question

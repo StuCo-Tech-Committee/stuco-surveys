@@ -21,6 +21,7 @@ interface ISurvey extends Document {
   name: string;
   creator: string;
   description: string;
+  identifiable: boolean;
   published: boolean;
   createdDate: string;
   modifiedDate: string;
@@ -30,6 +31,7 @@ interface ISurvey extends Document {
 interface ISurveyResponse extends Document {
   surveyId: string;
   date: string;
+  respondent?: string;
   answers: {
     choices?: string[] | null;
     number?: number | null;
@@ -46,6 +48,7 @@ const SurveySchema = new mongoose.Schema({
   name: { type: String },
   creator: { type: String, required: true },
   description: { type: String },
+  identifiable: { type: Boolean, default: false, required: true },
   published: { type: Boolean },
   createdDate: { type: Date, required: true },
   modifiedDate: { type: Date, required: true },
@@ -127,6 +130,10 @@ const SurveyResponseSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  respondent: {
+    type: String,
+    required: false,
+  },
   answers: {
     type: [
       {
@@ -181,6 +188,7 @@ class SurveyManager {
       name: '',
       creator: creator,
       description: '',
+      identifiable: false,
       published: false,
       createdDate: new Date(),
       modifiedDate: new Date(),
@@ -252,10 +260,16 @@ class SurveyManager {
 
     pusher.trigger(response.surveyId, 'new-response', response);
 
-    const newResponse = new SurveyResponse({
+    const identifiable = (
+      (await SurveyManager.getSurvey(response.surveyId)) as ISurvey
+    ).identifiable;
+
+    const responseObject = {
       ...response,
+      respondent: identifiable ? respondent : undefined,
       date: new Date().toString(),
-    } as ISurveyResponse);
+    } as ISurveyResponse;
+    const newResponse = new SurveyResponse(responseObject);
     await newResponse.save();
 
     const surveyRespondents = await SurveyRespondents.findOne({

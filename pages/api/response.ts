@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { unstable_getServerSession } from 'next-auth';
 import {
+  ISurvey,
   ISurveyResponse,
   SurveyManager,
 } from '../../utilities/manager/SurveyManager';

@@ -149,6 +149,22 @@ const Edit = ({ id }: { id: string }) => {
                 } as ISurvey);
               }}
             ></input>
+            <div className="flex flex-row gap-2">
+              <input
+                type="checkbox"
+                disabled={editedSurvey.published}
+                defaultChecked={editedSurvey.identifiable}
+                id={`identifiable-${id}`}
+                onChange={(e) => {
+                  const newSurvey = { ...editedSurvey };
+                  newSurvey.identifiable = e.currentTarget.checked;
+                  saveEditedSurvey(newSurvey as ISurvey);
+                }}
+              />
+              <label htmlFor={`identifiable-${id}`}>
+                Identify respondents?
+              </label>
+            </div>
             <br></br>
             {/* Create new element buttons */}
             <CreateElementButton
