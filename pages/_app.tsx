@@ -1,5 +1,4 @@
 import { PusherProvider } from '@harelpls/use-pusher';
-import { QueryClient } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
