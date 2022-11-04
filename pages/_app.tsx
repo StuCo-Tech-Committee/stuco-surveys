@@ -7,6 +7,14 @@ import Footer from '../components/footer';
 import Header from '../components/header';
 import NextNProgress from '../components/progressBar';
 import '../styles/globals.css';
+import { Inter, JetBrains_Mono } from '@next/font/google';
+
+const inter = Inter({
+  subsets: ['latin'],
+});
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+});
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const router = useRouter();
