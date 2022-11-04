@@ -77,10 +77,10 @@ const Survey = ({
 
     await fetch(`${server}/api/response`, {
       method: 'POST',
-      body: JSON.stringify({
-        response: surveyResponse,
-        respondent: session.user.email,
-      }),
+      body: JSON.stringify(
+        surveyResponse,
+        // respondent: session.user.email,
+      ),
     });
 
     setSubmissionState('submitted');

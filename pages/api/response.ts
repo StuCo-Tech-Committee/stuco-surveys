@@ -25,13 +25,10 @@ export default async function handler(
 
   switch (req.method) {
     case 'POST':
-      const { response, respondent } = JSON.parse(req.body) as {
-        response: ISurveyResponse;
-        respondent: string;
-      };
+      const response = JSON.parse(req.body) as ISurveyResponse;
 
       try {
-        await SurveyManager.submitResponse(response, respondent);
+        await SurveyManager.submitResponse(response, session.user.email);
 
         res.status(200).send({ success: true });
       } catch {
