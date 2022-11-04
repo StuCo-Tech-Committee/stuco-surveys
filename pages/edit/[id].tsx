@@ -25,6 +25,36 @@ import Question from '../../components/survey/question';
 import { server } from '../../config';
 import { ISurvey } from '../../utilities/manager/SurveyManager';
 import { authOptions } from '../api/auth/[...nextauth]';
+import clsx from 'clsx';
+
+const CopyLinkButton = ({ id }: { id: string }) => {
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (copied) {
+      setTimeout(() => setCopied(false), 2000);
+    }
+  }, [copied]);
+
+  return (
+    <button
+      onClick={async () => {
+        if (copied) return;
+        await navigator.clipboard.writeText(`${server}/survey/${id}`);
+        setCopied(true);
+      }}
+      className={clsx(
+        'flex cursor-pointer flex-row items-center justify-center gap-2 rounded-md bg-gray-800 px-3 py-2 text-white transition-all hover:shadow-md',
+        {
+          'bg-green-500': copied,
+        }
+      )}
+    >
+      <BsClipboard />
+      {copied ? 'Copied!' : 'Copy Link'}
+    </button>
+  );
+};
 
 const Edit = ({ id }: { id: string }) => {
   const [saving, setSaving] = useState(false);
@@ -251,8 +281,8 @@ const Edit = ({ id }: { id: string }) => {
               )}
             </motion.div>
             {/* Controls overlay */}
-            <div className="pointer-events-none absolute flex h-full w-full flex-row items-start justify-end py-4 px-6">
-              <div className="pointer-events-auto flex flex-row gap-4">
+            <div className="pointer-events-none absolute flex h-full w-full flex-row items-start justify-end py-1 px-3">
+              <div className="pointer-events-auto flex flex-row gap-4 rounded-lg bg-gray-50/80 p-3">
                 {saving && !editedSurvey.published ? (
                   <motion.div
                     initial={{ opacity: 0, y: 5 }}
@@ -283,17 +313,7 @@ const Edit = ({ id }: { id: string }) => {
                 )}
                 {editedSurvey.published ? (
                   <div className="flex flex-row gap-2">
-                    <button
-                      onClick={async () => {
-                        navigator.clipboard.writeText(
-                          `${server}/survey/${editedSurvey._id}`
-                        );
-                      }}
-                      className="flex cursor-pointer flex-row items-center justify-center gap-2 rounded-md bg-gray-800 px-3 py-2 text-white transition-all hover:shadow-md"
-                    >
-                      <BsClipboard />
-                      <span>Copy Link</span>
-                    </button>
+                    <CopyLinkButton id={editedSurvey._id} />
                     <Link href={`/viewer/${editedSurvey._id}`}>
                       <button className="flex cursor-pointer flex-row items-center justify-center gap-2 rounded-md bg-gray-800 px-3 py-2 text-white transition-all hover:shadow-md">
                         <BsChatLeftText />
