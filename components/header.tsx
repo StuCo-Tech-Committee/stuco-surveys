@@ -3,6 +3,7 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 import { useState } from 'react';
 import Link from 'next/link';
 import { BiLoaderAlt } from 'react-icons/bi';
+import Image from 'next/image';
 
 const NavItem = ({ name, href }: { name: string; href: string }) => {
   return (
@@ -25,7 +26,15 @@ const Header = () => {
       className="flex w-full flex-row justify-between px-4 py-4 md:px-32"
     >
       <Link href="/">
-        <a className="text-2xl font-bold text-exeter">StuCo Surveys</a>
+        <a className="flex flex-row items-center gap-2 text-xl font-bold text-exeter">
+          <Image
+            alt="StuCo Surveys Logo"
+            src="/stuco-surveys-icon.svg"
+            width={28}
+            height={28}
+          />
+          StuCo Surveys
+        </a>
       </Link>
       <ul className="flex flex-row gap-4">
         <NavItem name="Manager" href="/manager" />
