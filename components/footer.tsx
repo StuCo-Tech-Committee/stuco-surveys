@@ -1,7 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { BsInstagram } from 'react-icons/bs';
-import { IconType } from 'react-icons/lib';
 import { MdLockOutline, MdOutlineManageSearch } from 'react-icons/md';
 
 const PlatformLink = ({
