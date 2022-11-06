@@ -8,8 +8,8 @@ import Image from 'next/image';
 const NavItem = ({ name, href }: { name: string; href: string }) => {
   return (
     <li className="flex flex-col justify-center">
-      <Link href={href}>
-        <a className="text-md ml-4 text-gray-800">{name}</a>
+      <Link href={href} className="text-md ml-4 text-gray-800">
+        {name}
       </Link>
     </li>
   );
@@ -25,16 +25,17 @@ const Header = () => {
       animate={{ opacity: 1, y: 0 }}
       className="flex w-full flex-row justify-between px-4 py-4 md:px-32"
     >
-      <Link href="/">
-        <a className="flex flex-row items-center gap-2 text-xl font-bold text-exeter">
-          <Image
-            alt="StuCo Surveys Logo"
-            src="/stuco-surveys-icon.svg"
-            width={28}
-            height={28}
-          />
-          StuCo Surveys
-        </a>
+      <Link
+        href="/"
+        className="flex flex-row items-center gap-2 text-xl font-bold text-exeter"
+      >
+        <Image
+          alt="StuCo Surveys Logo"
+          src="/stuco-surveys-icon.svg"
+          width={28}
+          height={28}
+        />
+        StuCo Surveys
       </Link>
       <ul className="flex flex-row gap-4">
         <NavItem name="Manager" href="/manager" />

@@ -22,7 +22,7 @@ const SurveyButton = ({
   loadSurveys: Function;
 }) => {
   return (
-    <Link href={`/edit/${id}`} scroll={false}>
+    <Link href={`/edit/${id}`} scroll={false} legacyBehavior>
       <motion.div
         variants={{
           hidden: {

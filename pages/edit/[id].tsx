@@ -134,10 +134,8 @@ const Edit = ({ id }: { id: string }) => {
             }`}
           >
             {/* Back button and title and description editor */}
-            <Link href="/manager">
-              <a className="pointer-events-auto text-gray-400">
-                {'← Back to Manager'}
-              </a>
+            <Link href="/manager" className="pointer-events-auto text-gray-400">
+              {'← Back to Manager'}
             </Link>
             <input
               disabled={editedSurvey.published}
@@ -250,10 +248,11 @@ const Edit = ({ id }: { id: string }) => {
                 <h2 className="text-md break-words text-gray-600">
                   {editedSurvey.description || 'No description'}
                 </h2>
-                <Link href="/privacy">
-                  <a className="text-sm text-exeter underline underline-offset-1">
-                    Privacy notice
-                  </a>
+                <Link
+                  href="/privacy"
+                  className="text-sm text-exeter underline underline-offset-1"
+                >
+                  Privacy notice
                 </Link>
                 <h2 className="mt-2 text-sm font-bold text-exeter">
                   * Required
@@ -314,7 +313,7 @@ const Edit = ({ id }: { id: string }) => {
                 {editedSurvey.published ? (
                   <div className="flex flex-row gap-2">
                     <CopyLinkButton id={editedSurvey._id} />
-                    <Link href={`/viewer/${editedSurvey._id}`}>
+                    <Link href={`/viewer/${editedSurvey._id}`} legacyBehavior>
                       <button className="flex cursor-pointer flex-row items-center justify-center gap-2 rounded-md bg-gray-800 px-3 py-2 text-white transition-all hover:shadow-md">
                         <BsChatLeftText />
                         <span>Responses</span>
