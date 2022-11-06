@@ -1,4 +1,3 @@
-// import { PusherProvider } from '@harelpls/use-pusher';
 import { Inter, JetBrains_Mono } from '@next/font/google';
 import { AnimatePresence, motion } from 'framer-motion';
 import { SessionProvider } from 'next-auth/react';
@@ -22,13 +21,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const router = useRouter();
 
   return (
-    // <PusherProvider
-    //   {...{
-    //     clientKey: '3800fa093dc2b07f5524',
-    //     cluster: 'us2',
-    //   }}
-    // >
-    // <div className={jetBrainsMono.variable}>
     <div className={`${jetBrainsMono.variable} ${inter.variable} font-sans`}>
       <SessionProvider session={session}>
         <NextNProgress color="#9A1D2E" options={{ showSpinner: false }} />
@@ -51,8 +43,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         )}
       </SessionProvider>
     </div>
-    // </div>
-    // </PusherProvider>
   );
 }
 
