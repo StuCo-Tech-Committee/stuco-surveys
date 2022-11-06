@@ -7,7 +7,7 @@ if (
   !process.env.NEXT_PUBLIC_PUSHER_CLUSTER
 ) {
   throw new Error(
-    'PUSHER_APP_ID, NEXT_PUBLIC_PUSHER_KEY, PUSHER_SECRET, and PUSHER_CLUSTER must be defined in the environment variables.'
+    'PUSHER_APP_ID, NEXT_PUBLIC_PUSHER_KEY, PUSHER_SECRET, and NEXT_PUBLIC_PUSHER_CLUSTER must be defined in the environment variables.'
   );
 }
 
