@@ -1,5 +1,4 @@
 import { PusherProvider } from '@harelpls/use-pusher';
-import { QueryClient } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
@@ -8,6 +7,14 @@ import Footer from '../components/footer';
 import Header from '../components/header';
 import NextNProgress from '../components/progressBar';
 import '../styles/globals.css';
+import { Inter, JetBrains_Mono } from '@next/font/google';
+
+const inter = Inter({
+  subsets: ['latin'],
+});
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+});
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const router = useRouter();

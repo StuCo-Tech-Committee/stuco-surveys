@@ -78,7 +78,7 @@ const Survey = ({
     await fetch(`${server}/api/response`, {
       method: 'POST',
       body: JSON.stringify(
-        surveyResponse,
+        surveyResponse
         // respondent: session.user.email,
       ),
     });
@@ -158,10 +158,11 @@ const Survey = ({
                     <span className="font-bold">{session.user?.name}</span>
                     <br />
                     {!survey.identifiable && (
-                      <Link href="/privacy">
-                        <a className="text-sm text-exeter underline underline-offset-1">
-                          Privacy statement
-                        </a>
+                      <Link
+                        href="/privacy"
+                        className="text-sm text-exeter underline underline-offset-1"
+                      >
+                        Privacy statement
                       </Link>
                     )}
                   </h1>
