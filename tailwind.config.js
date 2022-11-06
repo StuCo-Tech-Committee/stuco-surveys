@@ -9,8 +9,8 @@ module.exports = {
         exeter: '#9A1D2E',
       },
       fontFamily: {
-        sans: ['Inter'],
-        monospace: ['JetBrains Mono'],
+        sans: ['var(--font-inter)', 'sans-serif'],
+        monospace: ['var(--font-jetbrains-mono)', 'monospace'],
       },
     },
   },
