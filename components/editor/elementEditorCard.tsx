@@ -222,7 +222,7 @@ const ElementEditorCard = ({
   published: boolean;
 }) => {
   return (
-    <div className="mb-4 w-full rounded-md bg-gray-50 p-4">
+    <div className="mb-4 w-full rounded-md border border-gray-200 bg-white p-4">
       <div className="flex flex-row">
         <input
           disabled={published}

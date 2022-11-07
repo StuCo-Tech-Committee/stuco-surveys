@@ -6,7 +6,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { ReactNode, useEffect, useState } from 'react';
 import { AiOutlineStop } from 'react-icons/ai';
-import { BiLoaderAlt } from 'react-icons/bi';
+import { BiLoaderAlt, BiPlus } from 'react-icons/bi';
 import {
   BsChatLeftText,
   BsCheck2,
@@ -97,7 +97,7 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
         onClick={() => {
           createSurveyElement(type);
         }}
-        className="my-2 flex flex-row items-center rounded-md bg-white p-2 font-semibold text-gray-800 transition-all hover:shadow-md"
+        className="flex flex-row items-center rounded-md border border-gray-200 bg-white p-2 font-semibold text-gray-800 transition-all hover:shadow-md"
       >
         {icon}
         <span className="mx-2">{name}</span>
@@ -181,24 +181,34 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
             Identify respondents?
           </label>
         </div>
-        <br></br>
+        <hr className="my-5" />
         {/* Create new element buttons */}
-        <CreateElementButton
-          name="Multiple Choice"
-          type="multiple-choice"
-          icon={<BsUiRadios />}
-        />
-        <CreateElementButton
-          name="Checkboxes"
-          type="checkboxes"
-          icon={<BsUiChecks />}
-        />
-        <CreateElementButton name="Slider" type="slider" icon={<BsSliders />} />
-        <CreateElementButton
-          name="Free Response"
-          type="free-response"
-          icon={<BsTextLeft />}
-        />
+        <p className="mb-2 flex flex-row items-center gap-1 font-monospace text-gray-500">
+          <BiPlus /> CREATE
+        </p>
+        <div className="flex flex-row flex-wrap gap-2">
+          <CreateElementButton
+            name="Multiple Choice"
+            type="multiple-choice"
+            icon={<BsUiRadios />}
+          />
+          <CreateElementButton
+            name="Checkboxes"
+            type="checkboxes"
+            icon={<BsUiChecks />}
+          />
+          <CreateElementButton
+            name="Slider"
+            type="slider"
+            icon={<BsSliders />}
+          />
+          <CreateElementButton
+            name="Free Response"
+            type="free-response"
+            icon={<BsTextLeft />}
+          />
+        </div>
+        <hr className="my-5" />
         {/* Elements editor */}
         <div className="mt-8 flex flex-col items-start justify-start">
           {editedSurvey.elements.map((surveyElement) => {
