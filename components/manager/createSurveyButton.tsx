@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import { NextRouter } from 'next/router';
 import { ReactNode } from 'react';
@@ -40,22 +39,10 @@ const CreateSurveyButton = ({
         router.push(`/edit/${survey._id}`);
       }}
     >
-      <motion.div
-        variants={{
-          hidden: {
-            y: 10,
-            opacity: 0,
-          },
-          visible: {
-            y: 0,
-            opacity: 1,
-          },
-        }}
-        className="flex cursor-pointer flex-col items-start justify-start rounded-md border border-gray-300 bg-white p-4 transition-colors hover:bg-gray-50"
-      >
+      <div className="flex cursor-pointer flex-col items-start justify-start rounded-md border border-gray-300 bg-white p-4 transition-colors hover:bg-gray-50">
         {icon}
         <h1>{name}</h1>
-      </motion.div>
+      </div>
     </button>
   );
 };

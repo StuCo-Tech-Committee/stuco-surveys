@@ -1,5 +1,5 @@
 import { Inter, JetBrains_Mono } from '@next/font/google';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
@@ -31,11 +31,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
             <Header key="Header" />
           )}
         </AnimatePresence>
-        <AnimatePresence exitBeforeEnter>
-          <motion.div key={router.pathname}>
-            <Component {...pageProps} />
-          </motion.div>
-        </AnimatePresence>
+        <Component key={router.pathname} {...pageProps} />
         {pageProps.hasOwnProperty('header') && pageProps.header === false ? (
           <></>
         ) : (

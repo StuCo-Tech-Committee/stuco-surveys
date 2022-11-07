@@ -226,11 +226,11 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
       </div>
       <div className="relative flex h-screen w-full flex-row items-center justify-center bg-gray-50">
         <motion.div
-          initial={{ scale: 0.96, opacity: 0, filter: 'blur(2px)' }}
+          initial={{ scale: 0.95, opacity: 0, filter: 'blur(3px)' }}
           animate={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
           transition={{
-            duration: 0.3,
-            ease: 'easeInOut',
+            duration: 0.5,
+            ease: 'circOut',
           }}
           className="flex aspect-[400/780] h-[95%] flex-col gap-8 overflow-x-hidden overflow-y-scroll bg-white p-6 shadow-2xl"
         >
@@ -284,23 +284,23 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
                 <span>Saving...</span>
               </motion.div>
             ) : !editedSurvey.published ? (
-              <motion.main
+              <motion.div
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="pointer-events-none flex select-none flex-row items-center justify-end gap-1 text-gray-400"
               >
                 <BsCheck2 className="mt-0.5" />
                 <span>Saved</span>
-              </motion.main>
+              </motion.div>
             ) : (
-              <motion.main
+              <motion.div
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="pointer-events-none flex select-none flex-row items-center justify-end gap-1 text-gray-400"
               >
                 <BsCloudUpload className="mt-0.5" />
                 <span>Published</span>
-              </motion.main>
+              </motion.div>
             )}
             {editedSurvey.published ? (
               <div className="flex flex-row gap-2">
