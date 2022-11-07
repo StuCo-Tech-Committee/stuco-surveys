@@ -23,7 +23,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <div className={`${jetBrainsMono.variable} ${inter.variable} font-sans`}>
       <SessionProvider session={session}>
-        <NextNProgress color="#9A1D2E" options={{ showSpinner: false }} />
+        <NextNProgress
+          color="#9A1D2E"
+          height={2}
+          options={{ showSpinner: false }}
+        />
         <AnimatePresence>
           {pageProps.hasOwnProperty('header') && pageProps.header === false ? (
             <></>
