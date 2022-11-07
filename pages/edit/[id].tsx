@@ -59,10 +59,7 @@ const CopyLinkButton = ({ id }: { id: string }) => {
 
 const Edit = ({ id }: { id: string }) => {
   const [saving, setSaving] = useState(false);
-  const [editedSurvey, saveEditedSurvey, { isValidating, error }] = useAutosave(
-    setSaving,
-    id
-  );
+  const [editedSurvey, saveEditedSurvey] = useAutosave(setSaving, id);
 
   const createSurveyElement = (type: string) => {
     if (!editedSurvey) return;
@@ -152,7 +149,7 @@ const Edit = ({ id }: { id: string }) => {
               }}
             ></input>
           ) : (
-            <Skeleton height={48} className="mt-8" />
+            <Skeleton height={45} className="mt-8" />
           )}
         </span>
         <span>
