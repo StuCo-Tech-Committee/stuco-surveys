@@ -23,7 +23,7 @@ import ElementEditorCard from '../../components/editor/elementEditorCard';
 import useAutosave from '../../components/editor/useAutosave';
 import Question from '../../components/survey/question';
 import { server } from '../../config';
-import { ISurvey, SurveyManager } from '../../utilities/manager/SurveyManager';
+import { getSurvey, ISurvey } from '../../utilities/manager/SurveyManager';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 const CopyLinkButton = ({ id }: { id: string }) => {
@@ -105,7 +105,7 @@ const Edit = ({ survey }: { survey: ISurvey }) => {
   };
 
   return (
-    <div className="flex w-full flex-row overflow-hidden">
+    <div className="absolute top-0 bottom-0 right-0 left-0 flex w-full flex-row overflow-hidden">
       <Head>
         <title>{editedSurvey?.name || 'Untitled Survey'}</title>
         <meta
@@ -370,9 +370,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  const survey: ISurvey = await SurveyManager.getSurvey(
-    context.query.id as string
-  );
+  const survey: ISurvey = await getSurvey(context.query.id as string);
 
   return {
     props: {

@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { BiFileBlank } from 'react-icons/bi';
 import CreateSurveyButton from '../components/manager/createSurveyButton';
 import SurveyButton from '../components/manager/surveyButton';
-import { ISurvey, SurveyManager } from '../utilities/manager/SurveyManager';
+import { getSurveys, ISurvey } from '../utilities/manager/SurveyManager';
 import { authOptions } from './api/auth/[...nextauth]';
 
 const Manager = ({ surveys }: { surveys: ISurvey[] }) => {
@@ -121,7 +121,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  const surveys = await SurveyManager.getSurveys(session.user!.email!, 'all');
+  const surveys = await getSurveys(session.user!.email!, 'all');
 
   return {
     props: {

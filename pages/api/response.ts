@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { unstable_getServerSession } from 'next-auth';
 import {
   ISurveyResponse,
-  SurveyManager,
+  submitResponse,
 } from '../../utilities/manager/SurveyManager';
 import { authOptions } from './auth/[...nextauth]';
 
@@ -22,7 +22,7 @@ export default async function handler(
       const response = JSON.parse(req.body) as ISurveyResponse;
 
       try {
-        await SurveyManager.submitResponse(response, session.user.email);
+        await submitResponse(response, session.user.email);
 
         res.status(200).send({ success: true });
       } catch {

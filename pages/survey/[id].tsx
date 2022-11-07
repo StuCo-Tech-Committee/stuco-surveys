@@ -16,10 +16,11 @@ import {
 import Question from '../../components/survey/question';
 import { server } from '../../config';
 import {
+  checkResponded,
+  getSurvey,
   ISurvey,
   ISurveyElement,
   ISurveyResponse,
-  SurveyManager,
 } from '../../utilities/manager/SurveyManager';
 import { authOptions } from '../api/auth/[...nextauth]';
 
@@ -294,7 +295,7 @@ const Survey = ({
           ),
         }[status]
       }
-      {session ? <></> : <></>}
+      <p>{JSON.stringify(surveyResponse)}</p>
     </div>
   );
 };
@@ -313,7 +314,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   const survey: ISurvey = JSON.parse(
-    JSON.stringify(await SurveyManager.getSurvey(context.query.id as string))
+    JSON.stringify(await getSurvey(context.query.id as string))
   );
 
   if (!survey) {
@@ -326,7 +327,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       survey: survey,
       responded: session?.user?.email
-        ? await SurveyManager.checkResponded(survey._id, session?.user?.email)
+        ? await checkResponded(survey._id, session?.user?.email)
         : false,
       header: false,
     },

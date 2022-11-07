@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { unstable_getServerSession } from 'next-auth';
-import { ISurvey, SurveyManager } from '../../utilities/manager/SurveyManager';
+import { getSurveys, ISurvey } from '../../utilities/manager/SurveyManager';
 import { authOptions } from './auth/[...nextauth]';
 
 export default async function handler(
@@ -20,9 +20,7 @@ export default async function handler(
     | 'unpublished';
 
   if (publishType) {
-    res
-      .status(200)
-      .json(await SurveyManager.getSurveys(session.user.email, publishType));
+    res.status(200).json(await getSurveys(session.user.email, publishType));
     return;
   } else {
     res.status(400).send({ error: 'Bad request' });
