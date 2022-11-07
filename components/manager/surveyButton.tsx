@@ -1,10 +1,10 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { PopupMenu, PopupItem } from '../popupMenu';
+import Link from 'next/link';
 import { BsTrash } from 'react-icons/bs';
 import { server } from '../../config';
+import { PopupItem, PopupMenu } from '../popupMenu';
 
 dayjs.extend(relativeTime);
 
@@ -13,13 +13,13 @@ const SurveyButton = ({
   title,
   description,
   modifiedDate,
-  loadSurveys,
+  refresh,
 }: {
   id: string;
   title: string;
   description: string;
   modifiedDate: Date;
-  loadSurveys: Function;
+  refresh: Function;
 }) => {
   return (
     <Link href={`/edit/${id}`} scroll={false} legacyBehavior>
@@ -48,7 +48,7 @@ const SurveyButton = ({
                 await fetch(`${server}/api/survey?id=${id}`, {
                   method: 'DELETE',
                 });
-                loadSurveys();
+                refresh();
               }}
             />
           </PopupMenu>
