@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
-import { ISurvey, ISurveyElement } from '../../utilities/manager/SurveyManager';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { BsCircle, BsTrash } from 'react-icons/bs';
-import { TiDeleteOutline } from 'react-icons/ti';
 import { MdCheckBoxOutlineBlank } from 'react-icons/md';
+import { TiDeleteOutline } from 'react-icons/ti';
+import { ISurvey, ISurveyElement } from '../../utilities/manager/SurveyManager';
 
 const Editor = ({
   surveyElement,
@@ -13,7 +13,7 @@ const Editor = ({
 }: {
   surveyElement: ISurveyElement;
   editedSurvey: ISurvey;
-  saveEditedSurvey: Dispatch<SetStateAction<ISurvey | undefined>>;
+  saveEditedSurvey: Dispatch<SetStateAction<ISurvey>>;
   published: boolean;
 }) => {
   switch (surveyElement.type) {
@@ -218,7 +218,7 @@ const ElementEditorCard = ({
 }: {
   surveyElement: ISurveyElement;
   editedSurvey: ISurvey;
-  saveEditedSurvey: Dispatch<SetStateAction<ISurvey | undefined>>;
+  saveEditedSurvey: Dispatch<SetStateAction<ISurvey>>;
   published: boolean;
 }) => {
   return (
