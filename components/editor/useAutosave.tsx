@@ -6,6 +6,8 @@ import {
   useEffect,
   useState,
 } from 'react';
+import useSWR from 'swr';
+import { SWRResponse } from 'swr/dist/types';
 import { server } from '../../config';
 import { ISurvey } from '../../utilities/manager/SurveyManager';
 
@@ -13,9 +15,20 @@ const SAVE_DELAY = 1000;
 
 const useAutosave = (
   setSaving: (arg0: boolean) => void,
-  initialSurvey: ISurvey
-): [ISurvey, Dispatch<SetStateAction<ISurvey>>] => {
-  const [survey, setSurvey] = useState(initialSurvey);
+  id: string
+): [
+  ISurvey | null,
+  Dispatch<SetStateAction<ISurvey | null>>,
+  SWRResponse<ISurvey>
+] => {
+  const [survey, setSurvey] = useState<ISurvey | null>(null);
+  const swrState = useSWR<ISurvey>(`${server}/api/survey?id=${id}`);
+
+  useEffect(() => {
+    if (swrState.data) {
+      setSurvey(swrState.data);
+    }
+  }, [swrState.data]);
 
   const saveSurvey = useCallback(async (editedSurvey: ISurvey) => {
     await fetch(`${server}/api/survey`, {
@@ -50,7 +63,7 @@ const useAutosave = (
     debouncedSave(survey);
   }, [survey, debouncedSave, setSaving]);
 
-  return [survey, setSurvey];
+  return [survey, setSurvey, swrState];
 };
 
 export default useAutosave;

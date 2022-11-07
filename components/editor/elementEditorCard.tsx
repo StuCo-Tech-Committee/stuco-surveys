@@ -13,7 +13,7 @@ const Editor = ({
 }: {
   surveyElement: ISurveyElement;
   editedSurvey: ISurvey;
-  saveEditedSurvey: Dispatch<SetStateAction<ISurvey>>;
+  saveEditedSurvey: Dispatch<SetStateAction<ISurvey | null>>;
   published: boolean;
 }) => {
   switch (surveyElement.type) {
@@ -218,7 +218,7 @@ const ElementEditorCard = ({
 }: {
   surveyElement: ISurveyElement;
   editedSurvey: ISurvey;
-  saveEditedSurvey: Dispatch<SetStateAction<ISurvey>>;
+  saveEditedSurvey: Dispatch<SetStateAction<ISurvey | null>>;
   published: boolean;
 }) => {
   return (
