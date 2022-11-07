@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { unstable_getServerSession } from 'next-auth';
 import {
-  ISurvey,
   ISurveyResponse,
   SurveyManager,
 } from '../../utilities/manager/SurveyManager';
@@ -13,12 +12,7 @@ export default async function handler(
 ) {
   const session = await unstable_getServerSession(req, res, authOptions);
 
-  if (!session) {
-    res.status(401).json({ success: false, error: 'Unauthorized' });
-    return;
-  }
-
-  if (!session.user?.email) {
+  if (!session || !session.user || !session.user.email) {
     res.status(401).json({ success: false, error: 'Unauthorized' });
     return;
   }

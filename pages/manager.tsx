@@ -3,7 +3,6 @@ import { unstable_getServerSession } from 'next-auth';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { BiFileBlank } from 'react-icons/bi';
-import authorized from '../authorized';
 import CreateSurveyButton from '../components/manager/createSurveyButton';
 import SurveyButton from '../components/manager/surveyButton';
 import { ISurvey, SurveyManager } from '../utilities/manager/SurveyManager';
@@ -114,15 +113,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   );
 
   if (!session) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
-
-  if (!authorized.includes(session?.user?.email ?? '')) {
     return {
       redirect: {
         destination: '/',

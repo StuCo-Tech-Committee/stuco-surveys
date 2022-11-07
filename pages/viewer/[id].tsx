@@ -4,7 +4,6 @@ import Head from 'next/head';
 import { useState } from 'react';
 import { Rnd } from 'react-rnd';
 import { VictoryBar, VictoryChart, VictoryPie } from 'victory';
-import authorized from '../../authorized';
 import { useChannel, useEvent } from '../../components/realtime';
 import {
   ISurvey,
@@ -118,16 +117,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     authOptions
   );
 
-  if (!session || !session.user?.email) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
-
-  if (!authorized.includes(session?.user?.email ?? '')) {
+  if (!session || !session.user || !session.user.email) {
     return {
       redirect: {
         destination: '/',

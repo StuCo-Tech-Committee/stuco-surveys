@@ -1,4 +1,4 @@
-import mongoose, { Document, ObjectId } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import pusher from '../Pusher';
 
 const uri = process.env.DB_URI as string;
@@ -206,7 +206,7 @@ class SurveyManager {
     if (survey == null) {
       throw new Error('Survey not found');
     }
-    if (survey.creator != creator) {
+    if (survey.creator !== creator) {
       throw new Error('Not authorized');
     }
 
@@ -221,7 +221,7 @@ class SurveyManager {
     if (survey == null) {
       throw new Error('Survey not found');
     }
-    if (survey.creator != creator) {
+    if (survey.creator !== creator) {
       throw new Error('Not authorized');
     }
 

@@ -19,7 +19,6 @@ import {
   BsUpload,
 } from 'react-icons/bs';
 import { v4 } from 'uuid';
-import authorized from '../../authorized';
 import ElementEditorCard from '../../components/editor/elementEditorCard';
 import useAutosave from '../../components/editor/useAutosave';
 import Question from '../../components/survey/question';
@@ -353,7 +352,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     authOptions
   );
 
-  if (!authorized.includes(session?.user?.email ?? '')) {
+  if (!session || !session.user || !session.user.email) {
     return {
       redirect: {
         destination: '/',
