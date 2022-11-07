@@ -225,7 +225,9 @@ class SurveyManager {
       throw new Error('Not authorized');
     }
 
-    return await Survey.findByIdAndDelete(id).exec();
+    await Survey.findByIdAndDelete(id).exec();
+    await SurveyRespondents.findOneAndDelete({ surveyId: id }).exec();
+    await SurveyResponse.deleteMany({ surveyId: id }).exec();
   }
 
   static async publishSurvey(id: string) {
