@@ -295,7 +295,6 @@ const Survey = ({
           ),
         }[status]
       }
-      <p>{JSON.stringify(surveyResponse)}</p>
     </div>
   );
 };
