@@ -1,36 +1,30 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { unstable_getServerSession } from 'next-auth/next';
-import authorized from '../../authorized';
-import { ISurvey, SurveyManager } from '../../utilities/manager/SurveyManager';
+import {
+  createSurvey,
+  deleteSurvey,
+  getSurvey,
+  ISurvey,
+  updateSurvey,
+} from '../../utilities/manager/SurveyManager';
 import { authOptions } from './auth/[...nextauth]';
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ISurvey[] | { error: string } | null>
+  res: NextApiResponse<ISurvey | { error: string } | null>
 ) {
   const session = await unstable_getServerSession(req, res, authOptions);
 
-  if (!session) {
+  if (!session || !session.user || !session.user.email) {
     res.status(401).json({ error: 'Unauthorized' });
     return;
   }
 
-  if (!session.user?.email) {
-    res.status(401).json({ error: 'Unauthorized' });
-    return;
-  }
-
-  // Anyone can see a survey, but only authorized users can edit it.
   if (req.method === 'GET') {
     if (!req.query.id)
       return res.status(400).send({ error: 'Query parameter "id" required' });
-    res.status(200).json(await SurveyManager.getSurvey(req.query.id as string));
-    return;
-  }
-
-  if (!authorized.includes(session.user.email)) {
-    res.status(401).json({ error: 'Unauthorized' });
+    res.status(200).json(await getSurvey(req.query.id as string));
     return;
   }
 
@@ -41,16 +35,14 @@ export default async function handler(
           .status(400)
           .send({ error: 'Body parameter "creator" required' });
 
-      res
-        .status(200)
-        .json(await SurveyManager.createSurvey(JSON.parse(req.body).creator));
+      res.status(200).json(await createSurvey(JSON.parse(req.body).creator));
       break;
     case 'PUT':
       if (!req.body)
         return res.status(400).send({ error: 'Request body required' });
 
       try {
-        await SurveyManager.updateSurvey(req.body, session.user.email);
+        await updateSurvey(req.body, session.user.email);
         res.status(200).json(null);
       } catch {
         res.status(400).send({ error: 'Bad request' });
@@ -61,10 +53,7 @@ export default async function handler(
         return res.status(400).send({ error: 'Query parameter "id" required' });
 
       try {
-        await SurveyManager.deleteSurvey(
-          req.query.id as string,
-          session.user.email
-        );
+        await deleteSurvey(req.query.id as string, session.user.email);
         res.status(200).send(null);
       } catch {
         res.status(400).send({ error: 'Bad request' });

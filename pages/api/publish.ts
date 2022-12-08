@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { unstable_getServerSession } from 'next-auth';
-import authorized from '../../authorized';
-import { SurveyManager } from '../../utilities/manager/SurveyManager';
+import { publishSurvey } from '../../utilities/manager/SurveyManager';
 import { authOptions } from './auth/[...nextauth]';
 
 export default async function handler(
@@ -10,17 +9,7 @@ export default async function handler(
 ) {
   const session = await unstable_getServerSession(req, res, authOptions);
 
-  if (!session) {
-    res.status(401).json({ success: false, error: 'Unauthorized' });
-    return;
-  }
-
-  if (!session.user?.email) {
-    res.status(401).json({ success: false, error: 'Unauthorized' });
-    return;
-  }
-
-  if (!authorized.includes(session.user.email)) {
+  if (!session || !session.user || !session.user.email) {
     res.status(401).json({ success: false, error: 'Unauthorized' });
     return;
   }
@@ -32,7 +21,7 @@ export default async function handler(
           .status(400)
           .send({ success: false, error: 'Query parameter "id" required' });
 
-      await SurveyManager.publishSurvey(req.query.id as string);
+      await publishSurvey(req.query.id as string);
 
       res.status(200).send({ success: true });
 

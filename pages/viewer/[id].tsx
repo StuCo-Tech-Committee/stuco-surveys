@@ -4,12 +4,12 @@ import Head from 'next/head';
 import { useState } from 'react';
 import { Rnd } from 'react-rnd';
 import { VictoryBar, VictoryChart, VictoryPie } from 'victory';
-import authorized from '../../authorized';
 import { useChannel, useEvent } from '../../components/realtime';
 import {
+  getResponses,
+  getSurvey,
   ISurvey,
   ISurveyResponse,
-  SurveyManager,
 } from '../../utilities/manager/SurveyManager';
 import { authOptions } from '../api/auth/[...nextauth]';
 
@@ -118,16 +118,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     authOptions
   );
 
-  if (!session || !session.user?.email) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
-
-  if (!authorized.includes(session?.user?.email ?? '')) {
+  if (!session || !session.user || !session.user.email) {
     return {
       redirect: {
         destination: '/',
@@ -143,10 +134,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   const survey = JSON.parse(
-    JSON.stringify(await SurveyManager.getSurvey(context.query.id as string))
+    JSON.stringify(await getSurvey(context.query.id as string))
   );
   const responses = JSON.parse(
-    JSON.stringify(await SurveyManager.getResponses(context.query.id as string))
+    JSON.stringify(await getResponses(context.query.id as string))
   );
 
   if (!survey || !responses) {

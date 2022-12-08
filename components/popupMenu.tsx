@@ -1,5 +1,5 @@
-import React, {
-  Children,
+import { motion } from 'framer-motion';
+import {
   MutableRefObject,
   PropsWithChildren,
   ReactNode,
@@ -9,7 +9,6 @@ import React, {
   useState,
 } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { motion } from 'framer-motion';
 
 const useOutsideAlerter = (
   ref: MutableRefObject<Node | null>,
@@ -77,7 +76,7 @@ const PopupMenu = ({ children }: PropsWithChildren<{}>) => {
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ ease: 'backOut', duration: 0.4 }}
+          transition={{ ease: 'circOut', duration: 0.3 }}
           className="absolute right-0 top-7 origin-top-right bg-white py-2 text-right shadow-md"
         >
           {children}
