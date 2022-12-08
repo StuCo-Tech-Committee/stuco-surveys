@@ -1,3 +1,4 @@
+import debounce from 'lodash/debounce';
 import {
   Dispatch,
   SetStateAction,
@@ -7,15 +8,21 @@ import {
 } from 'react';
 import { server } from '../../config';
 import { ISurvey } from '../../utilities/manager/SurveyManager';
-import debounce from 'lodash/debounce';
 
 const SAVE_DELAY = 1000;
 
 const useAutosave = (
   setSaving: (arg0: boolean) => void,
-  initialSurvey?: ISurvey
-): [ISurvey | undefined, Dispatch<SetStateAction<ISurvey | undefined>>] => {
-  const [survey, setSurvey] = useState(initialSurvey);
+  id: string
+): [ISurvey | null, Dispatch<SetStateAction<ISurvey | null>>] => {
+  const [survey, setSurvey] = useState<ISurvey | null>(null);
+  useEffect(() => {
+    (async () => {
+      const survey = await fetch(`${server}/api/survey?id=${id}`);
+      const surveyJson = await survey.json();
+      setSurvey(surveyJson);
+    })();
+  }, [id]);
 
   const saveSurvey = useCallback(async (editedSurvey: ISurvey) => {
     await fetch(`${server}/api/survey`, {

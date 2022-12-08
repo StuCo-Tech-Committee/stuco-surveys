@@ -1,9 +1,8 @@
-import { motion } from 'framer-motion';
-import { useSession, signIn, signOut } from 'next-auth/react';
-import { useState } from 'react';
-import Link from 'next/link';
-import { BiLoaderAlt } from 'react-icons/bi';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
+import { BiLoaderAlt } from 'react-icons/bi';
 
 const NavItem = ({ name, href }: { name: string; href: string }) => {
   return (
@@ -20,11 +19,7 @@ const Header = () => {
   const [working, setWorking] = useState(false);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="flex w-full flex-row justify-between px-4 py-4 md:px-32"
-    >
+    <div className="flex w-full flex-row justify-between px-4 py-4 md:px-32">
       <Link
         href="/"
         className="flex flex-row items-center gap-2 text-xl font-bold text-exeter"
@@ -60,7 +55,7 @@ const Header = () => {
         {/* <NavItem name="Viewer" href="/viewer" /> */}
         {/* <NavItem name="Privacy" href="/privacy" /> */}
       </ul>
-    </motion.div>
+    </div>
   );
 };
 
