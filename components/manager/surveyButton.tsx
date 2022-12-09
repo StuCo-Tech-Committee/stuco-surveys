@@ -3,7 +3,6 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { BsTrash } from 'react-icons/bs';
-import { server } from '../../config';
 import { PopupItem, PopupMenu } from '../popupMenu';
 
 dayjs.extend(relativeTime);
@@ -45,7 +44,7 @@ const SurveyButton = ({
               name="Delete"
               icon={<BsTrash />}
               action={async () => {
-                await fetch(`${server}/api/survey?id=${id}`, {
+                await fetch(`/api/survey?id=${id}`, {
                   method: 'DELETE',
                 });
                 refresh();

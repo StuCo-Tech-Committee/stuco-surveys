@@ -1,7 +1,6 @@
 import { useSession } from 'next-auth/react';
 import { NextRouter } from 'next/router';
 import { ReactNode } from 'react';
-import { server } from '../../config';
 
 const CreateSurveyButton = ({
   name,
@@ -22,7 +21,7 @@ const CreateSurveyButton = ({
           return;
         }
 
-        const surveyResponse = await fetch(`${server}/api/survey`, {
+        const surveyResponse = await fetch(`/api/survey`, {
           method: 'POST',
           body: JSON.stringify({
             creator: session?.user?.email,

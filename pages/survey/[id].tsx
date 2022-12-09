@@ -14,7 +14,6 @@ import {
   BsUpload,
 } from 'react-icons/bs';
 import Question from '../../components/survey/question';
-import { server } from '../../config';
 import {
   checkResponded,
   getSurvey,
@@ -78,7 +77,7 @@ const Survey = ({
 
     setSubmissionState('submitting');
 
-    await fetch(`${server}/api/response`, {
+    await fetch(`/api/response`, {
       method: 'POST',
       body: JSON.stringify(
         surveyResponse
