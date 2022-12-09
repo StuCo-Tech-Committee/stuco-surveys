@@ -201,6 +201,8 @@ const Editor = ({
       );
     case 'free-response':
       return <div></div>;
+    case 'file-upload':
+      return <div></div>;
     default:
       return (
         <div>

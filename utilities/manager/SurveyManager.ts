@@ -36,6 +36,11 @@ interface ISurveyResponse extends Document {
     choices?: string[] | null;
     number?: number | null;
     text?: string | null;
+    file?: {
+      name: string;
+      fileType: string;
+      data: Buffer;
+    };
   }[];
 }
 
@@ -140,6 +145,13 @@ const SurveyResponseSchema = new mongoose.Schema({
         choices: [String],
         number: Number,
         text: String,
+        file: {
+          type: {
+            name: String,
+            fileType: String,
+            data: Buffer,
+          },
+        },
       },
     ],
     required: true,
@@ -265,7 +277,9 @@ export async function submitResponse(
     throw new Error('Already responded');
   }
 
-  pusher.trigger(response.surveyId, 'new-response', response);
+  pusher.trigger(response.surveyId, 'new-response', response).catch((err) => {
+    console.error(err);
+  });
 
   const identifiable = ((await getSurvey(response.surveyId)) as ISurvey)
     .identifiable;

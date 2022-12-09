@@ -1,4 +1,5 @@
 import { ChangeEvent, useState } from 'react';
+import { BsFileEarmarkArrowUp } from 'react-icons/bs';
 import { ISurveyElement } from '../../utilities/manager/SurveyManager';
 
 const AnswerPanel = ({
@@ -15,6 +16,7 @@ const AnswerPanel = ({
   ) => void;
 }) => {
   const [number, setNumber] = useState<number>();
+  const [file, setFile] = useState<File>();
 
   switch (element.type) {
     case 'multiple-choice':
@@ -117,6 +119,28 @@ const AnswerPanel = ({
               handleChange && handleChange(e, element, questionIndex)
             }
           />
+        </div>
+      );
+    case 'file-upload':
+      return (
+        <div className="mt-2 w-full">
+          {/* Add a styled file input button */}
+          <label className="flex cursor-pointer flex-row items-center justify-center gap-1.5 rounded-md border border-neutral-300 bg-white px-4 py-2 hover:bg-neutral-50">
+            <input
+              type="file"
+              className="hidden"
+              onChange={(e) => {
+                setFile(e.currentTarget.files![0]);
+                handleChange && handleChange(e, element, questionIndex);
+              }}
+            />
+            <BsFileEarmarkArrowUp />
+            Upload File
+          </label>
+          <p className="mt-2 text-center text-neutral-800">
+            File:{' '}
+            <span className="text-neutral-600">{file?.name ?? 'None'}</span>
+          </p>
         </div>
       );
     default:

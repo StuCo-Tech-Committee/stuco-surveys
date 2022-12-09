@@ -62,6 +62,8 @@ const Survey = ({
           return surveyResponse.answers[index].number != null;
         } else if (element.type == 'free-response') {
           return surveyResponse.answers[index].text != null;
+        } else if (element.type == 'file-upload') {
+          return surveyResponse.answers[index].file != null;
         } else {
           return false;
         }
@@ -87,8 +89,18 @@ const Survey = ({
     setSubmissionState('submitted');
   }, [surveyResponse, session?.user?.email]);
 
+  // Function to convert ArrayBuffer to Buffer
+  const arrayBufferToBuffer = (arrayBuffer: ArrayBuffer) => {
+    const buffer = Buffer.alloc(arrayBuffer.byteLength);
+    const view = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < buffer.length; ++i) {
+      buffer[i] = view[i];
+    }
+    return buffer;
+  };
+
   const handleChange = useCallback(
-    (
+    async (
       e: ChangeEvent<HTMLInputElement>,
       element: ISurveyElement,
       index: number
@@ -117,6 +129,16 @@ const Survey = ({
           number: e.currentTarget.valueAsNumber,
         }),
         ...(element.type == 'free-response' && { text: e.currentTarget.value }),
+        ...(element.type == 'file-upload' &&
+          e.currentTarget.files![0] && {
+            file: {
+              name: e.currentTarget.files![0].name,
+              fileType: e.currentTarget.files![0].type,
+              data: arrayBufferToBuffer(
+                await e.currentTarget.files![0].arrayBuffer()
+              ),
+            },
+          }),
       };
       setSurveyResponse(newResponse as ISurveyResponse);
     },
