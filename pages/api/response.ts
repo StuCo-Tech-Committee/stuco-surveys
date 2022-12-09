@@ -20,12 +20,27 @@ export default async function handler(
   switch (req.method) {
     case 'POST':
       const response = JSON.parse(req.body) as ISurveyResponse;
+      const newResponse = {
+        ...response,
+        answers: response.answers.map((answer) => {
+          if (answer.file) {
+            return {
+              ...answer,
+              file: {
+                ...answer.file,
+                data: Buffer.from(answer.file.data),
+              },
+            };
+          }
+        }),
+      } as ISurveyResponse;
 
       try {
-        await submitResponse(response, session.user.email);
+        await submitResponse(newResponse, session.user.email);
 
         res.status(200).send({ success: true });
-      } catch {
+      } catch (error) {
+        console.error(error);
         res.status(400).send({ success: false, error: 'Bad request' });
       }
 

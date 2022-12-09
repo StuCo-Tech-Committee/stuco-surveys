@@ -12,6 +12,7 @@ import {
   BsCheck2,
   BsClipboard,
   BsCloudUpload,
+  BsFileEarmarkArrowUp,
   BsSliders,
   BsTextLeft,
   BsUiChecks,
@@ -217,6 +218,11 @@ const Edit = ({ id }: { id: string }) => {
             name="Free Response"
             type="free-response"
             icon={<BsTextLeft />}
+          />
+          <CreateElementButton
+            name="File Upload"
+            type="file-upload"
+            icon={<BsFileEarmarkArrowUp />}
           />
         </div>
         <hr className="my-5" />
