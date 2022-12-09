@@ -6,7 +6,6 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { server } from '../../config';
 import { ISurvey } from '../../utilities/manager/SurveyManager';
 
 const SAVE_DELAY = 1000;
@@ -18,14 +17,14 @@ const useAutosave = (
   const [survey, setSurvey] = useState<ISurvey | null>(null);
   useEffect(() => {
     (async () => {
-      const survey = await fetch(`${server}/api/survey?id=${id}`);
+      const survey = await fetch(`/api/survey?id=${id}`);
       const surveyJson = await survey.json();
       setSurvey(surveyJson);
     })();
   }, [id]);
 
   const saveSurvey = useCallback(async (editedSurvey: ISurvey) => {
-    await fetch(`${server}/api/survey`, {
+    await fetch(`/api/survey`, {
       method: 'PUT',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(editedSurvey),
