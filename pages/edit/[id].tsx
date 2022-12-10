@@ -42,7 +42,9 @@ const CopyLinkButton = ({ id }: { id: string }) => {
     <button
       onClick={async () => {
         if (copied) return;
-        await navigator.clipboard.writeText(`${server}/survey/${id}`);
+        await navigator.clipboard.writeText(
+          `${window.location.origin}/survey/${id}`
+        );
         setCopied(true);
       }}
       className={clsx(
