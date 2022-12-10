@@ -44,6 +44,18 @@ interface ISurveyResponse extends Document {
   }[];
 }
 
+type IPusherSurveyResponse = Omit<ISurveyResponse, 'answers'> & {
+  answers: {
+    choices?: string[] | null;
+    number?: number | null;
+    text?: string | null;
+    file?: {
+      name: string;
+      fileType: string;
+    };
+  }[];
+};
+
 interface ISurveyRespondents extends Document {
   surveyId: string;
   respondents: string[];
@@ -277,9 +289,25 @@ export async function submitResponse(
     throw new Error('Already responded');
   }
 
-  pusher.trigger(response.surveyId, 'new-response', response).catch((err) => {
-    console.error(err);
-  });
+  console.log('e');
+  pusher
+    .trigger(response.surveyId, 'new-response', {
+      ...response,
+      answers: response.answers.map((answer) => {
+        return {
+          ...answer,
+          ...(answer.file && {
+            file: {
+              name: answer.file?.name,
+              fileType: answer.file?.fileType,
+            },
+          }),
+        };
+      }),
+    } as IPusherSurveyResponse)
+    .catch((err) => {
+      console.error(err);
+    });
 
   const identifiable = ((await getSurvey(response.surveyId)) as ISurvey)
     .identifiable;
@@ -320,4 +348,4 @@ export async function checkResponded(
   }
 }
 
-export type { ISurvey, ISurveyElement, ISurveyResponse };
+export type { ISurvey, ISurveyElement, ISurveyResponse, IPusherSurveyResponse };

@@ -8,6 +8,7 @@ import { useChannel, useEvent } from '../../components/realtime';
 import {
   getResponses,
   getSurvey,
+  IPusherSurveyResponse,
   ISurvey,
   ISurveyResponse,
 } from '../../utilities/manager/SurveyManager';
@@ -18,20 +19,24 @@ const Viewer = ({
   _responses,
 }: {
   survey: ISurvey;
-  _responses: ISurveyResponse[];
+  _responses: IPusherSurveyResponse[];
 }) => {
-  const [responses, setResponses] = useState<ISurveyResponse[]>(
+  const [responses, setResponses] = useState<IPusherSurveyResponse[]>(
     _responses.sort((a, b) => {
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     })
   );
   const channel = useChannel(survey._id);
-  useEvent(channel, 'new-response', (response: ISurveyResponse | undefined) => {
-    console.log('NEW THING!!!!');
-    if (typeof response === 'undefined') return;
+  useEvent(
+    channel,
+    'new-response',
+    (response: IPusherSurveyResponse | undefined) => {
+      console.log('NEW THING!!!!');
+      if (typeof response === 'undefined') return;
 
-    setResponses([response, ...responses]);
-  });
+      setResponses([response, ...responses]);
+    }
+  );
 
   return (
     <>
@@ -153,7 +158,22 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       survey: survey,
-      _responses: responses,
+      _responses: responses.map((response: ISurveyResponse) => {
+        return {
+          ...response,
+          answers: response.answers.map((answer) => {
+            return {
+              ...answer,
+              ...(answer.file && {
+                file: {
+                  name: answer.file?.name,
+                  fileType: answer.file?.fileType,
+                },
+              }),
+            };
+          }),
+        };
+      }),
       header: false,
     },
   };

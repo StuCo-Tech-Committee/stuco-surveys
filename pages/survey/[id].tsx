@@ -62,7 +62,11 @@ const Survey = ({
         } else if (element.type == 'free-response') {
           return surveyResponse.answers[index].text != null;
         } else if (element.type == 'file-upload') {
-          return surveyResponse.answers[index].file != null;
+          return (
+            surveyResponse.answers[index].file &&
+            Buffer.byteLength(surveyResponse.answers[index].file!.data) <
+              16777216
+          );
         } else {
           return false;
         }
