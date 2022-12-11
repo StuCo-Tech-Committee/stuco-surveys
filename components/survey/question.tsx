@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import { BsFileEarmarkArrowUp } from 'react-icons/bs';
 import { ISurveyElement } from '../../utilities/manager/SurveyManager';
+import humanFileSize from './humanFileSize';
 
 const AnswerPanel = ({
   element,
@@ -137,10 +138,27 @@ const AnswerPanel = ({
             <BsFileEarmarkArrowUp />
             Upload File
           </label>
-          <p className="mt-2 text-center text-neutral-800">
-            File:{' '}
-            <span className="text-neutral-600">{file?.name ?? 'None'}</span>
-          </p>
+          <div className="mt-2 text-sm">
+            {file ? (
+              file.size > 16777216 ? (
+                <p className="text-red-500">
+                  File size must be less than 16 MB (current size:{' '}
+                  {(file.size / 1000000).toFixed(2)} MB)
+                </p>
+              ) : (
+                <p className="text-neutral-800">
+                  File: <span className="text-neutral-500">{file.name}</span>{' '}
+                  <span className="text-neutral-400">
+                    ({humanFileSize(file.size, true, 1)})
+                  </span>
+                </p>
+              )
+            ) : (
+              <p className="text-neutral-800">
+                File: <span className="text-neutral-500">None</span>
+              </p>
+            )}
+          </div>
         </div>
       );
     default:
