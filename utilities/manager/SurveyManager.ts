@@ -289,7 +289,6 @@ export async function submitResponse(
     throw new Error('Already responded');
   }
 
-  console.log('e');
   pusher
     .trigger(response.surveyId, 'new-response', {
       ...response,
