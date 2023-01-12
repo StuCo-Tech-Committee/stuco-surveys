@@ -31,7 +31,6 @@ const Viewer = ({
     channel,
     'new-response',
     (response: IPusherSurveyResponse | undefined) => {
-      console.log('NEW THING!!!!');
       if (typeof response === 'undefined') return;
 
       setResponses([response, ...responses]);

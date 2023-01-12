@@ -41,6 +41,8 @@ export default async function handler(
               },
             };
           }
+
+          return answer;
         }),
       } as ISurveyResponse;
 
