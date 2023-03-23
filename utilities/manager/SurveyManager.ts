@@ -140,7 +140,8 @@ const SurveySchema = new mongoose.Schema({
 
 const SurveyResponseSchema = new mongoose.Schema({
   surveyId: {
-    type: String,
+    type: mongoose.Types.ObjectId,
+    ref: 'Survey',
     required: true,
   },
   date: {
@@ -172,7 +173,8 @@ const SurveyResponseSchema = new mongoose.Schema({
 
 const SurveyRespondentsSchema = new mongoose.Schema({
   surveyId: {
-    type: String,
+    type: mongoose.Types.ObjectId,
+    ref: 'Survey',
     required: true,
   },
   respondents: {
