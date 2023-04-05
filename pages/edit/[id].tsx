@@ -5,19 +5,25 @@ import { unstable_getServerSession } from 'next-auth';
 import Head from 'next/head';
 import Link from 'next/link';
 import { ReactNode, useEffect, useState } from 'react';
+import {
+	DragDropContext,
+	Draggable,
+	DropResult,
+	Droppable,
+} from 'react-beautiful-dnd';
 import { AiOutlineStop } from 'react-icons/ai';
 import { BiLoaderAlt, BiPlus } from 'react-icons/bi';
 import {
-  BsChatLeftText,
-  BsCheck2,
-  BsClipboard,
-  BsCloudUpload,
-  BsFileEarmarkArrowUp,
-  BsSliders,
-  BsTextLeft,
-  BsUiChecks,
-  BsUiRadios,
-  BsUpload,
+	BsChatLeftText,
+	BsCheck2,
+	BsClipboard,
+	BsCloudUpload,
+	BsFileEarmarkArrowUp,
+	BsSliders,
+	BsTextLeft,
+	BsUiChecks,
+	BsUiRadios,
+	BsUpload,
 } from 'react-icons/bs';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -26,7 +32,7 @@ import ElementEditorCard from '../../components/editor/elementEditorCard';
 import useAutosave from '../../components/editor/useAutosave';
 import Question from '../../components/survey/question';
 import { server } from '../../config';
-import { ISurvey } from '../../utilities/manager/SurveyManager';
+import { ISurvey, ISurveyElement } from '../../utilities/manager/SurveyManager';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 const CopyLinkButton = ({ id }: { id: string }) => {
@@ -58,6 +64,18 @@ const CopyLinkButton = ({ id }: { id: string }) => {
       {copied ? 'Copied!' : 'Copy Link'}
     </button>
   );
+};
+
+const reorder = (
+  list: Array<ISurveyElement>,
+  startIndex: number,
+  endIndex: number
+) => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
 };
 
 const Edit = ({ id }: { id: string }) => {
@@ -107,6 +125,21 @@ const Edit = ({ id }: { id: string }) => {
         <span className="mx-2">{name}</span>
       </button>
     );
+  };
+
+  const onDragEnd = (result: DropResult) => {
+    // dropped outside the list
+    if (!result.destination) {
+      return;
+    }
+
+    const items = reorder(
+      editedSurvey!.elements,
+      result.source.index,
+      result.destination.index
+    );
+
+    saveEditedSurvey(({...editedSurvey, elements: items}) as ISurvey);
   };
 
   return (
@@ -229,19 +262,52 @@ const Edit = ({ id }: { id: string }) => {
         </div>
         <hr className="my-5" />
         {/* Elements editor */}
+        {/* IMPLEMENT DRAG AND DROP */}
         <div className="mt-8 flex flex-col items-start justify-start">
           {editedSurvey ? (
-            editedSurvey.elements.map((surveyElement) => {
-              return (
-                <ElementEditorCard
-                  surveyElement={surveyElement}
-                  editedSurvey={editedSurvey}
-                  saveEditedSurvey={saveEditedSurvey}
-                  published={editedSurvey.published}
-                  key={surveyElement.id}
-                />
-              );
-            })
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="droppable">
+                {/* {editedSurvey.elements.map((surveyElement) => {
+                  return (
+                      <ElementEditorCard
+                        surveyElement={surveyElement}
+                        editedSurvey={editedSurvey}
+                        saveEditedSurvey={saveEditedSurvey}
+                        published={editedSurvey.published}
+                        key={surveyElement.id}
+                      />
+                  );
+                })} */}
+                {(provided, snapshot) => (
+                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                    {editedSurvey.elements.map((item, index) => (
+                      <Draggable
+                        key={item.id}
+                        draggableId={item.id}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            <ElementEditorCard
+                              surveyElement={item}
+                              editedSurvey={editedSurvey}
+                              saveEditedSurvey={saveEditedSurvey}
+                              published={editedSurvey.published}
+                              key={item.id}
+                            />
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
           ) : (
             <>
               <div className="h-40 w-full rounded-lg leading-none">
