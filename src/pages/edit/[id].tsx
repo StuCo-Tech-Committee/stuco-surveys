@@ -6,24 +6,24 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { ReactNode, useEffect, useState } from 'react';
 import {
-	DragDropContext,
-	Draggable,
-	DropResult,
-	Droppable,
+  DragDropContext,
+  Draggable,
+  DropResult,
+  Droppable,
 } from 'react-beautiful-dnd';
 import { AiOutlineStop } from 'react-icons/ai';
 import { BiLoaderAlt, BiPlus } from 'react-icons/bi';
 import {
-	BsChatLeftText,
-	BsCheck2,
-	BsClipboard,
-	BsCloudUpload,
-	BsFileEarmarkArrowUp,
-	BsSliders,
-	BsTextLeft,
-	BsUiChecks,
-	BsUiRadios,
-	BsUpload,
+  BsChatLeftText,
+  BsCheck2,
+  BsClipboard,
+  BsCloudUpload,
+  BsFileEarmarkArrowUp,
+  BsSliders,
+  BsTextLeft,
+  BsUiChecks,
+  BsUiRadios,
+  BsUpload,
 } from 'react-icons/bs';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -139,7 +139,7 @@ const Edit = ({ id }: { id: string }) => {
       result.destination.index
     );
 
-    saveEditedSurvey(({...editedSurvey, elements: items}) as ISurvey);
+    saveEditedSurvey({ ...editedSurvey, elements: items } as ISurvey);
   };
 
   return (
@@ -262,23 +262,11 @@ const Edit = ({ id }: { id: string }) => {
         </div>
         <hr className="my-5" />
         {/* Elements editor */}
-        {/* IMPLEMENT DRAG AND DROP */}
-        <div className="mt-8 flex flex-col items-start justify-start">
+        <div className="mt-8 flex flex-col items-stretch justify-start">
           {editedSurvey ? (
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable droppableId="droppable">
-                {/* {editedSurvey.elements.map((surveyElement) => {
-                  return (
-                      <ElementEditorCard
-                        surveyElement={surveyElement}
-                        editedSurvey={editedSurvey}
-                        saveEditedSurvey={saveEditedSurvey}
-                        published={editedSurvey.published}
-                        key={surveyElement.id}
-                      />
-                  );
-                })} */}
-                {(provided, snapshot) => (
+                {(provided, _) => (
                   <div {...provided.droppableProps} ref={provided.innerRef}>
                     {editedSurvey.elements.map((item, index) => (
                       <Draggable
@@ -286,7 +274,7 @@ const Edit = ({ id }: { id: string }) => {
                         draggableId={item.id}
                         index={index}
                       >
-                        {(provided, snapshot) => (
+                        {(provided, _) => (
                           <div
                             ref={provided.innerRef}
                             {...provided.draggableProps}
