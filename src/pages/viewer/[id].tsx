@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { useState } from 'react';
 import { Rnd } from 'react-rnd';
 import { VictoryBar, VictoryChart, VictoryPie } from 'victory';
-import { useChannel, useEvent } from '../../components/realtime';
+import { useChannel, useEvent } from '../../hooks/realtime';
 import {
   getResponses,
   getSurvey,
