@@ -1,5 +1,8 @@
 import mongoose, { Document } from 'mongoose';
 import pusher from '../Pusher';
+import { Survey } from '../../models/Survey';
+import { SurveyRespondents } from '../../models/SurveyRespondents';
+import { SurveyResponse } from '../../models/SurveyResponse';
 
 const uri = process.env.DB_URI as string;
 
@@ -60,148 +63,6 @@ interface ISurveyRespondents extends Document {
   surveyId: string;
   respondents: string[];
 }
-
-const SurveySchema = new mongoose.Schema({
-  name: { type: String },
-  creator: { type: String, required: true },
-  description: { type: String },
-  identifiable: { type: Boolean, default: false, required: true },
-  published: { type: Boolean },
-  createdDate: { type: Date, required: true },
-  modifiedDate: { type: Date, required: true },
-  elements: {
-    type: [
-      {
-        id: { type: String, required: true },
-        type: {
-          type: String,
-          enum: ['multiple-choice', 'checkboxes', 'slider', 'free-response'],
-          required: true,
-        },
-        title: { type: String, required: false },
-        description: { type: String, required: false },
-        required: { type: Boolean, required: true },
-
-        // BEGIN ELEMENT TYPE-SPECIFIC PROPERTIES
-
-        // Multiple choice + checkboxes
-        choices: {
-          type: [String],
-          default: undefined,
-          required: function () {
-            return ['multiple-choice', 'checkboxes'].includes(
-              (this as any).type
-            );
-          },
-          validate: {
-            validator: function (v: string[]) {
-              return v.length >= 2;
-            },
-          },
-        },
-
-        // Slider
-        range: {
-          type: [Number],
-          default: undefined,
-          required: function () {
-            return (this as any).type == 'slider';
-          },
-          validate: {
-            validator: function (v: number[]) {
-              return v.length == 2 && v[1] > v[0];
-            },
-          },
-        },
-        step: {
-          type: Number,
-          required: function () {
-            return (this as any).type == 'slider';
-          },
-          validate: {
-            validator: function (v: number) {
-              return v >= 0;
-            },
-          },
-        },
-
-        // Free response
-        validator: {
-          type: String,
-          required: function () {
-            return (this as any).type == 'free-response';
-          },
-        },
-      },
-    ],
-    required: true,
-  },
-});
-
-const SurveyResponseSchema = new mongoose.Schema({
-  surveyId: {
-    type: mongoose.Types.ObjectId,
-    ref: 'Survey',
-    required: true,
-  },
-  date: {
-    type: Date,
-    required: true,
-  },
-  respondent: {
-    type: String,
-    required: false,
-  },
-  answers: {
-    type: [
-      {
-        choices: [String],
-        number: Number,
-        text: String,
-        file: {
-          type: {
-            name: String,
-            fileType: String,
-            data: Buffer,
-          },
-        },
-      },
-    ],
-    required: true,
-  },
-});
-
-const SurveyRespondentsSchema = new mongoose.Schema({
-  surveyId: {
-    type: mongoose.Types.ObjectId,
-    ref: 'Survey',
-    required: true,
-  },
-  respondents: {
-    type: [String],
-    required: true,
-  },
-});
-
-const Survey =
-  mongoose.models.Survey ||
-  mongoose.model<ISurvey>('Survey', SurveySchema, 'survey-schemas');
-
-const SurveyResponse =
-  mongoose.models.SurveyResponse ||
-  mongoose.model<ISurveyResponse>(
-    'SurveyResponse',
-    SurveyResponseSchema,
-    'survey-responses'
-  );
-
-const SurveyRespondents =
-  mongoose.models.SurveyRespondents ||
-  mongoose.model<ISurveyRespondents>(
-    'SurveyRespondents',
-    SurveyRespondentsSchema,
-    'survey-respondents'
-  );
 
 // TODO: This entire file does not include
 // data validation. That's an issue.
