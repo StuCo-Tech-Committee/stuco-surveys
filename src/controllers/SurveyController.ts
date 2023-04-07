@@ -1,51 +1,12 @@
-import mongoose, { Document } from 'mongoose';
-import pusher from '../Pusher';
-import { Survey } from '../../models/Survey';
-import { SurveyRespondents } from '../../models/SurveyRespondents';
-import { SurveyResponse } from '../../models/SurveyResponse';
+import mongoose from 'mongoose';
+import { ISurvey, ISurveyElement, Survey } from '../models/Survey';
+import { SurveyRespondents } from '../models/SurveyRespondents';
+import { ISurveyResponse, SurveyResponse } from '../models/SurveyResponse';
+import pusher from '../utilities/Pusher';
 
 const uri = process.env.DB_URI as string;
 
 mongoose.connect(uri);
-
-interface ISurveyElement {
-  id: string;
-  type: string;
-  title: string;
-  description: string;
-  required: boolean;
-  choices?: string[];
-  range?: (number | undefined)[];
-  step?: number;
-  validator?: string;
-}
-
-interface ISurvey extends Document {
-  name: string;
-  creator: string;
-  description: string;
-  identifiable: boolean;
-  published: boolean;
-  createdDate: string;
-  modifiedDate: string;
-  elements: ISurveyElement[];
-}
-
-interface ISurveyResponse extends Document {
-  surveyId: string;
-  date: string;
-  respondent?: string;
-  answers: {
-    choices?: string[] | null;
-    number?: number | null;
-    text?: string | null;
-    file?: {
-      name: string;
-      fileType: string;
-      data: Buffer;
-    };
-  }[];
-}
 
 type IPusherSurveyResponse = Omit<ISurveyResponse, 'answers'> & {
   answers: {
@@ -58,11 +19,6 @@ type IPusherSurveyResponse = Omit<ISurveyResponse, 'answers'> & {
     };
   }[];
 };
-
-interface ISurveyRespondents extends Document {
-  surveyId: string;
-  respondents: string[];
-}
 
 // TODO: This entire file does not include
 // data validation. That's an issue.
@@ -210,4 +166,4 @@ export async function checkResponded(
   }
 }
 
-export type { ISurvey, ISurveyElement, ISurveyResponse, IPusherSurveyResponse };
+export type { ISurvey, ISurveyResponse, IPusherSurveyResponse, ISurveyElement };

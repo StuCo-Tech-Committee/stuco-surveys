@@ -32,7 +32,7 @@ import ElementEditorCard from '../../components/editor/elementEditorCard';
 import useAutosave from '../../components/editor/useAutosave';
 import Question from '../../components/survey/question';
 import { server } from '../../config';
-import { ISurvey, ISurveyElement } from '../../utilities/manager/SurveyManager';
+import { ISurvey, ISurveyElement } from '../../controllers/SurveyController';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 const CopyLinkButton = ({ id }: { id: string }) => {

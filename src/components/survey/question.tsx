@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 import { BsFileEarmarkArrowUp } from 'react-icons/bs';
-import { ISurveyElement } from '../../utilities/manager/SurveyManager';
+import { ISurveyElement } from '../../controllers/SurveyController';
 import humanFileSize from './humanFileSize';
 
 const AnswerPanel = ({

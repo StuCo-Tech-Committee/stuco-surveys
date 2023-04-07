@@ -1,6 +1,6 @@
 import mongoose, { Document } from 'mongoose';
 
-interface ISurveyElement {
+export interface ISurveyElement {
   id: string;
   type: string;
   title: string;
@@ -12,7 +12,7 @@ interface ISurveyElement {
   validator?: string;
 }
 
-interface ISurvey extends Document {
+export interface ISurvey extends Document {
   name: string;
   creator: string;
   description: string;

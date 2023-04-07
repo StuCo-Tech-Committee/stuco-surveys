@@ -1,6 +1,6 @@
 import mongoose, { Document } from 'mongoose';
 
-interface ISurveyResponse extends Document {
+export interface ISurveyResponse extends Document {
   surveyId: string;
   date: string;
   respondent?: string;

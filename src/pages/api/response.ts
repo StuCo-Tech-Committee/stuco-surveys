@@ -3,7 +3,7 @@ import { unstable_getServerSession } from 'next-auth';
 import {
   ISurveyResponse,
   submitResponse,
-} from '../../utilities/manager/SurveyManager';
+} from '../../controllers/SurveyController';
 import { authOptions } from './auth/[...nextauth]';
 
 export const config = {
