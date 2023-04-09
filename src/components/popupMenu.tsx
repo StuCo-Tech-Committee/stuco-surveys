@@ -63,7 +63,7 @@ const PopupMenu = ({ children }: PropsWithChildren<{}>) => {
   );
 
   return (
-    <button
+    <div
       ref={buttonRef}
       onClick={(e) => {
         e.preventDefault();
@@ -84,7 +84,7 @@ const PopupMenu = ({ children }: PropsWithChildren<{}>) => {
       ) : (
         <></>
       )}
-    </button>
+    </div>
   );
 };
 
