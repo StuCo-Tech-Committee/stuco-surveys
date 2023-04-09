@@ -3,6 +3,8 @@ import { ISurvey, ISurveyElement, Survey } from '../models/Survey';
 import { SurveyRespondents } from '../models/SurveyRespondents';
 import { ISurveyResponse, SurveyResponse } from '../models/SurveyResponse';
 import pusher from '../utilities/Pusher';
+import { z } from 'zod';
+import * as Schemas from '../schemas/Schemas';
 
 const uri = process.env.DB_URI as string;
 
@@ -25,7 +27,15 @@ type IPusherSurveyResponse = Omit<ISurveyResponse, 'answers'> & {
 // As a matter of fact, all server-side
 // functions do not perform data
 // checking.
+
+// TODO: data validation is being implemented, but returning an error must have corresponding client side handling
 export async function createSurvey(creator: string): Promise<ISurvey> {
+  try {
+    Schemas.creatorSchema.parse(creator);
+  } catch (err) {
+    throw new Error('Invalid creator');
+  }
+
   const newSurvey = new Survey({
     name: '',
     creator: creator,
@@ -40,6 +50,12 @@ export async function createSurvey(creator: string): Promise<ISurvey> {
 }
 
 export async function getSurvey(id: string): Promise<ISurvey> {
+  try {
+    Schemas.idSchema.parse(id);
+  } catch (err) {
+    throw new Error('Invalid id');
+  }
+
   return Survey.findById(id).exec();
 }
 
@@ -47,6 +63,13 @@ export async function updateSurvey(
   newSurvey: ISurvey,
   creator: string
 ): Promise<void> {
+  try {
+    Schemas.surveySchema.parse(newSurvey);
+    Schemas.creatorSchema.parse(creator);
+  } catch (err) {
+    throw new Error('Invalid survey or creator');
+  }
+
   const survey = await Survey.findById(newSurvey._id).exec();
   if (survey == null) {
     throw new Error('Survey not found');
@@ -62,6 +85,13 @@ export async function updateSurvey(
 }
 
 export async function deleteSurvey(id: string, creator: string): Promise<void> {
+  try {
+    Schemas.idSchema.parse(id);
+    Schemas.creatorSchema.parse(creator);
+  } catch (err) {
+    throw new Error('Invalid id or creator');
+  }
+
   const survey = await Survey.findById(id).exec();
   if (survey == null) {
     throw new Error('Survey not found');
@@ -76,6 +106,12 @@ export async function deleteSurvey(id: string, creator: string): Promise<void> {
 }
 
 export async function publishSurvey(id: string): Promise<void> {
+  try {
+    Schemas.idSchema.parse(id);
+  } catch (err) {
+    throw new Error('Invalid id');
+  }
+
   const newSurveyRespondents = new SurveyRespondents({
     surveyId: id,
     respondents: [],
@@ -91,6 +127,12 @@ export async function getSurveys(
   creator: string,
   type: 'all' | 'published' | 'unpublished'
 ): Promise<ISurvey[]> {
+  try {
+    Schemas.creatorSchema.parse(creator);
+  } catch (err) {
+    throw new Error('Invalid creator');
+  }
+
   let query = Survey.find({ creator: creator });
   if (type == 'published') {
     query = query.where('published').equals(true);
