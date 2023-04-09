@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { BiFileBlank } from 'react-icons/bi';
 import CreateSurveyButton from '../components/manager/createSurveyButton';
 import SurveyButton from '../components/manager/surveyButton';
-import { getSurveys, ISurvey } from '../utilities/manager/SurveyManager';
+import { getSurveys, ISurvey } from '../controllers/SurveyController';
 import { authOptions } from './api/auth/[...nextauth]';
 
 const Manager = ({ surveys }: { surveys: ISurvey[] }) => {

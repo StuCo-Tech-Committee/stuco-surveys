@@ -6,7 +6,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { ISurvey } from '../../utilities/manager/SurveyManager';
+import { ISurvey } from '../../controllers/SurveyController';
 
 const SAVE_DELAY = 1000;
 

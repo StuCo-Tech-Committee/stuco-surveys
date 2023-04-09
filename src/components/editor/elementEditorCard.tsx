@@ -3,7 +3,7 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import { BsCircle, BsTrash } from 'react-icons/bs';
 import { MdCheckBoxOutlineBlank } from 'react-icons/md';
 import { TiDeleteOutline } from 'react-icons/ti';
-import { ISurvey, ISurveyElement } from '../../utilities/manager/SurveyManager';
+import { ISurvey, ISurveyElement } from '../../controllers/SurveyController';
 
 const Editor = ({
   surveyElement,
