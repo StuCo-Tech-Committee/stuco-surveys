@@ -11,7 +11,7 @@ import {
   IPusherSurveyResponse,
   ISurvey,
   ISurveyResponse,
-} from '../../controllers/SurveyController';
+} from '../../controllers/survey.controller';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 const Viewer = ({
