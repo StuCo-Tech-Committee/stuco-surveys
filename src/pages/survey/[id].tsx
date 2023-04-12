@@ -20,7 +20,7 @@ import {
   ISurvey,
   ISurveyElement,
   ISurveyResponse,
-} from '../../controllers/SurveyController';
+} from '../../controllers/survey.controller';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 const Survey = ({

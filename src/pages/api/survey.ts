@@ -7,7 +7,7 @@ import {
   getSurvey,
   ISurvey,
   updateSurvey,
-} from '../../controllers/SurveyController';
+} from '../../controllers/survey.controller';
 import { authOptions } from './auth/[...nextauth]';
 
 export default async function handler(

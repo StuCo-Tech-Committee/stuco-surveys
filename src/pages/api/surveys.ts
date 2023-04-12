@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { unstable_getServerSession } from 'next-auth';
-import { getSurveys, ISurvey } from '../../controllers/SurveyController';
+import { getSurveys, ISurvey } from '../../controllers/survey.controller';
 import { authOptions } from './auth/[...nextauth]';
 
 export default async function handler(

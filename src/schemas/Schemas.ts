@@ -30,3 +30,25 @@ export const surveySchema = z.object({
 export const creatorSchema = z.string().email();
 
 export const idSchema = z.string().refine((id) => ObjectId.isValid(id));
+
+export const responseSchema = z.object({
+  surveyId: z.string(),
+  date: z.string(),
+  respondent: z.string().optional(),
+  answers: z.array(
+    z.object({
+      choices: z.array(z.string()).optional(),
+      number: z.number().optional(),
+      text: z.string().optional(),
+      file: z
+        .object({
+          name: z.string(),
+          fileType: z.string(),
+          data: z.instanceof(Buffer).optional(),
+        })
+        .optional(),
+    })
+  ),
+});
+
+export const respondentSchema = z.string().email();

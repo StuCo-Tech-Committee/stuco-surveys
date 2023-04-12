@@ -2,9 +2,8 @@ import mongoose from 'mongoose';
 import { ISurvey, ISurveyElement, Survey } from '../models/Survey';
 import { SurveyRespondents } from '../models/SurveyRespondents';
 import { ISurveyResponse, SurveyResponse } from '../models/SurveyResponse';
-import pusher from '../utilities/Pusher';
-import { z } from 'zod';
 import * as Schemas from '../schemas/Schemas';
+import pusher from '../utilities/Pusher';
 
 const uri = process.env.DB_URI as string;
 
@@ -146,6 +145,13 @@ export async function submitResponse(
   response: ISurveyResponse,
   respondent: string
 ): Promise<void> {
+  try {
+    Schemas.responseSchema.parse(response);
+    Schemas.respondentSchema.parse(respondent);
+  } catch (err) {
+    throw new Error('Invalid response or respondent');
+  }
+
   if (await checkResponded(response.surveyId, respondent)) {
     throw new Error('Already responded');
   }
@@ -190,6 +196,12 @@ export async function submitResponse(
 }
 
 export async function getResponses(id: string): Promise<ISurveyResponse[]> {
+  try {
+    Schemas.idSchema.parse(id);
+  } catch (err) {
+    throw new Error('Invalid id');
+  }
+
   return SurveyResponse.find({ surveyId: id }).exec();
 }
 
@@ -197,6 +209,13 @@ export async function checkResponded(
   id: string,
   respondent: string
 ): Promise<boolean> {
+  try {
+    Schemas.idSchema.parse(id);
+    Schemas.respondentSchema.parse(respondent);
+  } catch (err) {
+    throw new Error('Invalid id or respondent');
+  }
+
   const surveyRespondents = await SurveyRespondents.findOne({
     surveyId: id,
   }).exec();
