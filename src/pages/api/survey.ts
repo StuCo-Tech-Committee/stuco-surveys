@@ -2,10 +2,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { unstable_getServerSession } from 'next-auth/next';
 import {
+  ISurvey,
   createSurvey,
   deleteSurvey,
   getSurvey,
-  ISurvey,
   updateSurvey,
 } from '../../controllers/survey.controller';
 import { authOptions } from './auth/[...nextauth]';
