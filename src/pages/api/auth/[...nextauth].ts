@@ -1,7 +1,6 @@
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
-import NextAuth from 'next-auth';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import AzureADProvider from 'next-auth/providers/azure-ad';
-import { NextAuthOptions } from 'next-auth';
 import clientPromise from '../../../lib/mongodb';
 
 export const authOptions: NextAuthOptions = {

@@ -41,31 +41,19 @@ const Privacy: NextPage = () => {
             <p className="ml-16 text-3xl text-gray-500">
               Answers and identification become decoupled.<br></br>
               <span className="text-2xl text-gray-400">
-                After submission, your survey response and all personally
-                identifiable information are split, obfuscated, and sent to two
-                separate databases, making it impossible for your response to be
-                traced back to you.
+                After submission, your response and all personally identifiable
+                information are decoupled and sent to two separate collections,
+                making it impossible for your response to be traced back to you.
               </span>
               <span className="text-2xl italic text-gray-500">
                 {' '}
-                We only store your personal information to contact you when you
-                win a survey raffle.
+                Your identity is only tied to your response on surveys that say
+                so. Otherwise, no one will know what you answered.
               </span>
             </p>
           </div>
           <div className="my-16 flex flex-row items-center justify-start">
             <p className="text-5xl font-black text-gray-600">3</p>
-            <p className="ml-16 text-3xl text-gray-500">
-              Database entries are encrypted.<br></br>
-              <span className="text-2xl text-gray-400">
-                Once your submission and information are moved to our database,
-                all data becomes encrypted, granting only authorized personnel
-                permission to view and manage the data.
-              </span>
-            </p>
-          </div>
-          <div className="my-16 flex flex-row items-center justify-start">
-            <p className="text-5xl font-black text-gray-600">4</p>
             <p className="ml-16 text-3xl text-gray-500">
               Overview of data is sent to StuCo.<br></br>
               <span className="text-2xl text-gray-400">

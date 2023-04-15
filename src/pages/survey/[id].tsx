@@ -15,11 +15,11 @@ import {
 } from 'react-icons/bs';
 import Question from '../../components/survey/question';
 import {
-  checkResponded,
-  getSurvey,
   ISurvey,
   ISurveyElement,
   ISurveyResponse,
+  checkResponded,
+  getSurvey,
 } from '../../controllers/survey.controller';
 import { authOptions } from '../api/auth/[...nextauth]';
 
