@@ -7,7 +7,7 @@ import { BiLoaderAlt } from 'react-icons/bi';
 const NavItem = ({ name, href }: { name: string; href: string }) => {
   return (
     <li className="flex flex-col justify-center">
-      <Link href={href} className="text-md ml-4 text-gray-800">
+      <Link href={href} className="text-md text-gray-800">
         {name}
       </Link>
     </li>
@@ -33,11 +33,11 @@ const Header = () => {
           />
           StuCo Surveys
         </Link>
-        <NavItem name="Privacy" href="/privacy" />
       </div>
 
       <ul className="flex flex-row gap-4">
         <NavItem name="Manager" href="/manager" />
+        <NavItem name="Privacy" href="/privacy" />
         <button
           onClick={() => {
             if (session) {
