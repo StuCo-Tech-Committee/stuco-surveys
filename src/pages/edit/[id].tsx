@@ -11,14 +11,15 @@ import {
   DropResult,
   Droppable,
 } from 'react-beautiful-dnd';
-import { AiOutlineStop } from 'react-icons/ai';
-import { BiLoaderAlt, BiPlus } from 'react-icons/bi';
+import { AiOutlineStop, AiOutlineWarning } from 'react-icons/ai';
+import { BiLoaderAlt, BiLogOut, BiPlus } from 'react-icons/bi';
 import {
   BsChatLeftText,
   BsCheck2,
   BsClipboard,
   BsCloudUpload,
   BsFileEarmarkArrowUp,
+  BsPersonCircle,
   BsSliders,
   BsTextLeft,
   BsUiChecks,
@@ -327,14 +328,49 @@ const Edit = ({ id }: { id: string }) => {
               <h2 className="text-md break-words text-gray-600">
                 {editedSurvey?.description || 'No description'}
               </h2>
-              <Link
-                href="/privacy"
-                className="text-sm text-exeter underline underline-offset-1"
-              >
-                Privacy notice
-              </Link>
+
               <h2 className="mt-2 text-sm font-bold text-exeter">* Required</h2>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  ease: 'backOut',
+                  duration: 0.4,
+                }}
+                className="mt-8 flex origin-top flex-col gap-6"
+              >
+                <div className="flex flex-row justify-between">
+                  <div className="flex flex-row items-center gap-3">
+                    <BsPersonCircle className="text-2xl" />
+                    <h1>
+                      You are signed in as
+                      <br />
+                      <span className="font-bold">Sample user</span>
+                      <br />
+                      <Link
+                        href="/privacy"
+                        className="text-sm text-exeter underline underline-offset-1"
+                      >
+                        Privacy statement
+                      </Link>
+                    </h1>
+                  </div>
+                  <button className="flex flex-row items-center justify-center gap-2 self-center rounded-md bg-exeter py-2 px-3 text-white shadow-md">
+                    <BiLogOut />
+                    <span>Sign out</span>
+                  </button>
+                </div>
+                {editedSurvey.identifiable && (
+                  <div className="flex flex-row items-center justify-center gap-2 rounded-md border border-red-200 bg-red-500/10 p-3">
+                    <AiOutlineWarning />
+                    <span>
+                      Your identity is tied to your response for this survey!
+                    </span>
+                  </div>
+                )}
+              </motion.div>
             </div>
+
             {editedSurvey.elements.map((element, index) => {
               return (
                 <Question
