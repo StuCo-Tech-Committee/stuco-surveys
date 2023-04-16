@@ -183,14 +183,12 @@ const Survey = ({
                     <br />
                     <span className="font-bold">{session.user?.name}</span>
                     <br />
-                    {!survey.identifiable && (
-                      <Link
-                        href="/privacy"
-                        className="text-sm text-exeter underline underline-offset-1"
-                      >
-                        Privacy statement
-                      </Link>
-                    )}
+                    <Link
+                      href="/privacy"
+                      className="text-sm text-exeter underline underline-offset-1"
+                    >
+                      Privacy statement
+                    </Link>
                   </h1>
                 </div>
                 <button
