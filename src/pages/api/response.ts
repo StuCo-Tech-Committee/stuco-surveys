@@ -9,8 +9,7 @@ import { authOptions } from './auth/[...nextauth]';
 export const config = {
   api: {
     bodyParser: {
-      // I hate doing this, but in the meantime, this is the only way to get file data to be sent to the server
-      sizeLimit: '100tb',
+      sizeLimit: '20mb',
     },
   },
 };
