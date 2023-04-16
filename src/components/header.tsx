@@ -7,7 +7,7 @@ import { BiLoaderAlt } from 'react-icons/bi';
 const NavItem = ({ name, href }: { name: string; href: string }) => {
   return (
     <li className="flex flex-col justify-center">
-      <Link href={href} className="text-md ml-4 text-gray-800">
+      <Link href={href} className="text-md text-gray-800">
         {name}
       </Link>
     </li>
@@ -20,20 +20,24 @@ const Header = () => {
 
   return (
     <div className="flex w-full flex-row justify-between px-4 py-4 md:px-32">
-      <Link
-        href="/"
-        className="flex flex-row items-center gap-2 text-xl font-bold text-exeter"
-      >
-        <Image
-          alt="StuCo Surveys Logo"
-          src="/stuco-surveys-icon.svg"
-          width={28}
-          height={28}
-        />
-        StuCo Surveys
-      </Link>
+      <div className="flex items-center font-bold">
+        <Link
+          href="/"
+          className="flex flex-row items-center gap-2 text-xl text-exeter"
+        >
+          <Image
+            alt="StuCo Surveys Logo"
+            src="/stuco-surveys-icon.svg"
+            width={28}
+            height={28}
+          />
+          StuCo Surveys
+        </Link>
+      </div>
+
       <ul className="flex flex-row gap-4">
         <NavItem name="Manager" href="/manager" />
+        <NavItem name="Privacy" href="/privacy" />
         <button
           onClick={() => {
             if (session) {
@@ -52,8 +56,6 @@ const Header = () => {
             session?.user?.name ?? 'Sign in'
           )}
         </button>
-        {/* <NavItem name="Viewer" href="/viewer" /> */}
-        {/* <NavItem name="Privacy" href="/privacy" /> */}
       </ul>
     </div>
   );
