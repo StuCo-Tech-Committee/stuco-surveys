@@ -1,5 +1,5 @@
 import { Hero } from '@/components/common/Hero';
-import { SecondaryFeatures } from '@/components/common/SecondaryFeatures';
+import Features from '@/components/common/Features';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 
@@ -15,7 +15,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Hero />
-      <SecondaryFeatures />
+      <Features />
     </>
   );
 };

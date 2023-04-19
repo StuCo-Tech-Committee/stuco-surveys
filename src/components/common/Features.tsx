@@ -185,7 +185,7 @@ function DeviceChartIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-export function SecondaryFeatures() {
+export default function Features() {
   return (
     <section
       id="features"
