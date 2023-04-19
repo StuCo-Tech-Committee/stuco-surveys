@@ -5,7 +5,7 @@
  */
 
 import Router from 'next/router';
-import * as NProgress from 'nprogress';
+import NProgress from 'nprogress';
 import * as React from 'react';
 
 export default function NextNProgress({

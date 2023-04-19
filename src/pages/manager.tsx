@@ -1,11 +1,11 @@
+import CreateSurveyButton from '@/components/manager/createSurveyButton';
+import SurveyButton from '@/components/manager/surveyButton';
+import { getSurveys, ISurvey } from '@/controllers/survey.controller';
 import { GetServerSideProps } from 'next';
 import { unstable_getServerSession } from 'next-auth';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { BiFileBlank } from 'react-icons/bi';
-import CreateSurveyButton from '../components/manager/createSurveyButton';
-import SurveyButton from '../components/manager/surveyButton';
-import { getSurveys, ISurvey } from '../controllers/survey.controller';
 import { authOptions } from './api/auth/[...nextauth]';
 
 const Manager = ({ surveys }: { surveys: ISurvey[] }) => {

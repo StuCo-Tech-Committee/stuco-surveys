@@ -1,7 +1,7 @@
-import Image from 'next/image';
 import clsx from 'clsx';
+import Image from 'next/image';
 
-import frame from '../../images/phoneFrame.svg';
+import frame from '@/images/phoneFrame.svg';
 
 export function PhoneFrame({
   className,

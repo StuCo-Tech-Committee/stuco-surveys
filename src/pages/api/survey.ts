@@ -1,13 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import {
+	ISurvey,
+	createSurvey,
+	deleteSurvey,
+	getSurvey,
+	updateSurvey,
+} from '@/controllers/survey.controller';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { unstable_getServerSession } from 'next-auth/next';
-import {
-  ISurvey,
-  createSurvey,
-  deleteSurvey,
-  getSurvey,
-  updateSurvey,
-} from '../../controllers/survey.controller';
 import { authOptions } from './auth/[...nextauth]';
 
 export default async function handler(

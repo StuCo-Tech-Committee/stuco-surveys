@@ -1,9 +1,9 @@
+import { PopupItem, PopupMenu } from '@/components/popupMenu';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { BsTrash } from 'react-icons/bs';
-import { PopupItem, PopupMenu } from '../popupMenu';
 
 dayjs.extend(relativeTime);
 

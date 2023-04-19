@@ -1,13 +1,13 @@
-import Link from 'next/link';
 import { Popover } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
+import Link from 'next/link';
 
-import { Button } from '../components/common/Button';
-import { Container } from '../components/common/Container';
-import { Logo } from '../components/common/Logo';
-import { NavLinks } from '../components/common/NavLinks';
-import { SVGProps, useState } from 'react';
+import { Button } from '@/components/common/Button';
+import { Container } from '@/components/common/Container';
+import { Logo } from '@/components/common/Logo';
+import { NavLinks } from '@/components/common/NavLinks';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { SVGProps, useState } from 'react';
 import { BiLoaderAlt } from 'react-icons/bi';
 
 function MenuIcon(props: SVGProps<SVGSVGElement>) {

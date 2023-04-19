@@ -1,3 +1,8 @@
+import ElementEditorCard from '@/components/editor/elementEditorCard';
+import useAutosave from '@/components/editor/useAutosave';
+import Question from '@/components/survey/question';
+import { server } from '@/config';
+import { ISurvey, ISurveyElement } from '@/controllers/survey.controller';
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
 import { GetServerSideProps } from 'next';
@@ -6,34 +11,29 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { ReactNode, useEffect, useState } from 'react';
 import {
-  DragDropContext,
-  Draggable,
-  DropResult,
-  Droppable,
+	DragDropContext,
+	Draggable,
+	DropResult,
+	Droppable,
 } from 'react-beautiful-dnd';
 import { AiOutlineStop, AiOutlineWarning } from 'react-icons/ai';
 import { BiLoaderAlt, BiLogOut, BiPlus } from 'react-icons/bi';
 import {
-  BsChatLeftText,
-  BsCheck2,
-  BsClipboard,
-  BsCloudUpload,
-  BsFileEarmarkArrowUp,
-  BsPersonCircle,
-  BsSliders,
-  BsTextLeft,
-  BsUiChecks,
-  BsUiRadios,
-  BsUpload,
+	BsChatLeftText,
+	BsCheck2,
+	BsClipboard,
+	BsCloudUpload,
+	BsFileEarmarkArrowUp,
+	BsPersonCircle,
+	BsSliders,
+	BsTextLeft,
+	BsUiChecks,
+	BsUiRadios,
+	BsUpload,
 } from 'react-icons/bs';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { v4 } from 'uuid';
-import ElementEditorCard from '../../components/editor/elementEditorCard';
-import useAutosave from '../../components/editor/useAutosave';
-import Question from '../../components/survey/question';
-import { server } from '../../config';
-import { ISurvey, ISurveyElement } from '../../controllers/survey.controller';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 const CopyLinkButton = ({ id }: { id: string }) => {

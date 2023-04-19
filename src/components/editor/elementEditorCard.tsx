@@ -1,9 +1,9 @@
+import { ISurvey, ISurveyElement } from '@/controllers/survey.controller';
 import { Dispatch, SetStateAction } from 'react';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { BsCircle, BsTrash } from 'react-icons/bs';
 import { MdCheckBoxOutlineBlank } from 'react-icons/md';
 import { TiDeleteOutline } from 'react-icons/ti';
-import { ISurvey, ISurveyElement } from '../../controllers/survey.controller';
 
 const Editor = ({
   surveyElement,

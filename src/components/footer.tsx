@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import qrCode from '../images/qrcode.png';
-import { Container } from './common/Container';
-import { Logomark } from './common/Logo';
-import { NavLinks } from './common/NavLinks';
+import { Container } from '@/components/common/Container';
+import { Logomark } from '@/components/common/Logo';
+import { NavLinks } from '@/components/common/NavLinks';
+import qrCode from '@/images/qrcode.png';
 
 function QrCodeBorder(props: React.SVGProps<SVGSVGElement>) {
   return (

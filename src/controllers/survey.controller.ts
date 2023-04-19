@@ -1,9 +1,10 @@
+import { ISurvey, ISurveyElement, Survey } from '@/models/Survey';
+import { SurveyRespondents } from '@/models/SurveyRespondents';
+import { ISurveyResponse, SurveyResponse } from '@/models/SurveyResponse';
+import * as Schemas from '@/schemas/Schemas';
+import pusher from '@/utilities/Pusher';
 import mongoose from 'mongoose';
-import { ISurvey, ISurveyElement, Survey } from '../models/Survey';
-import { SurveyRespondents } from '../models/SurveyRespondents';
-import { ISurveyResponse, SurveyResponse } from '../models/SurveyResponse';
-import * as Schemas from '../schemas/Schemas';
-import pusher from '../utilities/Pusher';
+
 
 const uri = process.env.DB_URI as string;
 

@@ -1,13 +1,13 @@
 import { useId } from 'react';
 
-import { Button } from './Button';
-import { Container } from './Container';
-import { PhoneFrame } from './PhoneFrame';
-import logoSoTA from '../../images/icons/SoTA.png';
-import imageSampleSurvey from '../../images/sampleSurvey.png';
+import { Button } from '@/components/common/Button';
+import { Container } from '@/components/common/Container';
+import { Logo } from '@/components/common/Logo';
+import { PhoneFrame } from '@/components/common/PhoneFrame';
+import logoSoTA from '@/images/icons/SoTA.png';
+import imageSampleSurvey from '@/images/sampleSurvey.png';
 import clsx from 'clsx';
 import Image from 'next/image';
-import { Logo } from './Logo';
 
 function BackgroundIllustration(props: React.ComponentProps<'div'>) {
   let id = useId();

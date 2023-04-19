@@ -1,8 +1,7 @@
+import { Hero } from '@/components/common/Hero';
+import { SecondaryFeatures } from '@/components/common/SecondaryFeatures';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Header from '../components/header';
-import { Hero } from '../components/common/Hero';
-import { SecondaryFeatures } from '../components/common/SecondaryFeatures';
 
 const Home: NextPage = () => {
   return (

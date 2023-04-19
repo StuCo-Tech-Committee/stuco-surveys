@@ -1,6 +1,6 @@
-import { ButtonHTMLAttributes, HTMLProps, forwardRef } from 'react';
-import Link from 'next/link';
 import clsx from 'clsx';
+import Link from 'next/link';
+import { ButtonHTMLAttributes, HTMLProps } from 'react';
 
 const baseStyles = {
   solid:
@@ -24,8 +24,8 @@ const variantStyles = {
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
   HTMLProps<HTMLAnchorElement> & {
     variant?: keyof typeof baseStyles;
-    color?: keyof typeof variantStyles['solid'] &
-      keyof typeof variantStyles['outline'];
+    color?: keyof (typeof variantStyles)['solid'] &
+      keyof (typeof variantStyles)['outline'];
     href?: string;
     ref?: any;
   };
