@@ -3,7 +3,7 @@ import { AnimatePresence } from 'framer-motion';
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
-import Footer from '../components/footer';
+import { Footer } from '../components/footer';
 import Header from '../components/header';
 import NextNProgress from '../components/progressBar';
 import '../styles/globals.css';

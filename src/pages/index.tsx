@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Header from '../components/header';
 import { Hero } from '../components/common/Hero';
+import { SecondaryFeatures } from '../components/common/SecondaryFeatures';
 
 const Home: NextPage = () => {
   return (
@@ -15,6 +16,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Hero />
+      <SecondaryFeatures />
     </>
   );
 };

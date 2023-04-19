@@ -36,7 +36,7 @@ export function Logomark(props: SVGProps<SVGSVGElement>) {
 
 export function Logo(props: SVGProps<SVGSVGElement>) {
   return (
-    <div className="flex flex-row items-center text-xl gap-2 text-exeter">
+    <div className="flex flex-row items-center text-xl gap-2 text-exeter font-bold">
       <svg viewBox="0 0 40 40" aria-hidden="true" {...props}>
         <Logomark width="40" height="40" />
       </svg>

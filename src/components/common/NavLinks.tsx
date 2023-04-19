@@ -7,8 +7,6 @@ export function NavLinks() {
 
   const data = [
     ['Features', '#features'],
-    ['Reviews', '#reviews'],
-    ['Pricing', '#pricing'],
     ['Privacy', '/privacy'],
   ];
 
