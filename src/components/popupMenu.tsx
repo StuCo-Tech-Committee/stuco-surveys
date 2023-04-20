@@ -1,12 +1,12 @@
 import { motion } from 'framer-motion';
 import {
-  MutableRefObject,
-  PropsWithChildren,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
+	MutableRefObject,
+	PropsWithChildren,
+	ReactNode,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
 } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 

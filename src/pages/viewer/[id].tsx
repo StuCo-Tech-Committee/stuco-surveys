@@ -4,14 +4,14 @@ import Head from 'next/head';
 import { useState } from 'react';
 import { Rnd } from 'react-rnd';
 import { VictoryBar, VictoryChart, VictoryPie } from 'victory';
-import { useChannel, useEvent } from '../../hooks/realtime';
 import {
-  getResponses,
-  getSurvey,
-  IPusherSurveyResponse,
-  ISurvey,
-  ISurveyResponse,
-} from '../../controllers/survey.controller';
+	IPusherSurveyResponse,
+	ISurvey,
+	ISurveyResponse,
+	getResponses,
+	getSurvey,
+} from '@/controllers/survey.controller';
+import { useChannel, useEvent } from '@/hooks/realtime';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 const Viewer = ({

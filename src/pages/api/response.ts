@@ -1,9 +1,9 @@
+import {
+	ISurveyResponse,
+	submitResponse,
+} from '@/controllers/survey.controller';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { unstable_getServerSession } from 'next-auth';
-import {
-  ISurveyResponse,
-  submitResponse,
-} from '../../controllers/survey.controller';
 import { authOptions } from './auth/[...nextauth]';
 
 export const config = {

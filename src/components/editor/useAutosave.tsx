@@ -1,12 +1,12 @@
+import { ISurvey } from '@/controllers/survey.controller';
 import debounce from 'lodash/debounce';
 import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
+	Dispatch,
+	SetStateAction,
+	useCallback,
+	useEffect,
+	useState,
 } from 'react';
-import { ISurvey } from '../../controllers/survey.controller';
 
 const SAVE_DELAY = 1000;
 
