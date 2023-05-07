@@ -11,25 +11,25 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { ReactNode, useEffect, useState } from 'react';
 import {
-	DragDropContext,
-	Draggable,
-	DropResult,
-	Droppable,
+  DragDropContext,
+  Draggable,
+  DropResult,
+  Droppable,
 } from 'react-beautiful-dnd';
 import { AiOutlineStop, AiOutlineWarning } from 'react-icons/ai';
 import { BiLoaderAlt, BiLogOut, BiPlus } from 'react-icons/bi';
 import {
-	BsChatLeftText,
-	BsCheck2,
-	BsClipboard,
-	BsCloudUpload,
-	BsFileEarmarkArrowUp,
-	BsPersonCircle,
-	BsSliders,
-	BsTextLeft,
-	BsUiChecks,
-	BsUiRadios,
-	BsUpload,
+  BsChatLeftText,
+  BsCheck2,
+  BsClipboard,
+  BsCloudUpload,
+  BsFileEarmarkArrowUp,
+  BsPersonCircle,
+  BsSliders,
+  BsTextLeft,
+  BsUiChecks,
+  BsUiRadios,
+  BsUpload,
 } from 'react-icons/bs';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -143,6 +143,8 @@ const Edit = ({ id }: { id: string }) => {
     saveEditedSurvey({ ...editedSurvey, elements: items } as ISurvey);
   };
 
+  console.log(editedSurvey);
+
   return (
     <div className="absolute top-0 bottom-0 right-0 left-0 flex w-full flex-row overflow-hidden">
       <Head>
@@ -219,7 +221,7 @@ const Edit = ({ id }: { id: string }) => {
           <input
             type="checkbox"
             disabled={editedSurvey?.published ?? true}
-            defaultChecked={editedSurvey?.identifiable ?? false}
+            checked={editedSurvey?.identifiable ?? false}
             id={`identifiable-${id}`}
             onChange={(e) => {
               const newSurvey = { ...editedSurvey };
@@ -231,7 +233,7 @@ const Edit = ({ id }: { id: string }) => {
         </div>
         <hr className="my-5" />
         {/* Create new element buttons */}
-        <p className="mb-2 flex flex-row items-center gap-1 font-monospace text-gray-500">
+        <p className="font-monospace mb-2 flex flex-row items-center gap-1 text-gray-500">
           <BiPlus /> CREATE
         </p>
         <div className="flex flex-row flex-wrap gap-2">
