@@ -143,8 +143,6 @@ const Edit = ({ id }: { id: string }) => {
     saveEditedSurvey({ ...editedSurvey, elements: items } as ISurvey);
   };
 
-  console.log(editedSurvey);
-
   return (
     <div className="absolute top-0 bottom-0 right-0 left-0 flex w-full flex-row overflow-hidden">
       <Head>
@@ -236,7 +234,7 @@ const Edit = ({ id }: { id: string }) => {
         <p className="font-monospace mb-2 flex flex-row items-center gap-1 text-gray-500">
           <BiPlus /> CREATE
         </p>
-        <div className="flex flex-row flex-wrap gap-2">
+        <div className="sticky top-0 flex flex-row flex-wrap gap-2">
           <CreateElementButton
             name="Multiple Choice"
             type="multiple-choice"
