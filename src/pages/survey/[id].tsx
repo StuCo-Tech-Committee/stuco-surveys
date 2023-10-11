@@ -1,10 +1,10 @@
 import Question from '@/components/survey/question';
 import {
-	ISurvey,
-	ISurveyElement,
-	ISurveyResponse,
-	checkResponded,
-	getSurvey,
+  ISurvey,
+  ISurveyElement,
+  ISurveyResponse,
+  checkResponded,
+  getSurvey,
 } from '@/controllers/survey.controller';
 import { motion } from 'framer-motion';
 import { GetServerSideProps } from 'next';
@@ -16,10 +16,10 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { AiOutlineStop, AiOutlineWarning } from 'react-icons/ai';
 import { BiLoaderAlt, BiLogOut } from 'react-icons/bi';
 import {
-	BsFillCheckCircleFill,
-	BsFillPersonBadgeFill,
-	BsPersonCircle,
-	BsUpload,
+  BsFillCheckCircleFill,
+  BsFillPersonBadgeFill,
+  BsPersonCircle,
+  BsUpload,
 } from 'react-icons/bs';
 import { authOptions } from '../api/auth/[...nextauth]';
 
