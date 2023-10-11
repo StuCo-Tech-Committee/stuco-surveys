@@ -77,7 +77,7 @@ const Viewer = ({
   return (
     <div className="mx-4 flex flex-col gap-12 self-stretch py-6 md:mx-32">
       <Head>
-        <title>{survey.name} - Responses</title>
+        <title>{survey.name + ' - Responses'}</title>
       </Head>
       <div className="">
         <nav
@@ -112,11 +112,6 @@ const Viewer = ({
         {element.type === 'multiple-choice' && (
           <ReactECharts
             option={{
-              title: {
-                text: 'Referer of a Website',
-                subtext: 'Fake Data',
-                left: 'center',
-              },
               tooltip: {
                 trigger: 'item',
               },
