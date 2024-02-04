@@ -1,3 +1,5 @@
+import { BarChart } from '@/components/viewer/barChart';
+import { PieChart } from '@/components/viewer/pieChart';
 import {
   IPusherSurveyResponse,
   ISurvey,
@@ -6,13 +8,11 @@ import {
   getSurvey,
 } from '@/controllers/survey.controller';
 import { useChannel, useEvent } from '@/hooks/realtime';
-import ReactECharts from 'echarts-for-react';
 import { GetServerSideProps } from 'next';
 import { unstable_getServerSession } from 'next-auth';
 import Head from 'next/head';
 import { useState } from 'react';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
-import { VictoryBar, VictoryChart } from 'victory';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 const Viewer = ({
@@ -58,22 +58,6 @@ const Viewer = ({
     }
   };
 
-  const values: { [index: string]: number } = {};
-  responses.forEach((response) => {
-    let choice = response.answers[current].choices![0];
-
-    if (!values[choice]) {
-      values[choice] = 1;
-    } else {
-      values[choice] = values[choice] + 1;
-    }
-  });
-
-  let data: [{ name: string; value: number }?] = [];
-  Object.keys(values).forEach(function (key) {
-    data.push({ name: key, value: values[key] });
-  });
-
   return (
     <div className="mx-4 flex flex-col gap-12 self-stretch py-6 md:mx-32">
       <Head>
@@ -110,44 +94,10 @@ const Viewer = ({
         <h1 className="text-3xl">{element.title}</h1>
         <h1 className="text-xl text-gray-600">{element.description}</h1>
         {element.type === 'multiple-choice' && (
-          <ReactECharts
-            option={{
-              tooltip: {
-                trigger: 'item',
-              },
-              legend: {
-                orient: 'vertical',
-                left: 'left',
-              },
-              series: [
-                {
-                  type: 'pie',
-                  radius: '50%',
-                  data: data,
-                },
-              ],
-              animation: false,
-            }}
-          />
+          <PieChart responses={responses} current={current} />
         )}
         {element.type === 'slider' && (
-          <VictoryChart>
-            <VictoryBar
-              data={responses
-                .map((response) => response.answers[current].number)
-                .filter((value, index, self) => self.indexOf(value) === index)
-                .map((number) => {
-                  return {
-                    x: number,
-                    y: responses.reduce<number>((prev, response) => {
-                      return response.answers[current].number === number
-                        ? prev + 1
-                        : prev;
-                    }, 0),
-                  };
-                })}
-            />
-          </VictoryChart>
+          <BarChart responses={responses} current={current} />
         )}
         {element.type === 'free-response' && (
           <div className="mt-8 flex h-full flex-col gap-10 overflow-y-scroll pb-20">
