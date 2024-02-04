@@ -39,7 +39,7 @@ export const responseSchema = z.object({
     z.object({
       choices: z.array(z.string()).optional(),
       number: z.number().optional(),
-      text: z.string().optional(),
+      text: z.string().optional().nullable(),
       file: z
         .object({
           name: z.string(),

@@ -5,7 +5,6 @@ import * as Schemas from '@/schemas/Schemas';
 import pusher from '@/utilities/Pusher';
 import mongoose from 'mongoose';
 
-
 const uri = process.env.DB_URI as string;
 
 mongoose.connect(uri);
